@@ -5,6 +5,8 @@ import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.*;
 import javafx.scene.canvas.Canvas;
@@ -57,13 +59,7 @@ public class Main extends Application {
     private Line side1;
     private Rectangle rectangleFigure;
     private Ellipse ellipseFigure;
-    private RadioButton stroke;
     private RadioButton fill;
-
-    void arrangementRadioButton(boolean check){
-        stroke.setVisible(check);
-        fill.setVisible(check);
-    };
 
     void initializeButton(){
         Image url= new Image("file:/home/sanchir/IdeaProjects/Paint/Picture/pencil.png");
@@ -90,10 +86,11 @@ public class Main extends Application {
         url= new Image("file:/home/sanchir/IdeaProjects/Paint/Picture/magnifier.png" , 16 , 16 , false , true);
         imageView = new ImageView(url);
         magnifier = new Button("",imageView);
-        ellipseButton = new Button("Circle");
-        stroke = new RadioButton("Stroke");
+        url= new Image("file:/home/sanchir/IdeaProjects/Paint/Picture/ellipse.png");
+        imageView = new ImageView(url);
+        ellipseButton = new Button("" , imageView);
         fill = new RadioButton("Fill");
-        arrangementRadioButton(false);
+        fill.setVisible(false);
     }
 
     public void onPencil(){
@@ -104,7 +101,7 @@ public class Main extends Application {
             pointerButton = 0;
             brushSize.setText("1");
             brushSize.setEditable(false);
-            arrangementRadioButton(false);
+            fill.setVisible(false);
         });
     }
 
@@ -115,7 +112,7 @@ public class Main extends Application {
             nameTextField.setText("Size :");
             pointerButton = 1;
             brushSize.setEditable(true);
-            arrangementRadioButton(false);
+            fill.setVisible(false);
         });
     }
 
@@ -126,7 +123,7 @@ public class Main extends Application {
             hideRectangle();
             pointerButton = 2;
             brushSize.setEditable(true);
-            arrangementRadioButton(false);
+            fill.setVisible(false);
         });
     }
 
@@ -139,7 +136,7 @@ public class Main extends Application {
             pointerButton = 3;
             brushSize.setText("1");
             brushSize.setEditable(false);
-            arrangementRadioButton(false);
+            fill.setVisible(false);
         });
     }
 
@@ -152,7 +149,7 @@ public class Main extends Application {
             pointerButton = 4;
             brushSize.setText("1");
             brushSize.setEditable(false);
-            arrangementRadioButton(true);
+            fill.setVisible(true);
         });
     }
 
@@ -164,7 +161,7 @@ public class Main extends Application {
             pointerButton = 5;
             brushSize.setText("1");
             brushSize.setEditable(false);
-            arrangementRadioButton(false);
+            fill.setVisible(false);
         });
     }
 
@@ -176,7 +173,7 @@ public class Main extends Application {
             pointerButton = 6;
 //            brushSize.setText("Your text");
             brushSize.setEditable(false);
-            arrangementRadioButton(false);
+            fill.setVisible(false);
 
         });
     }
@@ -189,7 +186,7 @@ public class Main extends Application {
             pointerButton = 7;
             brushSize.setText("1");
             brushSize.setEditable(true);
-            arrangementRadioButton(false);
+            fill.setVisible(false);
         });
     }
 
@@ -200,7 +197,7 @@ public class Main extends Application {
             pointerButton = 9;
             brushSize.setText("1");
             brushSize.setEditable(false);
-            arrangementRadioButton(true);
+            fill.setVisible(true);
         });
     }
 
@@ -316,18 +313,13 @@ public class Main extends Application {
 
     public void createTop(){
         HBox top1 = new HBox(createMenuBar());
-        HBox groupRadioButton = new HBox(fill , stroke);
-        groupRadioButton.setSpacing(5);
-        ToggleGroup group = new ToggleGroup();
-        fill.setToggleGroup(group);
-        stroke.setToggleGroup(group);
-        HBox top2 = new HBox(nameTextField , brushSize , colorPicker , groupRadioButton);
+        HBox top2 = new HBox(nameTextField , brushSize , colorPicker , fill);
         VBox top = new VBox(top1 , top2);
         root.setTop(top);
     }
 
     void arrangement(){
-        VBox left = new VBox(pencil , brush , eraser , line , rectangle , rectSelection , text , magnifier , ellipseButton);
+        VBox left = new VBox(pencil , brush , eraser , line , rectangle , ellipseButton , rectSelection , text , magnifier);
         left.setSpacing(5);
         root.setLeft(left);
         Group group = new Group(canvas , side1 , brushText , rectangleFigure , ellipseFigure);
@@ -446,12 +438,13 @@ public class Main extends Application {
     }
 
     void createRectangle(GraphicsContext g , double x , double y , double x1 , double y1){
-        g.setStroke(colorPicker.getValue());
         g.setLineWidth(1);
-        g.lineTo(x1 , y);
-        g.lineTo(x1 , y1);
-        g.lineTo(x , y1);
-        g.lineTo(x , y);
+        if(fill.isSelected()){
+            g.setFill(rectangleFigure.getFill());
+            g.fillRect(x,y,x1-x , y1-y);
+        }
+        g.setStroke(rectangleFigure.getStroke());
+        g.strokeRect(x,y,x1-x,y1-y);
         g.stroke();
         g.closePath();
     }
@@ -468,8 +461,8 @@ public class Main extends Application {
     void setCoordinateRectangle(double x1 , double y1 , double x2 , double y2){
         rectangleFigure.setX(x1);
         rectangleFigure.setY(y1);
-        rectangleFigure.setHeight(x2 - x1);
-        rectangleFigure.setWidth(y2 - y1);
+        rectangleFigure.setWidth(x2 - x1);
+        rectangleFigure.setHeight(y2 - y1);
     }
 
     void getStrokeDashArrayRectangle(double  width, double height){
@@ -490,7 +483,8 @@ public class Main extends Application {
 
     void createText(GraphicsContext g){
         if(checkForText){
-            g.fillText( brushText.getText(), rectangleFigure.getX(), rectangleFigure.getY());
+            g.setStroke(colorPicker.getValue());
+            g.strokeText( brushText.getText(), rectangleFigure.getX(), rectangleFigure.getY() + 10);
             checkForText = false;
             brushText.clear();
             brushText.setVisible(false);
@@ -529,74 +523,49 @@ public class Main extends Application {
         }
         switch (pointerButton){
             case 3:{
-                if(!click){
-                    side1.setVisible(true);
-                    g.beginPath();
-                    g.moveTo(x , y);
-                    setCoordinateLine(x + 2,y,x + 2 ,y);
-                }else {
-                    side1.setVisible(false);
-                    g.setStroke(colorPicker.getValue());
-                    g.setLineWidth(1);
-                    g.lineTo(x,y);
-                    g.stroke();
-                    g.closePath();
-                }
-                click = !click;
+                side1.setVisible(true);
+                g.beginPath();
+                g.moveTo(x , y);
+                setCoordinateLine(x,y,x ,y);
+                click = true;
                 pointerButtonForClick = pointerButton;
                 break;
             }
             case 4:{
-                if(!click){
-                    disclosureRectangle();
-                    getStrokeDashArrayClearRectangle();
-                    setCoordinateRectangle(x + 2,y + 2,x + 2 ,y + 2);
-                    g.beginPath();
-                    g.moveTo(x , y);
-                    coordinateX = x;
-                    coordinateY = y;
-                }else{
-                    hideRectangle();
-                    createRectangle(g , coordinateX , coordinateY , x , y);
-                }
-                click = !click;
+                disclosureRectangle();
+                getStrokeDashArrayClearRectangle();
+                setCoordinateRectangle(x,y,x,y);
+                g.beginPath();
+                g.moveTo(x , y);
+                coordinateX = x;
+                coordinateY = y;
+                click = true;
                 pointerButtonForClick = pointerButton;
                 break;
             }
             case 5:{
-                if(!click){
-                    disclosureRectangle();
-                    getStrokeDashArrayRectangle(5.0 , 5.0);
-                    setCoordinateRectangle(x + 2,y + 2,x + 2 ,y + 2);
-                    coordinateX = x + 2;
-                    coordinateY = y + 2;
-                }else{
-                    setCoordinateRectangle(coordinateX , coordinateY , x + 2 , y + 2);
-                }
-                click = !click;
+                disclosureRectangle();
+                rectangleFigure.setFill(null);
+                getStrokeDashArrayRectangle(5.0 , 5.0);
+                setCoordinateRectangle(x,y,x,y);
+                coordinateX = x;
+                coordinateY = y;
+                click = true;
                 pointerButtonForClick = pointerButton;
                 break;
             }
             case 6:{
                 g.setLineWidth(1);
                 g.setStroke(colorPicker.getValue());
-                if(!click){
-                    brushText.setVisible(false);
-                    disclosureRectangle();
-                    getStrokeDashArrayRectangle(5.0 , 5.0);
-                    setCoordinateRectangle(x + 2,y + 2,x + 2 ,y + 2);
-                    coordinateX = x + 2;
-                    coordinateY = y + 2;
-                    checkForText = false;
-                }else{
-                    setCoordinateRectangle(coordinateX , coordinateY , x + 2 , y + 2);
-                    brushText.setLayoutX(rectangleFigure.getX());
-                    brushText.setLayoutY(rectangleFigure.getY());
-                    brushText.setMaxSize(rectangleFigure.getWidth() , rectangleFigure.getHeight());
-                    brushText.setVisible(true);
-                    checkForText = true;
-                }
-                click = !click;
+                rectangleFigure.setFill(null);
+                brushText.setVisible(false);
+                disclosureRectangle();
+                getStrokeDashArrayRectangle(5.0 , 5.0);
+                setCoordinateRectangle(x,y,x,y);
+                coordinateX = x;
+                coordinateY = y;
+                checkForText = false;
+                click = true;
                 pointerButtonForClick = pointerButton;
                 break;
             }
@@ -623,8 +592,10 @@ public class Main extends Application {
                 }else{
                     ellipseFigure.setVisible(false);
                     g.setStroke(colorPicker.getValue());
-                    double startX = Math.min(coordinateX , x);
-                    double startY = Math.min(coordinateY , y);
+                    if(fill.isSelected()){
+                        g.setFill(rectangleFigure.getFill());
+                        g.fillOval(getBeginEllipseX(x) , getBeginEllipseY(y) , getRadiusEllipseX(x) , getRadiusEllipseY(y));
+                    }
                     g.strokeOval(getBeginEllipseX(x) , getBeginEllipseY(y) , getRadiusEllipseX(x) , getRadiusEllipseY(y));
                     g.closePath();
                 }
@@ -636,18 +607,9 @@ public class Main extends Application {
     }
 
     void moveLine(Timeline timeline , MouseEvent e){
-        KeyFrame kfx = new KeyFrame(Duration.millis(0.5) , new KeyValue(side1.endXProperty() , e.getX() + 2));
+        KeyFrame kfx = new KeyFrame(Duration.millis(0.5) , new KeyValue(side1.endXProperty() , e.getX()));
         KeyFrame kfy = new KeyFrame(Duration.millis(0.5) , new KeyValue(side1.endYProperty() , e.getY()));
         timeline.getKeyFrames().addAll(kfx , kfy);
-    }
-
-    double getWidthRectangle(double x){
-        return Math.max(rectangleFigure.getX() , x) - Math.min(rectangleFigure.getX() , x);
-    }
-
-    double getHeightRectangle(double y){
-
-        return Math.max(rectangleFigure.getY() , y) - Math.min(rectangleFigure.getY() , y);
     }
 
     void moveRectangle(Timeline timeline , MouseEvent e){
@@ -707,6 +669,60 @@ public class Main extends Application {
             createText(g);
             designClick(g , e.getX() , e.getY());
         });
+        side1.setOnMouseClicked(e->{
+            side1.setVisible(false);
+            g.setStroke(colorPicker.getValue());
+            g.setLineWidth(1);
+            g.lineTo(e.getX(),e.getY());
+            g.stroke();
+            g.closePath();
+            click = false;
+        });
+        rectangleFigure.setOnMouseClicked(e->{
+            switch (pointerButton){
+                case 4:{
+                    hideRectangle();
+                    createRectangle(g , Math.min(coordinateX , e.getX()) , Math.min(coordinateY , e.getY()) ,
+                            Math.max(coordinateX , e.getX()) , Math.max(coordinateY , e.getY()));
+                    break;
+                }
+                case 5:{
+                    setCoordinateRectangle(coordinateX , coordinateY , e.getX(), e.getY());
+                    break;
+                }
+                case 6:{
+                    setCoordinateRectangle(coordinateX , coordinateY , e.getX() , e.getY());
+                    brushText.setLayoutX(rectangleFigure.getX());
+                    brushText.setLayoutY(rectangleFigure.getY());
+                    brushText.setMaxSize(rectangleFigure.getWidth() , rectangleFigure.getHeight());
+                    brushText.setVisible(true);
+                    checkForText = true;
+                    click = false;
+                    break;
+                }
+            }
+            click = false;
+        });
+        fill.setOnMouseClicked(e->{
+            if(fill.isSelected()){
+                rectangleFigure.setFill(colorPicker.getValue());
+                ellipseFigure.setFill(colorPicker.getValue());
+            }else{
+                rectangleFigure.setFill(null);
+                ellipseFigure.setFill(null);
+            }
+        });
+        colorPicker.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                rectangleFigure.setStroke(colorPicker.getValue());
+                ellipseFigure.setStroke(colorPicker.getValue());
+                if(fill.isSelected()) {
+                    rectangleFigure.setFill(colorPicker.getValue());
+                    ellipseFigure.setFill(colorPicker.getValue());
+                }
+            }
+        });
     }
 
     void initializeVariable(){
@@ -714,7 +730,7 @@ public class Main extends Application {
         rectangleFigure = new Rectangle();
 //        rectangleFigure.getStrokeDashArray().addAll(25d, 10d);
         rectangleFigure.setFill(null);
-//        rectangleFigure.setStroke(Color.BLACK);
+        rectangleFigure.setStroke(Color.BLACK);
         rectangleFigure.setVisible(false);
         ellipseFigure = new Ellipse();
         ellipseFigure.setFill(null);
