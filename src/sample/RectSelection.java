@@ -19,13 +19,13 @@ import javafx.util.Duration;
 public class RectSelection {
     ToggleButton rectSelection;
     javafx.scene.shape.Rectangle rectangleFigure;
-    double coordinateX , coordinateY;
+    double coordinateX, coordinateY;
     public Image imageCopy;
 
     public void createButton(){
         Image url= new Image("file:/home/sanchir/IdeaProjects/Paint/Picture/rect_selection.png");
         ImageView imageView = new ImageView(url);
-        rectSelection = new ToggleButton("" , imageView);
+        rectSelection = new ToggleButton("", imageView);
     }
 
     public void setCursor(Canvas canvas){
@@ -33,14 +33,14 @@ public class RectSelection {
         canvas.setCursor(new ImageCursor(image,image.getWidth() / 2,image.getHeight() /2));
     }
 
-    void setCoordinateRectangle(double x2 , double y2){
+    void setCoordinateRectangle(double x2, double y2){
         rectangleFigure.setX(coordinateX);
         rectangleFigure.setY(coordinateY);
         rectangleFigure.setWidth(x2 - coordinateX);
         rectangleFigure.setHeight(y2 - coordinateY);
     }
 
-    public void design(GraphicsContext g , double x , double y){
+    public void design(GraphicsContext g, double x, double y){
         rectangleFigure.setVisible(true);
         rectangleFigure.setFill(null);
         setCoordinateRectangle(x,y);
@@ -49,26 +49,26 @@ public class RectSelection {
     }
 
     public void endDesign(MouseEvent e){
-        setCoordinateRectangle(e.getX() , e.getY());
+        setCoordinateRectangle(e.getX(), e.getY());
     }
 
     public void copy(Canvas canvas){
         SnapshotParameters snapshotParameters = new SnapshotParameters();
-        snapshotParameters.setViewport(new Rectangle2D(rectangleFigure.getX() , rectangleFigure.getY() ,
-                rectangleFigure.getWidth() , rectangleFigure.getHeight()));
-        imageCopy = canvas.snapshot(snapshotParameters , null);
+        snapshotParameters.setViewport(new Rectangle2D(rectangleFigure.getX(), rectangleFigure.getY(),
+                rectangleFigure.getWidth(), rectangleFigure.getHeight()));
+        imageCopy = canvas.snapshot(snapshotParameters, null);
     }
-    public void paste(Canvas canvas , double x , double y){
+    public void paste(Canvas canvas, double x, double y){
         canvas.getGraphicsContext2D().drawImage(imageCopy, x, y, imageCopy.getWidth(), imageCopy.getHeight());
     }
 
-    void moveRectangle(Timeline timeline , MouseEvent e){
-        KeyFrame kfX = new KeyFrame(Duration.millis(0.5) , new KeyValue(rectangleFigure.xProperty() , Math.min(e.getX() , coordinateX)));
-        KeyFrame kfY = new KeyFrame(Duration.millis(0.5) , new KeyValue(rectangleFigure.yProperty() , Math.min(e.getY() , coordinateY)));
-        KeyFrame kfWidth = new KeyFrame(Duration.millis(0.5) , new KeyValue(rectangleFigure.widthProperty() , Math.abs(e.getX() - coordinateX)));
-        KeyFrame kfHeight = new KeyFrame(Duration.millis(0.5) , new KeyValue(rectangleFigure.heightProperty() , Math.abs(e.getY() - coordinateY)));
-        timeline.getKeyFrames().addAll(kfX , kfY);
-        timeline.getKeyFrames().addAll(kfWidth , kfHeight);
+    void moveRectangle(Timeline timeline, MouseEvent e){
+        KeyFrame kfX = new KeyFrame(Duration.millis(0.5), new KeyValue(rectangleFigure.xProperty(), Math.min(e.getX(), coordinateX)));
+        KeyFrame kfY = new KeyFrame(Duration.millis(0.5), new KeyValue(rectangleFigure.yProperty(), Math.min(e.getY(), coordinateY)));
+        KeyFrame kfWidth = new KeyFrame(Duration.millis(0.5), new KeyValue(rectangleFigure.widthProperty(), Math.abs(e.getX() - coordinateX)));
+        KeyFrame kfHeight = new KeyFrame(Duration.millis(0.5), new KeyValue(rectangleFigure.heightProperty(), Math.abs(e.getY() - coordinateY)));
+        timeline.getKeyFrames().addAll(kfX, kfY);
+        timeline.getKeyFrames().addAll(kfWidth, kfHeight);
     }
 
 
@@ -78,6 +78,6 @@ public class RectSelection {
         rectangleFigure.setFill(null);
         rectangleFigure.setStroke(Color.BLACK);
         rectangleFigure.setVisible(false);
-        rectangleFigure.getStrokeDashArray().addAll(5.0 , 5.0);
+        rectangleFigure.getStrokeDashArray().addAll(5.0, 5.0);
     }
 }

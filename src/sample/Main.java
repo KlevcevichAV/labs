@@ -24,8 +24,8 @@ public class Main extends Application{
 
     public void createTop(){
         HBox top1 = new HBox(menuPaint.menuBar);
-        HBox top2 = new HBox(nameTextField , brushSize , colorPicker , toolBarPaint.fill);
-        VBox top = new VBox(top1 , top2);
+        HBox top2 = new HBox(nameTextField, brushSize, colorPicker, toolBarPaint.fill);
+        VBox top = new VBox(top1, top2);
         root.setTop(top);
     }
 
@@ -57,7 +57,7 @@ public class Main extends Application{
         root = new BorderPane();
         brushSize = new TextField("1");
         colorPicker = new ColorPicker();
-        canvas = new Canvas(600 , 600);
+        canvas = new Canvas(600, 600);
         GraphicsContext gc = canvas.getGraphicsContext2D();
         gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
         toolBarPaint = new ToolBarPaint();

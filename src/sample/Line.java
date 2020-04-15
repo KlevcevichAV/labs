@@ -20,7 +20,7 @@ public class Line {
     public void createButton(){
         Image url= new Image("file:/home/sanchir/IdeaProjects/Paint/Picture/line.png");
         ImageView imageView = new ImageView(url);
-        line = new ToggleButton("" , imageView);
+        line = new ToggleButton("", imageView);
     }
 
     public void setCursor(Canvas canvas){
@@ -38,8 +38,8 @@ public class Line {
     public void design(GraphicsContext g, double x, double y){
         side.setVisible(true);
         g.beginPath();
-        g.moveTo(x , y);
-        setCoordinateLine(x , y , x , y);
+        g.moveTo(x, y);
+        setCoordinateLine(x, y, x, y);
     }
 
     public void endDesign(GraphicsContext g, double x, double y, ColorPicker colorPicker){
@@ -51,11 +51,11 @@ public class Line {
         g.closePath();
     }
 
-    void moveLine(Timeline timeline , MouseEvent e, ColorPicker colorPicker){
+    void moveLine(Timeline timeline, MouseEvent e, ColorPicker colorPicker){
         side.setStroke(colorPicker.getValue());
-        KeyFrame kfx = new KeyFrame(Duration.millis(0.5) , new KeyValue(side.endXProperty() , e.getX()));
-        KeyFrame kfy = new KeyFrame(Duration.millis(0.5) , new KeyValue(side.endYProperty() , e.getY()));
-        timeline.getKeyFrames().addAll(kfx , kfy);
+        KeyFrame kfx = new KeyFrame(Duration.millis(0.5), new KeyValue(side.endXProperty(), e.getX()));
+        KeyFrame kfy = new KeyFrame(Duration.millis(0.5), new KeyValue(side.endYProperty(), e.getY()));
+        timeline.getKeyFrames().addAll(kfx, kfy);
     }
 
     Line(){

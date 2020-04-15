@@ -15,7 +15,7 @@ public class Eraser {
     public void createButton(){
         Image url= new Image("file:/home/sanchir/IdeaProjects/Paint/Picture/eraser.png");
         ImageView imageView = new ImageView(url);
-        eraser = new ToggleButton("" , imageView);
+        eraser = new ToggleButton("", imageView);
     }
 
     public void setCursor(Canvas canvas){
@@ -23,26 +23,26 @@ public class Eraser {
         canvas.setCursor(new ImageCursor(image,image.getWidth() / 2,image.getHeight() /2));
     }
 
-    public void designPressed(GraphicsContext g , double x , double y , double size){
+    public void designPressed(GraphicsContext g, double x, double y, double size){
         g.setLineWidth(size);
         g.setStroke(Color.WHITE);
         g.beginPath();
-        g.moveTo(x , y);
+        g.moveTo(x, y);
         g.stroke();
     }
 
-    public void design(GraphicsContext g , double x , double y){
+    public void design(GraphicsContext g, double x, double y){
         g.setStroke(Color.WHITE);
-        g.lineTo(x , y);
+        g.lineTo(x, y);
         g.stroke();
         g.closePath();
         g.beginPath();
-        g.moveTo(x , y);
+        g.moveTo(x, y);
     }
 
-    public void designReleased(GraphicsContext g , double x , double y){
+    public void designReleased(GraphicsContext g, double x, double y){
         g.setStroke(Color.WHITE);
-        g.lineTo(x ,y);
+        g.lineTo(x,y);
         g.stroke();
         g.closePath();
     }

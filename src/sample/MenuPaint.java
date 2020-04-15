@@ -23,7 +23,7 @@ public class MenuPaint {
     public void onOpen(Canvas canvas) throws FileNotFoundException {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open picture");
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("PNG" , "*.png");
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("PNG", "*.png");
         fileChooser.getExtensionFilters().add(extFilter);
         File openFile = fileChooser.showOpenDialog(null);
         if(openFile != null){
@@ -39,20 +39,20 @@ public class MenuPaint {
     public void onSave(Canvas canvas) throws IOException {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save picture");
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("PNG" , "*.png");
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("PNG", "*.png");
         fileChooser.getExtensionFilters().add(extFilter);
-        Image snapshot = canvas.snapshot(null ,null);
+        Image snapshot = canvas.snapshot(null,null);
         File file = fileChooser.showSaveDialog(null);
         if (file != null) {
             String name = file.getName();
             String extension = name.substring(1+name.lastIndexOf(".")).toLowerCase();
-            ImageIO.write(SwingFXUtils.fromFXImage(snapshot , null), extension, file);
+            ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), extension, file);
         }
     }
 
     public void onClear(Canvas canvas){
         canvas.getGraphicsContext2D().setFill(Color.WHITE);
-        canvas.getGraphicsContext2D().fillRect(0, 0 , canvas.getWidth() , canvas.getHeight());
+        canvas.getGraphicsContext2D().fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
     }
 
     public void onExit(){
@@ -88,7 +88,7 @@ public class MenuPaint {
         clear.setOnAction(e->onClear(canvas));
         MenuItem exit = new MenuItem("Exit");
         exit.setOnAction(e->onExit());
-        fileMenu.getItems().addAll(open , save , clear , exit);
+        fileMenu.getItems().addAll(open, save, clear, exit);
         return fileMenu;
     }
 
@@ -98,15 +98,15 @@ public class MenuPaint {
         copy.setOnAction(e->rectSelection.copy(canvas));
         copy.setAccelerator(KeyCombination.keyCombination("Ctrl+C"));
         MenuItem paste = new MenuItem("Paste");
-        paste.setOnAction(e->onPaste(pointerButton , rectSelection));
+        paste.setOnAction(e->onPaste(pointerButton, rectSelection));
         paste.setAccelerator(KeyCombination.keyCombination("Ctrl+V"));
-        editMenu.getItems().addAll(copy , paste);
+        editMenu.getItems().addAll(copy, paste);
         return editMenu;
     }
 
     MenuPaint(Canvas canvas, RectSelection rectSelection, ToolBarPaint.Pointer pointer){
         menuBar = new MenuBar();
-        menuBar.getMenus().addAll(createFileMenu(canvas) , createEditMenu(canvas, rectSelection, pointer));
+        menuBar.getMenus().addAll(createFileMenu(canvas), createEditMenu(canvas, rectSelection, pointer));
     }
 
 }

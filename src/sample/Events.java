@@ -48,10 +48,10 @@ public class Events {
         }
     }
 
-    void design(GraphicsContext g , double x , double y, ToolBarPaint toolBarPaint, ColorPicker colorPicker){
+    void design(GraphicsContext g, double x, double y, ToolBarPaint toolBarPaint, ColorPicker colorPicker){
         switch (toolBarPaint.pointer.pointerButton){
             case 0:{
-                toolBarPaint.pencil.design(g , x , y , colorPicker);
+                toolBarPaint.pencil.design(g, x, y, colorPicker);
                 break;
             }
             case 1: {
@@ -65,10 +65,10 @@ public class Events {
         }
     };
 
-    void designPressed(GraphicsContext g , double x , double y, ToolBarPaint toolBarPaint, ColorPicker colorPicker, TextField brushSize){
+    void designPressed(GraphicsContext g, double x, double y, ToolBarPaint toolBarPaint, ColorPicker colorPicker, TextField brushSize){
         switch (toolBarPaint.pointer.pointerButton){
             case 0:{
-                toolBarPaint.pencil.designPressed(g , x , y , colorPicker);
+                toolBarPaint.pencil.designPressed(g, x, y, colorPicker);
                 break;
             }
             case 1:{
@@ -84,10 +84,10 @@ public class Events {
         }
     }
 
-    void designReleased(GraphicsContext g , double x , double y, ToolBarPaint toolBarPaint, ColorPicker colorPicker){
+    void designReleased(GraphicsContext g, double x, double y, ToolBarPaint toolBarPaint, ColorPicker colorPicker){
         switch (toolBarPaint.pointer.pointerButton){
             case 0:{
-                toolBarPaint.pencil.designReleased(g , x , y , colorPicker);
+                toolBarPaint.pencil.designReleased(g, x, y, colorPicker);
                 break;
             }
             case 1:{
@@ -101,34 +101,34 @@ public class Events {
         }
     }
 
-    void designClick(Canvas canvas , double x , double y, ToolBarPaint toolBarPaint, ColorPicker colorPicker, TextField brushSize){
+    void designClick(Canvas canvas, double x, double y, ToolBarPaint toolBarPaint, ColorPicker colorPicker, TextField brushSize){
         switch (toolBarPaint.pointer.pointerButton){
             case 3:{
-                toolBarPaint.line.design(canvas.getGraphicsContext2D() , x , y);
+                toolBarPaint.line.design(canvas.getGraphicsContext2D(), x, y);
                 click = true;
                 break;
             }
             case 4:{
-                toolBarPaint.rectangle.design(canvas.getGraphicsContext2D() , x , y);
+                toolBarPaint.rectangle.design(canvas.getGraphicsContext2D(), x, y);
                 click = true;
                 break;
             }
             case 5:{
-                toolBarPaint.rectSelection.design(canvas.getGraphicsContext2D() , x , y);
+                toolBarPaint.rectSelection.design(canvas.getGraphicsContext2D(), x, y);
                 click = true;
                 break;
             }
             case 6:{
-                toolBarPaint.text.design(canvas.getGraphicsContext2D() , x , y);
+                toolBarPaint.text.design(canvas.getGraphicsContext2D(), x, y);
                 click = true;
                 break;
             }
             case 7:{
-                toolBarPaint.magnifier.approximation(canvas , brushSize);
+                toolBarPaint.magnifier.approximation(canvas, brushSize);
                 break;
             }
             case 8:{
-                toolBarPaint.rectSelection.paste(canvas , x , y);
+                toolBarPaint.rectSelection.paste(canvas, x, y);
                 break;
             }
             case 9:{
@@ -157,15 +157,15 @@ public class Events {
                 break;
             }
             case 4:{
-                toolBarPaint.rectangle.moveRectangle(timeline , e);
+                toolBarPaint.rectangle.moveRectangle(timeline, e);
                 break;
             }
             case 5:{
-                toolBarPaint.rectSelection.moveRectangle(timeline , e);
+                toolBarPaint.rectSelection.moveRectangle(timeline, e);
                 break;
             }
             case 6:{
-                toolBarPaint.text.moveRectangle(timeline , e);
+                toolBarPaint.text.moveRectangle(timeline, e);
                 break;
             }
             case 9:{
@@ -188,20 +188,20 @@ public class Events {
             design(canvas.getGraphicsContext2D(), e.getX(), e.getY(), toolBarPaint, colorPicker);
         });
         canvas.setOnMousePressed(e->{
-            designPressed(canvas.getGraphicsContext2D(), e.getX() , e.getY(), toolBarPaint, colorPicker, brushSize);
+            designPressed(canvas.getGraphicsContext2D(), e.getX(), e.getY(), toolBarPaint, colorPicker, brushSize);
         });
         canvas.setOnMouseReleased(e->{
-            designReleased(canvas.getGraphicsContext2D() , e.getX() , e.getY(), toolBarPaint, colorPicker);
+            designReleased(canvas.getGraphicsContext2D(), e.getX(), e.getY(), toolBarPaint, colorPicker);
         });
         canvas.setOnMouseClicked(e->{
-            toolBarPaint.text.createText(canvas.getGraphicsContext2D() , colorPicker);
+            toolBarPaint.text.createText(canvas.getGraphicsContext2D(), colorPicker);
             designClick(canvas, e.getX(), e.getY(), toolBarPaint, colorPicker, brushSize);
         });
         toolBarPaint.line.side.setOnMouseClicked(e->{
-            toolBarPaint.line.endDesign(canvas.getGraphicsContext2D() , e.getX() , e.getY(), colorPicker);
+            toolBarPaint.line.endDesign(canvas.getGraphicsContext2D(), e.getX(), e.getY(), colorPicker);
         });
         toolBarPaint.rectangle.rectangleFigure.setOnMouseClicked(e->{
-            toolBarPaint.rectangle.endDesign(canvas.getGraphicsContext2D() , toolBarPaint.fill , e);
+            toolBarPaint.rectangle.endDesign(canvas.getGraphicsContext2D(), toolBarPaint.fill, e);
             click = false;
         });
         toolBarPaint.rectSelection.rectangleFigure.setOnMouseClicked(e->{

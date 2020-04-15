@@ -16,15 +16,15 @@ import javafx.util.Duration;
 public class Ellipse {
     ToggleButton ellipse;
     javafx.scene.shape.Ellipse ellipseFigure;
-    double coordinateX , coordinateY;
+    double coordinateX, coordinateY;
     boolean click;
     public void createButton(){
         Image url= new Image("file:/home/sanchir/IdeaProjects/Paint/Picture/ellipse.png");
         ImageView imageView = new ImageView(url);
-        ellipse = new ToggleButton("" , imageView);
+        ellipse = new ToggleButton("", imageView);
     }
 
-    void setSettingsCircle(double x , double y , double radiusX , double radiusY){
+    void setSettingsCircle(double x, double y, double radiusX, double radiusY){
         ellipseFigure.setStroke(Color.BLACK);
         ellipseFigure.setVisible(true);
         ellipseFigure.setCenterX(x);
@@ -34,24 +34,24 @@ public class Ellipse {
     }
 
     double getBeginEllipseX(double x){
-        return Math.min(coordinateX , x);
+        return Math.min(coordinateX, x);
     }
 
     double getBeginEllipseY(double y){
-        return Math.min(coordinateY , y);
+        return Math.min(coordinateY, y);
     }
 
     double getRadiusEllipseX(double x){
-        return Math.max(coordinateX , x) - getBeginEllipseX(x);
+        return Math.max(coordinateX, x) - getBeginEllipseX(x);
     }
 
     double getRadiusEllipseY(double y){
-        return Math.max(coordinateY , y) - getBeginEllipseY(y);
+        return Math.max(coordinateY, y) - getBeginEllipseY(y);
     }
 
-    public void design(GraphicsContext g, ColorPicker colorPicker, RadioButton fill, double x , double y){
+    public void design(GraphicsContext g, ColorPicker colorPicker, RadioButton fill, double x, double y){
         if(!click){
-            setSettingsCircle(x , y , 0 , 0);
+            setSettingsCircle(x, y, 0, 0);
             coordinateX = x;
             coordinateY = y;
         }else{
@@ -59,10 +59,10 @@ public class Ellipse {
             g.setStroke(colorPicker.getValue());
             if(fill.isSelected()){
                 g.setFill(colorPicker.getValue());
-                g.fillOval(getBeginEllipseX(x) , getBeginEllipseY(y) , getRadiusEllipseX(x) , getRadiusEllipseY(y));
+                g.fillOval(getBeginEllipseX(x), getBeginEllipseY(y), getRadiusEllipseX(x), getRadiusEllipseY(y));
             }
             g.setStroke(colorPicker.getValue());
-            g.strokeOval(getBeginEllipseX(x) , getBeginEllipseY(y) , getRadiusEllipseX(x) , getRadiusEllipseY(y));
+            g.strokeOval(getBeginEllipseX(x), getBeginEllipseY(y), getRadiusEllipseX(x), getRadiusEllipseY(y));
             g.closePath();
         }
         click = !click;
@@ -70,11 +70,11 @@ public class Ellipse {
 
     public void moveCircle(Timeline timeline, MouseEvent e, ColorPicker colorPicker){
         ellipseFigure.setStroke(colorPicker.getValue());
-        KeyFrame kfCenterX = new KeyFrame(Duration.millis(0.5) , new KeyValue(ellipseFigure.centerXProperty() , (e.getX() + coordinateX)/2));
-        KeyFrame kfCenterY = new KeyFrame(Duration.millis(0.5) , new KeyValue(ellipseFigure.centerYProperty() , (e.getY() + coordinateY)/2));
-        KeyFrame kfRadiusX = new KeyFrame(Duration.millis(0.5) , new KeyValue(ellipseFigure.radiusXProperty() , getRadiusEllipseX(e.getX())/2));
-        KeyFrame kfRadiusY = new KeyFrame(Duration.millis(0.5) , new KeyValue(ellipseFigure.radiusYProperty() , getRadiusEllipseY(e.getY())/2));
-        timeline.getKeyFrames().addAll(kfCenterX , kfCenterY , kfRadiusX , kfRadiusY);
+        KeyFrame kfCenterX = new KeyFrame(Duration.millis(0.5), new KeyValue(ellipseFigure.centerXProperty(), (e.getX() + coordinateX)/2));
+        KeyFrame kfCenterY = new KeyFrame(Duration.millis(0.5), new KeyValue(ellipseFigure.centerYProperty(), (e.getY() + coordinateY)/2));
+        KeyFrame kfRadiusX = new KeyFrame(Duration.millis(0.5), new KeyValue(ellipseFigure.radiusXProperty(), getRadiusEllipseX(e.getX())/2));
+        KeyFrame kfRadiusY = new KeyFrame(Duration.millis(0.5), new KeyValue(ellipseFigure.radiusYProperty(), getRadiusEllipseY(e.getY())/2));
+        timeline.getKeyFrames().addAll(kfCenterX, kfCenterY, kfRadiusX, kfRadiusY);
     }
 
     Ellipse(){
