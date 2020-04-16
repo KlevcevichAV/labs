@@ -31,9 +31,9 @@ public class Main extends Application{
 
     void arrangement(){
         toolBarPaint.createGroup();
-        VBox left = new VBox(toolBarPaint.pencil.pencil, toolBarPaint.brush.brush, toolBarPaint.eraser.eraser, toolBarPaint.line.line,
-                toolBarPaint.rectangle.rectangle, toolBarPaint.ellipse.ellipse, toolBarPaint.rectSelection.rectSelection,
-                toolBarPaint.text.text, toolBarPaint.magnifier.magnifier);
+        VBox left = new VBox(toolBarPaint.pencil.tool, toolBarPaint.brush.tool, toolBarPaint.eraser.tool, toolBarPaint.line.tool,
+                toolBarPaint.rectangle.tool, toolBarPaint.ellipse.tool, toolBarPaint.rectSelection.tool,
+                toolBarPaint.text.tool, toolBarPaint.magnifier.tool);
         left.setSpacing(5);
         root.setLeft(left);
         Group group = new Group(canvas, toolBarPaint.line.side, toolBarPaint.text.brushText, toolBarPaint.rectangle.rectangleFigure,
@@ -70,8 +70,8 @@ public class Main extends Application{
     @Override
     public void start(Stage primaryStage) throws Exception{
         initialize();
-        events = new Events();
-        events.event(canvas, colorPicker, brushSize, toolBarPaint);
+        events = new Events(canvas, colorPicker, brushSize, toolBarPaint);
+        events.event();
         primaryStage.setScene(new Scene(root, 700, 650));
         primaryStage.show();
     }

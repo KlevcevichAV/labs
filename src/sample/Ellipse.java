@@ -13,15 +13,12 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
-public class Ellipse {
-    ToggleButton ellipse;
+public class Ellipse extends Tool{
     javafx.scene.shape.Ellipse ellipseFigure;
     double coordinateX, coordinateY;
     boolean click;
     public void createButton(){
-        Image url= new Image("file:/home/sanchir/IdeaProjects/Paint/Picture/ellipse.png");
-        ImageView imageView = new ImageView(url);
-        ellipse = new ToggleButton("", imageView);
+        createButton("ellipse.png");
     }
 
     void setSettingsCircle(double x, double y, double radiusX, double radiusY){

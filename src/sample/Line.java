@@ -13,19 +13,15 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Duration;
 
-public class Line {
-    ToggleButton line;
+public class Line extends Tool{
     public javafx.scene.shape.Line side;
 
     public void createButton(){
-        Image url= new Image("file:/home/sanchir/IdeaProjects/Paint/Picture/line.png");
-        ImageView imageView = new ImageView(url);
-        line = new ToggleButton("", imageView);
+        createButton("line.png");
     }
 
     public void setCursor(Canvas canvas){
-        Image image = new Image("file:/home/sanchir/IdeaProjects/Paint/Picture/line.png");
-        canvas.setCursor(new ImageCursor(image,image.getWidth() / 2,image.getHeight() /2));
+        setCursor(canvas, "line.png");
     }
 
     void setCoordinateLine(double x1, double y1, double x2, double y2){

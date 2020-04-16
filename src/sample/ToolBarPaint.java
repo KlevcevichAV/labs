@@ -46,7 +46,7 @@ public class ToolBarPaint {
     }
 
     public void onPencil(Canvas canvas, ColorPicker colorPicker, TextField brushSize, javafx.scene.shape.Rectangle rectangle1, javafx.scene.shape.Rectangle rectangle2){
-        pencil.pencil.setOnAction(e->{
+        pencil.tool.setOnAction(e->{
             text.createText(canvas.getGraphicsContext2D(), colorPicker);
             hideRectangle(rectangle1, rectangle2);
             pointer.pointerButton = 0;
@@ -57,7 +57,7 @@ public class ToolBarPaint {
     }
 
     public void onBrush(Canvas canvas, ColorPicker colorPicker, TextField brushSize, javafx.scene.shape.Rectangle rectangle1, javafx.scene.shape.Rectangle rectangle2){
-        brush.brush.setOnAction(e->{
+        brush.tool.setOnAction(e->{
             text.createText(canvas.getGraphicsContext2D(), colorPicker);
             hideRectangle(rectangle1, rectangle2);
             pointer.pointerButton = 1;
@@ -67,7 +67,7 @@ public class ToolBarPaint {
     }
 
     public void onEraser(Canvas canvas, ColorPicker colorPicker, TextField brushSize, javafx.scene.shape.Rectangle rectangle1, javafx.scene.shape.Rectangle rectangle2){
-        eraser.eraser.setOnAction(e->{
+        eraser.tool.setOnAction(e->{
             text.createText(canvas.getGraphicsContext2D(), colorPicker);
             hideRectangle(rectangle1, rectangle2);
             pointer.pointerButton = 2;
@@ -77,7 +77,7 @@ public class ToolBarPaint {
     }
 
     public void onLine(Canvas canvas, ColorPicker colorPicker, TextField brushSize, javafx.scene.shape.Rectangle rectangle1, javafx.scene.shape.Rectangle rectangle2) {
-        line.line.setOnAction(e->{
+        line.tool.setOnAction(e->{
             text.createText(canvas.getGraphicsContext2D(), colorPicker);
             hideRectangle(rectangle1, rectangle2);
             pointer.pointerButton = 3;
@@ -88,7 +88,7 @@ public class ToolBarPaint {
     }
 
     public void onRectangle(Canvas canvas, ColorPicker colorPicker, TextField brushSize, javafx.scene.shape.Rectangle rectangle1, javafx.scene.shape.Rectangle rectangle2){
-        rectangle.rectangle.setOnAction(e->{
+        rectangle.tool.setOnAction(e->{
             text.createText(canvas.getGraphicsContext2D(), colorPicker);
             hideRectangle(rectangle1, rectangle2);
             pointer.pointerButton = 4;
@@ -99,7 +99,7 @@ public class ToolBarPaint {
     }
 
     public void onRectSelection(Canvas canvas, ColorPicker colorPicker, TextField brushSize, javafx.scene.shape.Rectangle rectangle1, javafx.scene.shape.Rectangle rectangle2){
-        rectSelection.rectSelection.setOnAction(e->{
+        rectSelection.tool.setOnAction(e->{
             text.createText(canvas.getGraphicsContext2D(), colorPicker);
             hideRectangle(rectangle1, rectangle2);
             pointer.pointerButton = 5;
@@ -110,7 +110,7 @@ public class ToolBarPaint {
     }
 
     public void onText(Canvas canvas, ColorPicker colorPicker, TextField brushSize, javafx.scene.shape.Rectangle rectangle1, javafx.scene.shape.Rectangle rectangle2){
-        text.text.setOnAction(e->{
+        text.tool.setOnAction(e->{
             text.createText(canvas.getGraphicsContext2D(), colorPicker);
             hideRectangle(rectangle1, rectangle2);
 //            pointerButtonForClick = 1;
@@ -122,7 +122,7 @@ public class ToolBarPaint {
     }
 
     public void onMagnifier(Canvas canvas, ColorPicker colorPicker, TextField brushSize, javafx.scene.shape.Rectangle rectangle1, javafx.scene.shape.Rectangle rectangle2){
-        magnifier.magnifier.setOnAction(e->{
+        magnifier.tool.setOnAction(e->{
             text.createText(canvas.getGraphicsContext2D(), colorPicker);
             hideRectangle(rectangle1, rectangle2);
             pointer.pointerButton = 7;
@@ -133,7 +133,7 @@ public class ToolBarPaint {
     }
 
     public void onEllipse(Canvas canvas, ColorPicker colorPicker, TextField brushSize, javafx.scene.shape.Rectangle rectangle1, javafx.scene.shape.Rectangle rectangle2){
-        ellipse.ellipse.setOnAction(e->{
+        ellipse.tool.setOnAction(e->{
             text.createText(canvas.getGraphicsContext2D(), colorPicker);
             hideRectangle(rectangle1, rectangle2);
             pointer.pointerButton = 9;
@@ -156,15 +156,15 @@ public class ToolBarPaint {
 
     void createGroup(){
         group = new ToggleGroup();
-        pencil.pencil.setToggleGroup(group);
-        brush.brush.setToggleGroup(group);
-        eraser.eraser.setToggleGroup(group);
-        line.line.setToggleGroup(group);
-        rectangle.rectangle.setToggleGroup(group);
-        ellipse.ellipse.setToggleGroup(group);
-        rectSelection.rectSelection.setToggleGroup(group);
-        text.text.setToggleGroup(group);
-        magnifier.magnifier.setToggleGroup(group);
+        pencil.tool.setToggleGroup(group);
+        brush.tool.setToggleGroup(group);
+        eraser.tool.setToggleGroup(group);
+        line.tool.setToggleGroup(group);
+        rectangle.tool.setToggleGroup(group);
+        ellipse.tool.setToggleGroup(group);
+        rectSelection.tool.setToggleGroup(group);
+        text.tool.setToggleGroup(group);
+        magnifier.tool.setToggleGroup(group);
     }
 
     ToolBarPaint(){
