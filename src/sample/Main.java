@@ -9,6 +9,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import sample.events.Events;
+import sample.menuPaint.MenuPaint;
+import sample.toolbar.ToolBarPaint;
 
 public class Main extends Application{
     boolean click;
