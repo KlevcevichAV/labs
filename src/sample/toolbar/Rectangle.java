@@ -4,6 +4,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.RadioButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 
 
 public class Rectangle extends ToolRectangle {
@@ -14,13 +15,6 @@ public class Rectangle extends ToolRectangle {
 
     public void setCursor(Canvas canvas){
         setCursor(canvas, "rectangle.png");
-    }
-
-
-    public void design(GraphicsContext g, double x, double y){
-        design(x, y);
-        g.beginPath();
-        g.moveTo(x, y);
     }
 
     void createRectangle(GraphicsContext g, RadioButton fill, double x, double y, double x1, double y1){
@@ -41,9 +35,16 @@ public class Rectangle extends ToolRectangle {
                 Math.max(coordinateX, e.getX()), Math.max(coordinateY, e.getY()));
     }
 
+    @Override
+    void createFigureRectangle() {
+        rectangleFigure = new javafx.scene.shape.Rectangle();
+        rectangleFigure.setFill(null);
+        rectangleFigure.setStroke(Color.BLACK);
+        rectangleFigure.setVisible(false);
+    }
+
     Rectangle(){
         createButton();
         createFigureRectangle();
-        rectangleFigure.getStrokeDashArray().clear();
     }
 }

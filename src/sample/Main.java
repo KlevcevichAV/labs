@@ -34,13 +34,10 @@ public class Main extends Application{
 
     void arrangement(){
         toolBarPaint.createGroup();
-        VBox left = new VBox(toolBarPaint.pencil.tool, toolBarPaint.brush.tool, toolBarPaint.eraser.tool, toolBarPaint.line.tool,
-                toolBarPaint.rectangle.tool, toolBarPaint.ellipse.tool, toolBarPaint.rectSelection.tool,
-                toolBarPaint.text.tool, toolBarPaint.magnifier.tool);
+        VBox left = toolBarPaint.createVBox();
         left.setSpacing(5);
         root.setLeft(left);
-        Group group = new Group(canvas, toolBarPaint.line.side, toolBarPaint.text.brushText, toolBarPaint.rectangle.rectangleFigure,
-                toolBarPaint.rectSelection.rectangleFigure, toolBarPaint.text.rectangleFigure, toolBarPaint.ellipse.ellipseFigure);
+        Group group = new Group(toolBarPaint.createGroupFigure(canvas));
         scrollPane.setContent(group);
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);

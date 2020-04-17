@@ -1,10 +1,12 @@
 package sample.toolbar;
 
+import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.VBox;
 
 public class ToolBarPaint {
     public class Pointer{
@@ -165,6 +167,16 @@ public class ToolBarPaint {
         rectSelection.tool.setToggleGroup(group);
         text.tool.setToggleGroup(group);
         magnifier.tool.setToggleGroup(group);
+    }
+
+    public VBox createVBox(){
+        return new VBox(pencil.tool, brush.tool, eraser.tool, line.tool, rectangle.tool,
+                ellipse.tool, rectSelection.tool, text.tool, magnifier.tool);
+    }
+
+    public Group createGroupFigure(Canvas canvas){
+        return new Group(canvas, line.side, text.brushText, rectangle.rectangleFigure,
+                rectSelection.rectangleFigure, text.rectangleFigure, ellipse.ellipseFigure);
     }
 
     public ToolBarPaint(){

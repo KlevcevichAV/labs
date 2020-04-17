@@ -19,10 +19,10 @@ public class ToolRectangle extends Tool{
     }
 
     public void design(double x, double y){
-        rectangleFigure.setVisible(true);
-        setCoordinateRectangle(x,y);
         coordinateX = x;
         coordinateY = y;
+        setCoordinateRectangle(x,y);
+        rectangleFigure.setVisible(true);
     }
 
     public void endDesign(MouseEvent e){

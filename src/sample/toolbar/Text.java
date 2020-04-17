@@ -22,6 +22,7 @@ public class Text extends ToolRectangle{
         checkForText = false;
     }
 
+    @Override
     public void endDesign(MouseEvent e){
         setCoordinateRectangle(e.getX(), e.getY());
         brushText.setLayoutX(rectangleFigure.getX());
