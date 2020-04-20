@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<root>
+    <sportsman category="мастер спорта" fullName="Месси" kindOfSport="Футбол" position="Нападающий" structure="основной" title="39"/>
+    <sportsman category="кмс" fullName="Роналду" kindOfSport="Футбол" position="Нападающий" structure="основной" title="39"/>
+    <sportsman category="мастер спорта" fullName="Суарез" kindOfSport="Футбол" position="Нападающий" structure="основной" title="29"/>
+    <sportsman category="мастер спорта" fullName="Обамеянг" kindOfSport="Футбол" position="Нападающий" structure="основной" title="10"/>
+    <sportsman category="мастер спорта" fullName="Тер Штеген" kindOfSport="Футбол" position="Вратарь" structure="основной" title="10"/>
+    <sportsman category="мастер спорта" fullName="Де Хеа" kindOfSport="Футбол" position="Вратарь" structure="основной" title="10"/>
+    <sportsman category="мастер спорта" fullName="Лев Яшин" kindOfSport="Футбол" position="Вратарь" structure="n/a" title="46"/>
+</root>

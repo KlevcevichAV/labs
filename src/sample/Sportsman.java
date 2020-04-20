@@ -48,12 +48,29 @@ public class Sportsman {
         }
     }
 
-    Sportsman(String fullName, int structure, String position, int title, String kindOfSport, int category){
+    void setFullName(String fullName){
         this.fullName = fullName;
-        setStructure(structure);
+    }
+
+    void setPosition(String position){
         this.position = position;
+    }
+
+    void setTitle(int title){
         this.title = title;
+    }
+
+    void setKindOfSport(String kindOfSport){
         this.kindOfSport = kindOfSport;
+    }
+
+
+    Sportsman(String fullName, int structure, String position, int title, String kindOfSport, int category){
+        setFullName(fullName);
+        setStructure(structure);
+        setPosition(position);
+        setTitle(title);
+        setKindOfSport(kindOfSport);
         setCategory(category);
 
     }
