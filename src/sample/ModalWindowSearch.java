@@ -178,7 +178,7 @@ public class ModalWindowSearch {
         table.setItems(list);
         VBox vBox = createVBox();
         root.getChildren().add(vBox);
-        Scene scene = new Scene(root, 550, 600);
+        Scene scene = new Scene(root, 610, 600);
         window.setScene(scene);
         window.setTitle("Search");
         window.showAndWait();

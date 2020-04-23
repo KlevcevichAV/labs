@@ -155,7 +155,7 @@ public class View {
 
     public void setSettingsTable(int numberRow){
         table.setMaxHeight(28 + numberRow *24);
-//        root.setMaxHeight(115 + 27 + table.getMaxHeight());
+        root.setMaxHeight(115 + 27 + table.getMaxHeight());
     }
 
     View(Stage primaryStage, ObservableList<Sportsman> list){
@@ -165,7 +165,7 @@ public class View {
         disableLeft();
         disableRight();
         primaryStage.setTitle("Hello World");
-        primaryStage.setScene(new Scene(root, 500, 400));
+        primaryStage.setScene(new Scene(root, 500, 500));
         primaryStage.show();
     }
 }

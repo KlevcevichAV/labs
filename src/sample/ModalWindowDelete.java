@@ -1,6 +1,5 @@
 package sample;
 
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -155,7 +154,7 @@ public class ModalWindowDelete {
         initialize(list);
         VBox vBox = createVBox();
         root.getChildren().add(vBox);
-        Scene scene = new Scene(root, 550, 600);
+        Scene scene = new Scene(root, 610, 200);
         window.setScene(scene);
         window.setTitle("Delete");
         window.showAndWait();
