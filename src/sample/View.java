@@ -6,15 +6,19 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class View {
     private BorderPane root;
     private Toolbar toolbar;
     private TableView table;
+    public MenuBar menu;
+    public MenuItem add, search, delete, load, save;
 
     void arrangement(){
-        root.setTop(toolbar.getToolbar());
+        VBox top = new VBox(menu, toolbar.getToolbar());
+        root.setTop(top);
         root.setCenter(table);
         root.setBottom(toolbar.getPages());
         table.setMaxHeight(270);
@@ -41,6 +45,17 @@ public class View {
 
     void initialize(){
         toolbar = new Toolbar();
+        Menu file = new Menu("File");
+        Menu function = new Menu("Function");
+        add = new Menu("Add");
+        search = new Menu("Search");
+        delete = new Menu("Delete");
+        load = new Menu("Load");
+        save = new Menu("Save");
+        file.getItems().addAll(load, save);
+        function.getItems().addAll(add, search, delete);
+        menu = new MenuBar();
+        menu.getMenus().addAll(file, function);
         createTable();
         arrangement();
     }
@@ -136,6 +151,11 @@ public class View {
 
     public Label getCounterElements(){
         return toolbar.counterElements;
+    }
+
+    public void setSettingsTable(int numberRow){
+        table.setMaxHeight(28 + numberRow *24);
+//        root.setMaxHeight(115 + 27 + table.getMaxHeight());
     }
 
     View(Stage primaryStage, ObservableList<Sportsman> list){

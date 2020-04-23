@@ -44,11 +44,11 @@ public class Model {
     }
 
     void openFile(File file) throws IOException, SAXException, ParserConfigurationException {
-        list = SAXXmlReader.createList(new File("temp.xml"));
+        if(file != null)list = SAXXmlReader.createList(file);
     }
 
-    void saveFile(String path) throws IOException, TransformerException, ParserConfigurationException {
-        DOMxmlWriter.createXml(list, path);
+    void saveFile(File file) throws IOException, TransformerException, ParserConfigurationException {
+        if(file != null)DOMxmlWriter.createXml(list, file.getPath());
     }
 
     void setTable(ObservableList<Sportsman> list){

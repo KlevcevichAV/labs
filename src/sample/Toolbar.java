@@ -54,7 +54,7 @@ public class Toolbar{
         pointerPage = 1;
     }
 
-    VBox getToolbar(){
+    public VBox getToolbar(){
         return root;
     }
 
