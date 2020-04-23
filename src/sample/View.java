@@ -3,9 +3,7 @@ package sample;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -45,7 +43,6 @@ public class View {
         toolbar = new Toolbar();
         createTable();
         arrangement();
-//        table.rowFactoryProperty().set(10);
     }
 
     ObservableList<Sportsman> getUserList() {
@@ -77,10 +74,76 @@ public class View {
         return toolbar.save;
     }
 
+    public Button getPageOneButton(){
+        return toolbar.pageOne;
+    }
+
+    public Button getPagePrevButton(){
+        return toolbar.pagePrev;
+    }
+
+    public Button getPageNextButton(){
+        return toolbar.pageNext;
+    }
+
+    public Button getEditNumberRow(){
+        return toolbar.numberRow;
+    }
+
+    public Button getPageLastButton(){
+        return toolbar.pageLast;
+    }
+
+    public TextField getNumberRowField(){
+        return toolbar.numberRowField;
+    }
+
+    void disableLeft(){
+        toolbar.pageOne.setDisable(true);
+        toolbar.pagePrev.setDisable(true);
+    }
+
+    void disableRight(){
+        toolbar.pageNext.setDisable(true);
+        toolbar.pageLast.setDisable(true);
+    }
+
+    void enableLeft(){
+        toolbar.pageOne.setDisable(false);
+        toolbar.pagePrev.setDisable(false);
+    }
+
+    void enableRight(){
+        toolbar.pageNext.setDisable(false);
+        toolbar.pageLast.setDisable(false);
+    }
+
+    public  Button getSearch(){
+        return toolbar.search;
+    }
+
+    public Button getDelete(){
+        return toolbar.delete;
+    }
+
+    public Label getQuantityPages(){
+        return toolbar.quantityPages;
+    }
+
+    public Label getLabel(){
+        return toolbar.numberPage;
+    }
+
+    public Label getCounterElements(){
+        return toolbar.counterElements;
+    }
+
     View(Stage primaryStage, ObservableList<Sportsman> list){
         root = new BorderPane();
         initialize();
         fillingTable(list);
+        disableLeft();
+        disableRight();
         primaryStage.setTitle("Hello World");
         primaryStage.setScene(new Scene(root, 500, 400));
         primaryStage.show();

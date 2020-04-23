@@ -8,7 +8,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-
 public class ModalWindowAdd {
     static Stage window;
     static TextField fullNameEdit, positionEdit, titleEdit, kindOfSportEdit;
@@ -112,7 +111,6 @@ public class ModalWindowAdd {
         return vBox;
     }
 
-
     public static void newWindow(){
         result = null;
         window = new Stage();
@@ -130,5 +128,4 @@ public class ModalWindowAdd {
     static public Sportsman getResult(){
         return result;
     }
-
 }
