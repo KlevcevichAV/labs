@@ -132,6 +132,7 @@ public class ModalWindowSearch {
         MenuItem temp1 = new MenuItem("-");
         kindOfSportButton.getItems().add(temp1);
         temp1.setOnAction(e->{
+            choiceSearch = new String();
             kindOfSportButton.setText("-");
         });
         for(int i = 0; i < list.size(); i++){
@@ -155,6 +156,7 @@ public class ModalWindowSearch {
         MenuItem temp1 = new MenuItem("-");
         categoryButton.getItems().add(temp1);
         temp1.setOnAction(e->{
+            choiceSearch = new String();
             categoryButton.setText("-");
         });
         for(int i = 0; i < list.size(); i++){

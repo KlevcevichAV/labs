@@ -115,6 +115,12 @@ public class ModalWindowDelete {
     static void createKindOfSportButton(){
         ArrayList<String> nameButton = new ArrayList<>();
         kindOfSportButton = new MenuButton("Вид спорта");
+        MenuItem temp1 = new MenuItem("-");
+        kindOfSportButton.getItems().add(temp1);
+        temp1.setOnAction(e->{
+            choiceSearch = new String();
+            kindOfSportButton.setText("-");
+        });
         for(int i = 0; i < list.size(); i++){
             if(!find(nameButton, list.get(i).getKindOfSport())){
                 nameButton.add(list.get(i).getKindOfSport());
@@ -134,6 +140,12 @@ public class ModalWindowDelete {
         categoryButton = new MenuButton("Разряд");
         categoryButton.setVisible(false);
         choiceSearch = new String();
+        MenuItem temp1 = new MenuItem("-");
+        categoryButton.getItems().add(temp1);
+        temp1.setOnAction(e->{
+            choiceSearch = new String();
+            categoryButton.setText("-");
+        });
         for(int i = 0; i < list.size(); i++){
             if(!find(nameButton, list.get(i).getCategory())){
                 nameButton.add(list.get(i).getCategory());
