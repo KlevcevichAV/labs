@@ -1,4 +1,4 @@
-package sample;
+package sample.ModalWindow;
 
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -7,6 +7,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import sample.data.Sportsman;
 
 public class ModalWindowAdd {
     static Stage window;

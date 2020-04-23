@@ -1,8 +1,11 @@
-package sample;
+package sample.MVC;
 
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.xml.sax.SAXException;
+import sample.ModalWindow.ModalWindowAdd;
+import sample.ModalWindow.ModalWindowSearch;
+import sample.data.Sportsman;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -157,7 +160,7 @@ public class Controller {
         });
     }
 
-    Controller(Stage primaryStage){
+    public Controller(Stage primaryStage){
         model = new Model(10);
         view = new View(primaryStage, model.getTable());
         event();

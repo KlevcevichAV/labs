@@ -1,4 +1,4 @@
-package sample;
+package sample.MVC;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -8,6 +8,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import sample.data.Sportsman;
 
 public class View {
     private BorderPane root;

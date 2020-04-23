@@ -1,4 +1,4 @@
-package sample;
+package sample.data;
 
 public class Sportsman {
     private String fullName;
@@ -65,7 +65,7 @@ public class Sportsman {
     }
 
 
-    Sportsman(String fullName, int structure, String position, int title, String kindOfSport, int category){
+    public Sportsman(String fullName, int structure, String position, int title, String kindOfSport, int category){
         setFullName(fullName);
         setStructure(structure);
         setPosition(position);

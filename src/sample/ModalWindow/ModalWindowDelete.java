@@ -1,49 +1,29 @@
-package sample;
+package sample.ModalWindow;
 
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import sample.data.Sportsman;
 
 import java.util.ArrayList;
 
-public class ModalWindowSearch {
+public class ModalWindowDelete {
     static Stage window;
     static int choice = 0;
+    static int counterDelete = 0;
     static MenuButton kindOfSportButton, categoryButton;
     static RadioButton fullNameOrKindOfSport , title, fullNameOrCategory;
     static TextField condition1Field, condition2Field;
     static Label condition1Label, condition2Label;
-    static Button search, cancel;
-    static TableView table;
+    static Button delete, cancel;
     static String choiceSearch = new String();
-
-    static void createTable(){
-        table = new TableView();
-        TableColumn<Sportsman, String> fullNameCol = new TableColumn<>("ФИО");
-        TableColumn<Sportsman, String> structure = new TableColumn<>("Состав");
-        TableColumn<Sportsman, String> position = new TableColumn<>("Позиция");
-        TableColumn<Sportsman, Integer> title = new TableColumn<>("Титулы");
-        TableColumn<Sportsman, String> kindOfSport = new TableColumn<>("Вид спорта");
-        TableColumn<Sportsman, String> category = new TableColumn<>("Разряд");
-
-        fullNameCol.setCellValueFactory(new PropertyValueFactory<>("fullName"));
-        structure.setCellValueFactory(new PropertyValueFactory<>("structure"));
-        position.setCellValueFactory(new PropertyValueFactory<>("position"));
-        title.setCellValueFactory(new PropertyValueFactory<>("title"));
-        kindOfSport.setCellValueFactory(new PropertyValueFactory<>("kindOfSport"));
-        category.setCellValueFactory(new PropertyValueFactory<>("category"));
-
-        table.getColumns().addAll(fullNameCol, structure, position, title, kindOfSport, category);
-    }
-
+    public static ObservableList<Sportsman> list;
     static void createGroup(){
         fullNameOrKindOfSport = new RadioButton("По ФИО или виду спорта");
         fullNameOrKindOfSport.setSelected(true);
@@ -79,11 +59,18 @@ public class ModalWindowSearch {
         fullNameOrCategory.setToggleGroup(groupStructure);
     }
 
-    static void createButton(ObservableList<Sportsman> list){
-        search = new Button("Search");
+    static void createButton(){
+        delete = new Button("Delete");
         cancel = new Button("Cancel");
-        search.setOnAction(e->{
-            table.setItems(search(choice, condition1Field.getText(), condition2Field.getText(), list));
+        delete.setOnAction(e->{
+            delete(choice, condition1Field.getText(), condition2Field.getText());
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            if(counterDelete == 0){
+                alert.setContentText("Ничего не найдено!");
+            }else alert.setContentText("Удалено спортсменов: " + counterDelete);
+            counterDelete = 0;
+            alert.showAndWait();
+            window.close();
         });
         cancel.setOnAction(e->{
             window.close();
@@ -99,10 +86,10 @@ public class ModalWindowSearch {
         condition1Label = new Label("ФИО");
         condition2Label = new Label("Вид спорта");
         createGroup();
-        createButton(list);
-        createTable();
-        createCategoryButton(list);
-        createKindOfSportButton(list);
+        ModalWindowDelete.list = list;
+        createButton();
+        createCategoryButton();
+        createKindOfSportButton();
     }
 
     static VBox createVBox(){
@@ -113,7 +100,7 @@ public class ModalWindowSearch {
         Group edit = new Group(kindOfSportButton, condition2Field, categoryButton);
         HBox condition2 = new HBox(condition2Label, edit);
         condition2.setSpacing(30);
-        VBox vBox = new VBox(choice, condition1, condition2, table, search, cancel);
+        VBox vBox = new VBox(choice, condition1, condition2, delete, cancel);
         vBox.setSpacing(10);
         return vBox;
     }
@@ -125,14 +112,9 @@ public class ModalWindowSearch {
         return false;
     }
 
-    static void createKindOfSportButton(ObservableList<Sportsman> list){
+    static void createKindOfSportButton(){
         ArrayList<String> nameButton = new ArrayList<>();
         kindOfSportButton = new MenuButton("Вид спорта");
-        MenuItem temp1 = new MenuItem("-");
-        kindOfSportButton.getItems().add(temp1);
-        temp1.setOnAction(e->{
-            kindOfSportButton.setText("-");
-        });
         for(int i = 0; i < list.size(); i++){
             if(!find(nameButton, list.get(i).getKindOfSport())){
                 nameButton.add(list.get(i).getKindOfSport());
@@ -147,15 +129,11 @@ public class ModalWindowSearch {
         }
     }
 
-    static void createCategoryButton(ObservableList<Sportsman> list){
+    static void createCategoryButton(){
         ArrayList<String> nameButton = new ArrayList<>();
         categoryButton = new MenuButton("Разряд");
         categoryButton.setVisible(false);
-        MenuItem temp1 = new MenuItem("-");
-        categoryButton.getItems().add(temp1);
-        temp1.setOnAction(e->{
-            categoryButton.setText("-");
-        });
+        choiceSearch = new String();
         for(int i = 0; i < list.size(); i++){
             if(!find(nameButton, list.get(i).getCategory())){
                 nameButton.add(list.get(i).getCategory());
@@ -175,61 +153,59 @@ public class ModalWindowSearch {
         window.initModality(Modality.APPLICATION_MODAL);
         Pane root = new Pane();
         initialize(list);
-        table.setItems(list);
         VBox vBox = createVBox();
         root.getChildren().add(vBox);
-        Scene scene = new Scene(root, 610, 600);
+        Scene scene = new Scene(root, 610, 200);
         window.setScene(scene);
-        window.setTitle("Search");
+        window.setTitle("Delete");
         window.showAndWait();
     }
 
-    static ObservableList<Sportsman> searchFIOOrKindOfSport(String condition1, String condition2, ObservableList<Sportsman> list){
+    static void deleteFIOOrKindOfSport(String condition1, String condition2, ObservableList<Sportsman> list){
         if(!(condition1.isEmpty() && condition2.isEmpty())){
-            ObservableList<Sportsman> listSearch = FXCollections.observableArrayList();
             for(int i = 0; i < list.size(); i++){
                 if(condition1.equals(list.get(i).getFullName()) || condition2.equals(list.get(i).getKindOfSport())){
-                    listSearch.add(list.get(i));
+                    list.remove(i--);
+                    counterDelete++;
                 }
             }
-            return listSearch;
-        }else return list;
+        }
     }
 
-    static ObservableList<Sportsman> searchFIOOrCategory(String condition1, String condition2, ObservableList<Sportsman> list){
+    static void deleteFIOOrCategory(String condition1, String condition2, ObservableList<Sportsman> list){
         if(!condition1.isEmpty() || !condition2.isEmpty()){
-            ObservableList<Sportsman> listSearch = FXCollections.observableArrayList();
             for(int i = 0; i < list.size(); i++){
                 if(condition1.equals(list.get(i).getFullName()) || condition2.equals(list.get(i).getCategory())){
-                    listSearch.add(list.get(i));
+                    list.remove(i--);
+                    counterDelete++;
                 }
             }
-            return listSearch;
-        } else return list;
+        }
     }
 
-    static ObservableList<Sportsman> searchTitle(String condition1, String condition2, ObservableList<Sportsman> list){
-        ObservableList<Sportsman> listSearch = FXCollections.observableArrayList();
+    static void deleteTitle(String condition1, String condition2, ObservableList<Sportsman> list){
         int border1 = Integer.parseInt(condition1);
         int border2 = Integer.parseInt(condition2);
         for(int i = 0; i < list.size(); i++){
             if(list.get(i).getTitle() <= border2 && list.get(i).getTitle() >= border1){
-                listSearch.add(list.get(i));
+                list.remove(i--);
+                counterDelete++;
             }
         }
-        return listSearch;
     }
 
-    static ObservableList<Sportsman> search(int choice, String condition1, String condition2, ObservableList<Sportsman> list){
+    static void delete(int choice, String condition1, String condition2){
         switch (choice){
             case 0:{
-                return searchFIOOrKindOfSport(condition1, choiceSearch, list);
+                deleteFIOOrKindOfSport(condition1, choiceSearch, list);
+                break;
             }
             case 1:{
-                return searchTitle(condition1, condition2, list);
+                deleteTitle(condition1, condition2, list);
+                break;
             }
             default:{
-                return searchFIOOrCategory(condition1, choiceSearch, list);
+                deleteFIOOrCategory(condition1, choiceSearch, list);
             }
         }
     }

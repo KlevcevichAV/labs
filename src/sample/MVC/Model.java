@@ -1,9 +1,13 @@
-package sample;
+package sample.MVC;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Label;
 import org.xml.sax.SAXException;
+import sample.ModalWindow.ModalWindowDelete;
+import sample.data.Sportsman;
+import sample.parser.DOMxmlWriter;
+import sample.parser.SAXXmlReader;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -48,7 +52,7 @@ public class Model {
     }
 
     void saveFile(File file) throws IOException, TransformerException, ParserConfigurationException {
-        if(file != null)DOMxmlWriter.createXml(list, file.getPath());
+        if(file != null) DOMxmlWriter.createXml(list, file.getPath());
     }
 
     void setTable(ObservableList<Sportsman> list){
