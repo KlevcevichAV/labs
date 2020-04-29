@@ -121,7 +121,7 @@ public class ModalWindowSearch {
         return vBox;
     }
 
-    private static boolean find(ArrayList<String> list, String element) {
+    private static boolean find(List<String> list, String element) {
         for (String condition : list) {
             if (condition.equals(element)) return true;
         }
@@ -129,7 +129,7 @@ public class ModalWindowSearch {
     }
 
     private static void createKindOfSportButton(List<Sportsman> list) {
-        ArrayList<String> nameButton = new ArrayList<>();
+        List<String> nameButton = new ArrayList<>();
         kindOfSportButton = new MenuButton(Constant.KIND_OF_SPORT);
         MenuItem temp1 = new MenuItem("-");
         kindOfSportButton.getItems().add(temp1);
@@ -151,7 +151,7 @@ public class ModalWindowSearch {
     }
 
     private static void createCategoryButton(List<Sportsman> list) {
-        ArrayList<String> nameButton = new ArrayList<>();
+        List<String> nameButton = new ArrayList<>();
         categoryButton = new MenuButton(Constant.CATEGORY);
         categoryButton.setVisible(false);
         MenuItem temp1 = new MenuItem("-");
