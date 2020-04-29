@@ -1,33 +1,37 @@
-package sample.MVC;
+package sample.controller;
 
+import javafx.collections.ObservableList;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.xml.sax.SAXException;
-import sample.ModalWindow.ModalWindowAdd;
-import sample.ModalWindow.ModalWindowSearch;
+import sample.modalWindow.ModalWindowAdd;
+import sample.modalWindow.ModalWindowSearch;
 import sample.data.Sportsman;
+import sample.model.Model;
+import sample.view.View;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 
 public class Controller {
     Model model;
     View view;
 
-    void pageSwitchingControl(){
-        if(model.pointerPage == 1){
+    private void pageSwitchingControl() {
+        if (model.pointerPage == 1) {
             view.disableLeft();
-        }else view.enableLeft();
-        if(model.pointerPage == model.quantityPages){
+        } else view.enableLeft();
+        if (model.pointerPage == model.quantityPages) {
             view.disableRight();
-        }else view.enableRight();
+        } else view.enableRight();
 
     }
 
-    public File onOpen() throws FileNotFoundException {
+    private File onOpen() throws FileNotFoundException {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open table");
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("xml", "*.xml");
@@ -36,7 +40,7 @@ public class Controller {
         return openFile;
     }
 
-    public File onSave() throws IOException {
+    private File onSave() throws IOException {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save table");
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("xml", "*.xml");
@@ -45,43 +49,57 @@ public class Controller {
         return file;
     }
 
-    void event(){
+    private void setLabel(int counterElements) {
+        view.setLabel(model.pointerPage, model.quantityPages);
+        view.setCounterElements(counterElements, model.numberRow);
+        view.setQuantityPages(model.getTableSize());
+    }
+
+    private void event() {
         pageSwitchingControl();
-        view.getAddButton().setOnAction(e->{
+        view.getAddButton().setOnAction(e -> {
             ModalWindowAdd.newWindow();
             Sportsman newSportsman = ModalWindowAdd.getResult();
-            if(newSportsman != null){
+            if (newSportsman != null) {
                 model.addElement(newSportsman);
-                view.fillingTable(model.getTable(view.getLabel(), view.getCounterElements(), view.getQuantityPages()));
+                List<Sportsman> temp = model.getTable();
+                setLabel(temp.size());
+                view.fillingTable(temp);
                 pageSwitchingControl();
             }
         });
-        view.add.setOnAction(e->{
+        view.add.setOnAction(e -> {
             ModalWindowAdd.newWindow();
             Sportsman newSportsman = ModalWindowAdd.getResult();
-            if(newSportsman != null){
+            if (newSportsman != null) {
                 model.addElement(newSportsman);
-                view.fillingTable(model.getTable(view.getLabel(), view.getCounterElements(), view.getQuantityPages()));
+                List<Sportsman> temp = model.getTable();
+                setLabel(temp.size());
+                view.fillingTable(temp);
                 pageSwitchingControl();
             }
         });
-        view.getSearch().setOnAction(e->{
-            ModalWindowSearch.newWindow(model.getTable());
+        view.getSearch().setOnAction(e -> {
+            ModalWindowSearch.newWindow(model.getWholeTable());
         });
-        view.search.setOnAction(e->{
-            ModalWindowSearch.newWindow(model.getTable());
+        view.search.setOnAction(e -> {
+            ModalWindowSearch.newWindow(model.getWholeTable());
         });
-        view.getDelete().setOnAction(e->{
+        view.getDelete().setOnAction(e -> {
             model.deleteElements();
-            view.fillingTable(model.getTable(view.getLabel(), view.getCounterElements(), view.getQuantityPages()));
+            List<Sportsman> temp = model.getTable();
+            setLabel(temp.size());
+            view.fillingTable(temp);
             pageSwitchingControl();
         });
-        view.delete.setOnAction(e->{
+        view.delete.setOnAction(e -> {
             model.deleteElements();
-            view.fillingTable(model.getTable(view.getLabel(), view.getCounterElements(), view.getQuantityPages()));
+            List<Sportsman> temp = model.getTable();
+            setLabel(temp.size());
+            view.fillingTable(temp);
             pageSwitchingControl();
         });
-        view.getOpenButton().setOnAction(e->{
+        view.getOpenButton().setOnAction(e -> {
             try {
                 model.openFile(onOpen());
             } catch (IOException ioException) {
@@ -91,10 +109,12 @@ public class Controller {
             } catch (ParserConfigurationException parserConfigurationException) {
                 parserConfigurationException.printStackTrace();
             }
-            view.fillingTable(model.getTable(view.getLabel(), view.getCounterElements(), view.getQuantityPages()));
+            List<Sportsman> temp = model.getTable();
+            setLabel(temp.size());
+            view.fillingTable(temp);
             pageSwitchingControl();
         });
-        view.load.setOnAction(e->{
+        view.load.setOnAction(e -> {
             try {
                 model.openFile(onOpen());
             } catch (IOException ioException) {
@@ -104,10 +124,12 @@ public class Controller {
             } catch (ParserConfigurationException parserConfigurationException) {
                 parserConfigurationException.printStackTrace();
             }
-            view.fillingTable(model.getTable(view.getLabel(), view.getCounterElements(), view.getQuantityPages()));
+            List<Sportsman> temp = model.getTable();
+            setLabel(temp.size());
+            view.fillingTable(temp);
             pageSwitchingControl();
         });
-        view.getSaveButton().setOnAction(e->{
+        view.getSaveButton().setOnAction(e -> {
             try {
                 model.saveFile(onSave());
             } catch (IOException ioException) {
@@ -118,7 +140,7 @@ public class Controller {
                 parserConfigurationException.printStackTrace();
             }
         });
-        view.save.setOnAction(e->{
+        view.save.setOnAction(e -> {
             try {
                 model.saveFile(onSave());
             } catch (IOException ioException) {
@@ -129,38 +151,48 @@ public class Controller {
                 parserConfigurationException.printStackTrace();
             }
         });
-        view.getPageNextButton().setOnAction(e->{
+        view.getPageNextButton().setOnAction(e -> {
             model.nextPage();
-            view.fillingTable(model.getTable(view.getLabel(), view.getCounterElements(), view.getQuantityPages()));
+            List<Sportsman> temp = model.getTable();
+            setLabel(temp.size());
+            view.fillingTable(temp);
             pageSwitchingControl();
         });
-        view.getPagePrevButton().setOnAction(e->{
+        view.getPagePrevButton().setOnAction(e -> {
             model.prevPage();
-            view.fillingTable(model.getTable(view.getLabel(), view.getCounterElements(), view.getQuantityPages()));
+            List<Sportsman> temp = model.getTable();
+            setLabel(temp.size());
+            view.fillingTable(temp);
             pageSwitchingControl();
         });
-        view.getPageOneButton().setOnAction(e->{
+        view.getPageOneButton().setOnAction(e -> {
             model.pageOne();
-            view.fillingTable(model.getTable(view.getLabel(), view.getCounterElements(), view.getQuantityPages()));
+            List<Sportsman> temp = model.getTable();
+            setLabel(temp.size());
+            view.fillingTable(temp);
             pageSwitchingControl();
         });
-        view.getPageLastButton().setOnAction(e->{
+        view.getPageLastButton().setOnAction(e -> {
             model.lastPage();
-            view.fillingTable(model.getTable(view.getLabel(), view.getCounterElements(), view.getQuantityPages()));
+            List<Sportsman> temp = model.getTable();
+            setLabel(temp.size());
+            view.fillingTable(temp);
             pageSwitchingControl();
         });
-        view.getEditNumberRow().setOnAction(e->{
+        view.getEditNumberRow().setOnAction(e -> {
             String stringNumberRow = view.getNumberRowField().getText();
             int numberRow = Integer.parseInt(stringNumberRow);
             model.setNumberRow(numberRow);
             model.pointerPage = 1;
             view.setSettingsTable(model.numberRow);
-            view.fillingTable(model.getTable(view.getLabel(), view.getCounterElements(), view.getQuantityPages()));
+            List<Sportsman> temp = model.getTable();
+            setLabel(temp.size());
+            view.fillingTable(temp);
             pageSwitchingControl();
         });
     }
 
-    public Controller(Stage primaryStage){
+    public Controller(Stage primaryStage) {
         model = new Model(10);
         view = new View(primaryStage, model.getTable());
         event();

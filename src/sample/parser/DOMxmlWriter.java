@@ -3,6 +3,7 @@ package sample.parser;
 import javafx.collections.ObservableList;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import sample.data.Constant;
 import sample.data.Sportsman;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -16,17 +17,18 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 public class DOMxmlWriter {
-    public static void createXml(ObservableList<Sportsman> list, String path) throws ParserConfigurationException, IOException, TransformerException {
+    public static void createXml(List<Sportsman> list, String path) throws ParserConfigurationException, IOException, TransformerException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
         Document document = builder.newDocument();
         Element root = document.createElement("root");
         document.appendChild(root);
-        for (int i = 0; i < list.size(); i++){
-            Element temp = document.createElement("sportsman");
-            createSportsman(temp, list.get(i));
+        for (Sportsman sportsman : list) {
+            Element temp = document.createElement(Constant.SPORTSMAN);
+            createSportsman(temp, sportsman);
             root.appendChild(temp);
         }
         Transformer t = TransformerFactory.newInstance().newTransformer();
@@ -34,12 +36,12 @@ public class DOMxmlWriter {
         t.transform(new DOMSource(document), new StreamResult(new FileOutputStream(path)));
     }
 
-    static void createSportsman(Element element, Sportsman sportsman){
-        element.setAttribute("fullName", sportsman.getFullName());
-        element.setAttribute("structure", sportsman.getStructure());
-        element.setAttribute("position", sportsman.getPosition());
-        element.setAttribute("title", Integer.toString(sportsman.getTitle()));
-        element.setAttribute("kindOfSport", sportsman.getKindOfSport());
-        element.setAttribute("category", sportsman.getCategory());
+    private static void createSportsman(Element element, Sportsman sportsman) {
+        element.setAttribute(Constant.FULL_NAME_EN, sportsman.getFullName());
+        element.setAttribute(Constant.STRUCTURE_EN, sportsman.getStructure());
+        element.setAttribute(Constant.POSITION_EN, sportsman.getPosition());
+        element.setAttribute(Constant.TITLE_EN, Integer.toString(sportsman.getTitle()));
+        element.setAttribute(Constant.KIND_OF_SPORT_EN, sportsman.getKindOfSport());
+        element.setAttribute(Constant.CATEGORY_EN, sportsman.getCategory());
     }
 }

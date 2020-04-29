@@ -2,13 +2,13 @@ package sample;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
-import sample.MVC.Controller;
+import sample.controller.Controller;
 
 
 public class Main extends Application {
     @Override
-    public void start(Stage primaryStage) throws Exception{
-        Controller controller = new Controller(primaryStage);
+    public void start(Stage primaryStage) throws Exception {
+        new Controller(primaryStage);
     }
 
 

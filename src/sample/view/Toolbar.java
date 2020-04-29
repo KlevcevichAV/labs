@@ -1,4 +1,4 @@
-package sample.MVC;
+package sample.view;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -6,27 +6,16 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-public class Toolbar{
-    VBox root;
-    int pointerPage;
-    Button add;
-    Button search;
-    Button delete;
-    Button load;
-    Button save;
-    Label numbRow;
-    Label counterElements;
-    Label quantityPages;
-    Button numberRow;
-    TextField numberRowField;
-    Button pageOne;
-    Button pageLast;
-    Label numberPage;
-    Button pagePrev;
-    Button pageNext;
-    HBox pages;
+public class Toolbar {
+    private VBox root;
+    private HBox pages;
+    private int pointerPage;
+    private Button add, search, delete, load, save, numberRow;
+    public Label numbRow, counterElements, quantityPages, numberPage;
+    private TextField numberRowField;
+    private Button pageOne, pageLast, pagePrev, pageNext;
 
-    Toolbar(){
+    public Toolbar() {
         add = new Button("Добавить");
         search = new Button("Поиск");
         delete = new Button("Удаление");
@@ -54,12 +43,55 @@ public class Toolbar{
         pointerPage = 1;
     }
 
-    public VBox getToolbar(){
+    public VBox getToolbar() {
         return root;
     }
 
+    public HBox getPages() {
+        return pages;
+    }
 
+    public Button getAdd() {
+        return add;
+    }
 
-    HBox getPages(){ return pages;}
+    public Button getSearch() {
+        return search;
+    }
 
+    public Button getDelete() {
+        return delete;
+    }
+
+    public Button getLoad() {
+        return load;
+    }
+
+    public Button getSave() {
+        return save;
+    }
+
+    public Button getPageOne() {
+        return pageOne;
+    }
+
+    public Button getPageLast() {
+        return pageLast;
+    }
+
+    public Button getPagePrev() {
+        return pagePrev;
+    }
+
+    public Button getPageNext() {
+        return pageNext;
+    }
+
+    public Button getNumberRow() {
+        return numberRow;
+    }
+
+    public TextField getNumberRowField() {
+        return numberRowField;
+    }
 }

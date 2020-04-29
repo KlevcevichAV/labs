@@ -1,4 +1,4 @@
-package sample.ModalWindow;
+package sample.modalWindow;
 
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
@@ -9,34 +9,41 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import sample.data.Constant;
 import sample.data.Sportsman;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ModalWindowDelete {
-    static Stage window;
-    static int choice = 0;
-    static int counterDelete = 0;
-    static MenuButton kindOfSportButton, categoryButton;
-    static RadioButton fullNameOrKindOfSport , title, fullNameOrCategory;
-    static TextField condition1Field, condition2Field;
-    static Label condition1Label, condition2Label;
-    static Button delete, cancel;
-    static String choiceSearch = new String();
-    public static ObservableList<Sportsman> list;
-    static void createGroup(){
+    private static Stage window;
+    private static int choice = 0;
+    private static int counterDelete = 0;
+    private static MenuButton kindOfSportButton, categoryButton;
+    private static RadioButton fullNameOrKindOfSport, title, fullNameOrCategory;
+    private static TextField condition1Field, condition2Field;
+    private static Label condition1Label, condition2Label;
+    private static Button delete, cancel;
+    private static String choiceSearch = "";
+    private static List<Sportsman> list;
+
+    public static List<Sportsman> getList(){
+        return list;
+    }
+
+    private static void createGroup() {
         fullNameOrKindOfSport = new RadioButton("По ФИО или виду спорта");
         fullNameOrKindOfSport.setSelected(true);
-        fullNameOrKindOfSport.setOnAction(e->{
+        fullNameOrKindOfSport.setOnAction(e -> {
             condition2Field.setVisible(false);
             categoryButton.setVisible(false);
             kindOfSportButton.setVisible(true);
             choice = 0;
-            condition1Label.setText("ФИО");
-            condition2Label.setText("Вид спорта");
+            condition1Label.setText(Constant.FULL_NAME);
+            condition2Label.setText(Constant.KIND_OF_SPORT);
         });
         title = new RadioButton("По количеству титулов");
-        title.setOnAction(e->{
+        title.setOnAction(e -> {
             condition2Field.setVisible(true);
             categoryButton.setVisible(false);
             kindOfSportButton.setVisible(false);
@@ -45,13 +52,13 @@ public class ModalWindowDelete {
             condition2Label.setText("Максимум");
         });
         fullNameOrCategory = new RadioButton("По ФИО или разряду");
-        fullNameOrCategory.setOnAction(e->{
+        fullNameOrCategory.setOnAction(e -> {
             condition2Field.setVisible(false);
             categoryButton.setVisible(true);
             kindOfSportButton.setVisible(false);
             choice = 2;
-            condition1Label.setText("ФИО");
-            condition2Label.setText("Разряд");
+            condition1Label.setText(Constant.FULL_NAME);
+            condition2Label.setText(Constant.CATEGORY);
         });
         ToggleGroup groupStructure = new ToggleGroup();
         fullNameOrKindOfSport.setToggleGroup(groupStructure);
@@ -59,32 +66,32 @@ public class ModalWindowDelete {
         fullNameOrCategory.setToggleGroup(groupStructure);
     }
 
-    static void createButton(){
+    private static void createButton() {
         delete = new Button("Delete");
         cancel = new Button("Cancel");
-        delete.setOnAction(e->{
+        delete.setOnAction(e -> {
             delete(choice, condition1Field.getText(), condition2Field.getText());
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            if(counterDelete == 0){
+            if (counterDelete == 0) {
                 alert.setContentText("Ничего не найдено!");
-            }else alert.setContentText("Удалено спортсменов: " + counterDelete);
+            } else alert.setContentText("Удалено спортсменов: " + counterDelete);
             counterDelete = 0;
             alert.showAndWait();
             window.close();
         });
-        cancel.setOnAction(e->{
+        cancel.setOnAction(e -> {
             window.close();
         });
     }
 
-    static void initialize(ObservableList<Sportsman> list){
+    private static void initialize(List<Sportsman> list) {
         condition1Field = new TextField();
         condition1Field.setPrefWidth(400);
         condition2Field = new TextField();
         condition2Field.setVisible(false);
         condition2Field.setPrefWidth(450);
-        condition1Label = new Label("ФИО");
-        condition2Label = new Label("Вид спорта");
+        condition1Label = new Label(Constant.FULL_NAME);
+        condition2Label = new Label(Constant.KIND_OF_SPORT);
         createGroup();
         ModalWindowDelete.list = list;
         createButton();
@@ -92,7 +99,7 @@ public class ModalWindowDelete {
         createKindOfSportButton();
     }
 
-    static VBox createVBox(){
+    private static VBox createVBox() {
         HBox choice = new HBox(fullNameOrKindOfSport, title, fullNameOrCategory);
         choice.setSpacing(30);
         HBox condition1 = new HBox(condition1Label, condition1Field);
@@ -105,29 +112,28 @@ public class ModalWindowDelete {
         return vBox;
     }
 
-    static boolean find(ArrayList<String> list, String element){
-        for(int i = 0; i < list.size(); i++){
-            if(list.get(i).equals(element)) return true;
+    private static boolean find(ArrayList<String> list, String element) {
+        for (String sportsman : list) {
+            if (sportsman.equals(element)) return true;
         }
         return false;
     }
 
-    static void createKindOfSportButton(){
+    private static void createKindOfSportButton() {
         ArrayList<String> nameButton = new ArrayList<>();
-        kindOfSportButton = new MenuButton("Вид спорта");
+        kindOfSportButton = new MenuButton(Constant.KIND_OF_SPORT);
         MenuItem temp1 = new MenuItem("-");
         kindOfSportButton.getItems().add(temp1);
-        temp1.setOnAction(e->{
-            choiceSearch = new String();
+        temp1.setOnAction(e -> {
+            choiceSearch = "";
             kindOfSportButton.setText("-");
         });
-        for(int i = 0; i < list.size(); i++){
-            if(!find(nameButton, list.get(i).getKindOfSport())){
-                nameButton.add(list.get(i).getKindOfSport());
-                MenuItem temp = new MenuItem(list.get(i).getKindOfSport());
-                int finalI = i;
-                temp.setOnAction(e->{
-                    choiceSearch = list.get(finalI).getKindOfSport();
+        for (Sportsman sportsman : list) {
+            if (!find(nameButton, sportsman.getKindOfSport())) {
+                nameButton.add(sportsman.getKindOfSport());
+                MenuItem temp = new MenuItem(sportsman.getKindOfSport());
+                temp.setOnAction(e -> {
+                    choiceSearch = sportsman.getKindOfSport();
                     kindOfSportButton.setText(choiceSearch);
                 });
                 kindOfSportButton.getItems().addAll(temp);
@@ -135,24 +141,23 @@ public class ModalWindowDelete {
         }
     }
 
-    static void createCategoryButton(){
+    private static void createCategoryButton() {
         ArrayList<String> nameButton = new ArrayList<>();
-        categoryButton = new MenuButton("Разряд");
+        categoryButton = new MenuButton(Constant.CATEGORY);
         categoryButton.setVisible(false);
-        choiceSearch = new String();
+        choiceSearch = "";
         MenuItem temp1 = new MenuItem("-");
         categoryButton.getItems().add(temp1);
-        temp1.setOnAction(e->{
-            choiceSearch = new String();
+        temp1.setOnAction(e -> {
+            choiceSearch = "";
             categoryButton.setText("-");
         });
-        for(int i = 0; i < list.size(); i++){
-            if(!find(nameButton, list.get(i).getCategory())){
-                nameButton.add(list.get(i).getCategory());
-                MenuItem temp = new MenuItem(list.get(i).getCategory());
-                int finalI = i;
-                temp.setOnAction(e->{
-                    choiceSearch = list.get(finalI).getCategory();
+        for (Sportsman sportsman : list) {
+            if (!find(nameButton, sportsman.getCategory())) {
+                nameButton.add(sportsman.getCategory());
+                MenuItem temp = new MenuItem(sportsman.getCategory());
+                temp.setOnAction(e -> {
+                    choiceSearch = sportsman.getCategory();
                     categoryButton.setText(choiceSearch);
                 });
                 categoryButton.getItems().addAll(temp);
@@ -160,7 +165,7 @@ public class ModalWindowDelete {
         }
     }
 
-    public static void newWindow(ObservableList<Sportsman> list){
+    public static void newWindow(List<Sportsman> list) {
         window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
         Pane root = new Pane();
@@ -173,10 +178,10 @@ public class ModalWindowDelete {
         window.showAndWait();
     }
 
-    static void deleteFIOOrKindOfSport(String condition1, String condition2, ObservableList<Sportsman> list){
-        if(!(condition1.isEmpty() && condition2.isEmpty())){
-            for(int i = 0; i < list.size(); i++){
-                if(condition1.equals(list.get(i).getFullName()) || condition2.equals(list.get(i).getKindOfSport())){
+    private static void deleteFIOOrKindOfSport(String condition1, String condition2, List<Sportsman> list) {
+        if (!(condition1.isEmpty() && condition2.isEmpty())) {
+            for (int i = 0; i < list.size(); i++) {
+                if (condition1.equals(list.get(i).getFullName()) || condition2.equals(list.get(i).getKindOfSport())) {
                     list.remove(i--);
                     counterDelete++;
                 }
@@ -184,10 +189,10 @@ public class ModalWindowDelete {
         }
     }
 
-    static void deleteFIOOrCategory(String condition1, String condition2, ObservableList<Sportsman> list){
-        if(!condition1.isEmpty() || !condition2.isEmpty()){
-            for(int i = 0; i < list.size(); i++){
-                if(condition1.equals(list.get(i).getFullName()) || condition2.equals(list.get(i).getCategory())){
+    private static void deleteFIOOrCategory(String condition1, String condition2, List<Sportsman> list) {
+        if (!condition1.isEmpty() || !condition2.isEmpty()) {
+            for (int i = 0; i < list.size(); i++) {
+                if (condition1.equals(list.get(i).getFullName()) || condition2.equals(list.get(i).getCategory())) {
                     list.remove(i--);
                     counterDelete++;
                 }
@@ -195,28 +200,28 @@ public class ModalWindowDelete {
         }
     }
 
-    static void deleteTitle(String condition1, String condition2, ObservableList<Sportsman> list){
+    private static void deleteTitle(String condition1, String condition2, List<Sportsman> list) {
         int border1 = Integer.parseInt(condition1);
         int border2 = Integer.parseInt(condition2);
-        for(int i = 0; i < list.size(); i++){
-            if(list.get(i).getTitle() <= border2 && list.get(i).getTitle() >= border1){
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getTitle() <= border2 && list.get(i).getTitle() >= border1) {
                 list.remove(i--);
                 counterDelete++;
             }
         }
     }
 
-    static void delete(int choice, String condition1, String condition2){
-        switch (choice){
-            case 0:{
+    private static void delete(int choice, String condition1, String condition2) {
+        switch (choice) {
+            case 0: {
                 deleteFIOOrKindOfSport(condition1, choiceSearch, list);
                 break;
             }
-            case 1:{
+            case 1: {
                 deleteTitle(condition1, condition2, list);
                 break;
             }
-            default:{
+            default: {
                 deleteFIOOrCategory(condition1, choiceSearch, list);
             }
         }

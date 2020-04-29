@@ -8,64 +8,63 @@ public class Sportsman {
     private String kindOfSport;
     private String category;
 
-    void setStructure(int structure){
-        switch (structure){
-            case 0:{
-                this.structure = "основной";
+    public void setStructure(int structure) {
+        switch (structure) {
+            case 0: {
+                this.structure = Constant.MAIN;
                 break;
             }
-            case 1:{
-                this.structure = "запасной";
+            case 1: {
+                this.structure = Constant.SPARE;
                 break;
             }
-            default:{
-                this.structure = "n/a";
+            default: {
+                this.structure = Constant.NA;
             }
         }
     }
 
-    void setCategory(int category){
-        switch (category){
-            case 0:{
-                this.category = "мастер спорта";
+    public void setCategory(int category) {
+        switch (category) {
+            case 0: {
+                this.category = Constant.MASTER_OF_SPORT;
                 break;
             }
-            case 1:{
-                this.category = "кмс";
+            case 1: {
+                this.category = Constant.СMS;
                 break;
             }
-            case 2:{
-                this.category = "3-й разряд";
+            case 2: {
+                this.category = Constant.DISCHARGE3;
                 break;
             }
-            case 3:{
-                this.category = "2-й разряд";
+            case 3: {
+                this.category = Constant.DISCHARGE2;
                 break;
             }
-            default:{
-                this.category = "1-й юношеский";
+            default: {
+                this.category = Constant.DISCHARGE1;
             }
         }
     }
 
-    void setFullName(String fullName){
+    public void setFullName(String fullName) {
         this.fullName = fullName;
     }
 
-    void setPosition(String position){
+    public void setPosition(String position) {
         this.position = position;
     }
 
-    void setTitle(int title){
+    public void setTitle(int title) {
         this.title = title;
     }
 
-    void setKindOfSport(String kindOfSport){
+    public void setKindOfSport(String kindOfSport) {
         this.kindOfSport = kindOfSport;
     }
 
-
-    public Sportsman(String fullName, int structure, String position, int title, String kindOfSport, int category){
+    public Sportsman(String fullName, int structure, String position, int title, String kindOfSport, int category) {
         setFullName(fullName);
         setStructure(structure);
         setPosition(position);
