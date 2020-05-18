@@ -17,7 +17,7 @@ public class View {
     private Toolbar toolbar;
     private TableView table;
     public MenuBar menu;
-    public MenuItem add, search, delete, load, save;
+    public MenuItem add, search, delete, load, save, exit;
 
     private void arrangement() {
         VBox top = new VBox(menu, toolbar.getToolbar());
@@ -55,8 +55,9 @@ public class View {
         delete = new Menu("Delete");
         load = new Menu("Load");
         save = new Menu("Save");
+        exit = new Menu("Exit");
         file.getItems().addAll(load, save);
-        function.getItems().addAll(add, search, delete);
+        function.getItems().addAll(add, search, delete, exit);
         menu = new MenuBar();
         menu.getMenus().addAll(file, function);
         createTable();

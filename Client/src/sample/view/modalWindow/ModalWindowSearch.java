@@ -14,6 +14,8 @@ import javafx.stage.Stage;
 import sample.data.Constant;
 import sample.data.Sportsman;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +28,7 @@ public class ModalWindowSearch {
     private static Label condition1Label, condition2Label;
     private static Button search, cancel;
     private static TableView table;
+    private static int pointerChoice;
     private static String choiceSearch = "";
 
     private static void createTable() {
@@ -48,9 +51,11 @@ public class ModalWindowSearch {
     }
 
     private static void createGroup() {
+        pointerChoice = 1;
         fullNameOrKindOfSport = new RadioButton("По ФИО или виду спорта");
         fullNameOrKindOfSport.setSelected(true);
         fullNameOrKindOfSport.setOnAction(e -> {
+            pointerChoice = 1;
             condition2Field.setVisible(false);
             categoryButton.setVisible(false);
             kindOfSportButton.setVisible(true);
@@ -60,6 +65,7 @@ public class ModalWindowSearch {
         });
         title = new RadioButton("По количеству титулов");
         title.setOnAction(e -> {
+            pointerChoice = 2;
             condition2Field.setVisible(true);
             categoryButton.setVisible(false);
             kindOfSportButton.setVisible(false);
@@ -69,6 +75,7 @@ public class ModalWindowSearch {
         });
         fullNameOrCategory = new RadioButton("По ФИО или разряду");
         fullNameOrCategory.setOnAction(e -> {
+            pointerChoice = 3;
             condition2Field.setVisible(false);
             categoryButton.setVisible(true);
             kindOfSportButton.setVisible(false);
@@ -82,10 +89,19 @@ public class ModalWindowSearch {
         fullNameOrCategory.setToggleGroup(groupStructure);
     }
 
-    private static void createButton(List<Sportsman> list) {
+    private static void createButton(List<Sportsman> list, BufferedWriter out) {
         search = new Button("Search");
         cancel = new Button("Cancel");
         search.setOnAction(e -> {
+            try {
+                out.write(Constant.SEARCH + "\n");
+                out.flush();
+                out.write(pointerChoice + "\n");
+                out.flush();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+
             table.setItems(search(choice, condition1Field.getText(), condition2Field.getText(), (ObservableList<Sportsman>) list));
         });
         cancel.setOnAction(e -> {
@@ -93,7 +109,7 @@ public class ModalWindowSearch {
         });
     }
 
-    private static void initialize(List<Sportsman> list) {
+    private static void initialize(List<Sportsman> list, BufferedWriter out) {
         condition1Field = new TextField();
         condition1Field.setPrefWidth(400);
         condition2Field = new TextField();
@@ -102,7 +118,7 @@ public class ModalWindowSearch {
         condition1Label = new Label(Constant.FULL_NAME);
         condition2Label = new Label(Constant.KIND_OF_SPORT);
         createGroup();
-        createButton(list);
+        createButton(list, out);
         createTable();
         createCategoryButton(list);
         createKindOfSportButton(list);
@@ -173,11 +189,11 @@ public class ModalWindowSearch {
         }
     }
 
-    public static void newWindow(List<Sportsman> list) {
+    public static void newWindow(List<Sportsman> list, BufferedWriter out) {
         window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
         Pane root = new Pane();
-        initialize(list);
+        initialize(list, out);
         table.setItems((ObservableList) list);
         VBox vBox = createVBox();
         root.getChildren().add(vBox);

@@ -1,11 +1,18 @@
 package sample.controller;
 
+import javafx.geometry.Insets;
+import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.xml.sax.SAXException;
+import sample.data.Constant;
+import sample.parser.Translator;
 import sample.view.modalWindow.ModalWindowAdd;
+import sample.view.modalWindow.ModalWindowLoad;
 import sample.view.modalWindow.ModalWindowSearch;
 import sample.data.Sportsman;
+import sample.model.Model;
 import sample.parser.DOMxmlWriter;
 import sample.parser.SAXXmlReader;
 import sample.view.View;
@@ -14,18 +21,21 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import java.io.*;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class Controller {
-    private Socket client;
-    private View view;
-    private BufferedReader reader;
-    private BufferedReader in;
-    private BufferedWriter out;
+    Model model;
+    View view;
+    Socket client;
+    BufferedReader reader;
+    BufferedReader in;
+    public boolean check;
+    BufferedWriter out;
+    boolean checkLoad;
 
     private void add() throws IOException, TransformerException, ParserConfigurationException, SAXException {
-        ModalWindowAdd.newWindow();
+        ModalWindowAdd.newWindow(out);
         Sportsman newSportsman = ModalWindowAdd.getResult();
         String sportsmanString = "";
         if (newSportsman != null) {
@@ -46,21 +56,78 @@ public class Controller {
 
     }
 
-    private File onOpen() throws FileNotFoundException {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Open table");
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("xml", "*.xml");
-        fileChooser.getExtensionFilters().add(extFilter);
-        File openFile = fileChooser.showOpenDialog(null);
-        return openFile;
+    private ComboBox<String> createList(String listString){
+        ComboBox<String> list = new ComboBox<>();
+        String temp = "";
+        for(int i = 0; i < listString.length(); i++){
+            if(listString.charAt(i) == '\n' || i + 1 == listString.length()){
+                list.getItems().add(temp.toString());
+                temp = "";
+            }else temp = temp + listString.charAt(i);
+        }
+        return list;
     }
 
-    private File onSave() throws IOException {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Save table");
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("xml", "*.xml");
-        fileChooser.getExtensionFilters().add(extFilter);
-        File file = fileChooser.showSaveDialog(null);
+    private Alert createEmptyDialog(javafx.scene.Node content, String title) {
+        Alert alert = new Alert(Alert.AlertType.NONE);
+        alert.setTitle(title);
+
+        alert.getDialogPane().setContent(content);
+
+        return alert;
+    }
+
+    private String table;
+
+    private File onOpen() throws IOException {
+        out.write(Constant.LOAD+"\n");
+        out.flush();
+        ModalWindowLoad.newWindow(in,out);
+        File file = null;
+//        System.out.println(table);
+        System.out.println(ModalWindowLoad.table);
+        if(ModalWindowLoad.table != "") file = Translator.stringToFile(ModalWindowLoad.table, Constant.LOAD_FILE);
+        checkLoad = true;
+        return file;
+    }
+
+    static boolean checkEnd(String string){
+        return string.equals("end");
+    }
+
+    private File onSave() throws IOException, TransformerException, ParserConfigurationException {
+        out.write(Constant.SAVE+"\n");
+        out.flush();
+        GridPane gridPane = new GridPane();
+        TextField field = new TextField("name");
+        gridPane.add(field, 0, 1);
+        Alert distanceDialog = createEmptyDialog(gridPane, "Input name table");
+
+        ButtonType GET = new ButtonType("Get");
+        distanceDialog.getButtonTypes().add(GET);
+
+        ((Button) distanceDialog.getDialogPane().lookupButton(GET)).setOnAction(actionEvent -> {
+            String nameFile = "";
+            nameFile = field.getText();
+            if(!nameFile.contains(".xml"))nameFile = nameFile + ".xml";
+            try {
+                out.write(nameFile + "\n");
+                out.flush();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+            distanceDialog.close();
+        });
+
+        if(!checkLoad)distanceDialog.show();
+
+        File file = new File(Constant.SAVE_FILE);
+        if (file != null) {
+            DOMxmlWriter.createXml(model.getWholeTable(), Constant.SAVE_FILE);
+            String result = Translator.fileToString(file);
+            out.write(result);
+            out.flush();
+        }
         return file;
     }
 
@@ -73,7 +140,7 @@ public class Controller {
     private void event() {
         pageSwitchingControl();
         view.getAddButton().setOnAction(e -> {
-            ModalWindowAdd.newWindow();
+            ModalWindowAdd.newWindow(out);
             Sportsman newSportsman = ModalWindowAdd.getResult();
             if (newSportsman != null) {
                 model.addElement(newSportsman);
@@ -97,20 +164,20 @@ public class Controller {
             }
         });
         view.getSearch().setOnAction(e -> {
-            ModalWindowSearch.newWindow(model.getWholeTable());
+            ModalWindowSearch.newWindow(model.getWholeTable(), out);
         });
         view.search.setOnAction(e -> {
-            ModalWindowSearch.newWindow(model.getWholeTable());
+            ModalWindowSearch.newWindow(model.getWholeTable(), out);
         });
         view.getDelete().setOnAction(e -> {
-            model.deleteElements();
+            model.deleteElements(out);
             List<Sportsman> temp = model.getTable();
             setLabel(temp.size());
             view.fillingTable(temp);
             pageSwitchingControl();
         });
         view.delete.setOnAction(e -> {
-            model.deleteElements();
+            model.deleteElements(out);
             List<Sportsman> temp = model.getTable();
             setLabel(temp.size());
             view.fillingTable(temp);
@@ -130,6 +197,21 @@ public class Controller {
             setLabel(temp.size());
             view.fillingTable(temp);
             pageSwitchingControl();
+        });
+        view.exit.setOnAction(e->{
+            try {
+                out.write("/exit\n");
+                out.flush();
+                String word = in.readLine();
+                System.out.println(word);
+                in.close();
+                out.close();
+                reader.close();
+                client.close();
+                System.exit(0);
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
         });
         view.load.setOnAction(e -> {
             try {
@@ -209,12 +291,15 @@ public class Controller {
         });
     }
 
-    public Controller(Stage primaryStage, Socket client) throws IOException {
-        view = new View(primaryStage, new ArrayList<>());
+    public Controller(Stage primaryStage, Socket client, BufferedReader reader, BufferedReader in, BufferedWriter out) throws IOException {
+        check = true;
+        checkLoad = false;
+        model = new Model(10);
+        view = new View(primaryStage, model.getTable());
         this.client = client;
-        reader = new BufferedReader(new InputStreamReader(System.in));
-        in = new BufferedReader(new InputStreamReader(this.client.getInputStream()));
-        out = new BufferedWriter(new OutputStreamWriter(this.client.getOutputStream()));
+        this.reader = reader;
+        this.in = in;
+        this.out = out;
         event();
     }
 }

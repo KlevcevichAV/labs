@@ -10,6 +10,9 @@ import javafx.stage.Stage;
 import sample.data.Constant;
 import sample.data.Sportsman;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+
 public class ModalWindowAdd {
     private static Stage window;
     private static TextField fullNameEdit, positionEdit, titleEdit, kindOfSportEdit;
@@ -65,7 +68,7 @@ public class ModalWindowAdd {
         }
     }
 
-    private static void createButton() {
+    private static void createButton(BufferedWriter out) {
         add = new Button("Add");
         cancel = new Button("Cancel");
         add.setOnAction(e -> {
@@ -73,6 +76,12 @@ public class ModalWindowAdd {
             result = new Sportsman(fullNameEdit.getText(), getStructure(),
                     positionEdit.getText(), title,
                     kindOfSportEdit.getText(), getCategory());
+            try {
+                out.write(Constant.ADD + "\n");
+                out.flush();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
             window.close();
         });
         cancel.setOnAction(e -> {
@@ -81,7 +90,7 @@ public class ModalWindowAdd {
         });
     }
 
-    private static void initialize() {
+    private static void initialize(BufferedWriter out) {
         fullNameEdit = new TextField();
         fullNameEdit.setPrefWidth(400);
         positionEdit = new TextField();
@@ -92,7 +101,7 @@ public class ModalWindowAdd {
         kindOfSportEdit.setPrefWidth(447);
         createGroupStructure();
         createGroupCategory();
-        createButton();
+        createButton(out);
     }
 
     private static VBox createVBox() {
@@ -115,12 +124,12 @@ public class ModalWindowAdd {
         return vBox;
     }
 
-    public static void newWindow() {
+    public static void newWindow(BufferedWriter out) {
         result = null;
         window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
         Pane root = new Pane();
-        initialize();
+        initialize(out);
         VBox vBox = createVBox();
         root.getChildren().add(vBox);
         Scene scene = new Scene(root, 550, 300);
