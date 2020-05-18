@@ -93,16 +93,17 @@ public class ModalWindowSearch {
         search = new Button("Search");
         cancel = new Button("Cancel");
         search.setOnAction(e -> {
+            table.setItems(search(choice, condition1Field.getText(), condition2Field.getText(), (ObservableList<Sportsman>) list));
             try {
                 out.write(Constant.SEARCH + "\n");
                 out.flush();
                 out.write(pointerChoice + "\n");
                 out.flush();
+                out.write(table.getItems().size() + "\n");
+                out.flush();
             } catch (IOException ioException) {
                 ioException.printStackTrace();
             }
-
-            table.setItems(search(choice, condition1Field.getText(), condition2Field.getText(), (ObservableList<Sportsman>) list));
         });
         cancel.setOnAction(e -> {
             window.close();

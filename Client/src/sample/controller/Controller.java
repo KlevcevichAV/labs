@@ -56,14 +56,14 @@ public class Controller {
 
     }
 
-    private ComboBox<String> createList(String listString){
+    private ComboBox<String> createList(String listString) {
         ComboBox<String> list = new ComboBox<>();
         String temp = "";
-        for(int i = 0; i < listString.length(); i++){
-            if(listString.charAt(i) == '\n' || i + 1 == listString.length()){
+        for (int i = 0; i < listString.length(); i++) {
+            if (listString.charAt(i) == '\n' || i + 1 == listString.length()) {
                 list.getItems().add(temp.toString());
                 temp = "";
-            }else temp = temp + listString.charAt(i);
+            } else temp = temp + listString.charAt(i);
         }
         return list;
     }
@@ -80,23 +80,23 @@ public class Controller {
     private String table;
 
     private File onOpen() throws IOException {
-        out.write(Constant.LOAD+"\n");
+        out.write(Constant.LOAD + "\n");
         out.flush();
-        ModalWindowLoad.newWindow(in,out);
+        ModalWindowLoad.newWindow(in, out);
         File file = null;
 //        System.out.println(table);
-        System.out.println(ModalWindowLoad.table);
-        if(ModalWindowLoad.table != "") file = Translator.stringToFile(ModalWindowLoad.table, Constant.LOAD_FILE);
+//        System.out.println(ModalWindowLoad.table);
+        if (ModalWindowLoad.table != "") file = Translator.stringToFile(ModalWindowLoad.table, Constant.LOAD_FILE);
         checkLoad = true;
         return file;
     }
 
-    static boolean checkEnd(String string){
+    static boolean checkEnd(String string) {
         return string.equals("end");
     }
 
     private File onSave() throws IOException, TransformerException, ParserConfigurationException {
-        out.write(Constant.SAVE+"\n");
+        out.write(Constant.SAVE + "\n");
         out.flush();
         GridPane gridPane = new GridPane();
         TextField field = new TextField("name");
@@ -109,7 +109,7 @@ public class Controller {
         ((Button) distanceDialog.getDialogPane().lookupButton(GET)).setOnAction(actionEvent -> {
             String nameFile = "";
             nameFile = field.getText();
-            if(!nameFile.contains(".xml"))nameFile = nameFile + ".xml";
+            if (!nameFile.contains(".xml")) nameFile = nameFile + ".xml";
             try {
                 out.write(nameFile + "\n");
                 out.flush();
@@ -119,7 +119,7 @@ public class Controller {
             distanceDialog.close();
         });
 
-        if(!checkLoad)distanceDialog.show();
+        if (!checkLoad) distanceDialog.show();
 
         File file = new File(Constant.SAVE_FILE);
         if (file != null) {
@@ -198,12 +198,10 @@ public class Controller {
             view.fillingTable(temp);
             pageSwitchingControl();
         });
-        view.exit.setOnAction(e->{
+        view.exit.setOnAction(e -> {
             try {
                 out.write("/exit\n");
                 out.flush();
-                String word = in.readLine();
-                System.out.println(word);
                 in.close();
                 out.close();
                 reader.close();
@@ -256,6 +254,16 @@ public class Controller {
             setLabel(temp.size());
             view.fillingTable(temp);
             pageSwitchingControl();
+            try {
+                out.write(Constant.NEXT_PAGE + "\n");
+                out.flush();
+                out.write(model.pointerPage + "\n");
+                out.flush();
+
+
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
         });
         view.getPagePrevButton().setOnAction(e -> {
             model.prevPage();
@@ -263,6 +271,14 @@ public class Controller {
             setLabel(temp.size());
             view.fillingTable(temp);
             pageSwitchingControl();
+            try {
+                out.write(Constant.PREV_PAGE + "\n");
+                out.flush();
+                out.write(model.pointerPage + "\n");
+                out.flush();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
         });
         view.getPageOneButton().setOnAction(e -> {
             model.pageOne();
@@ -270,6 +286,14 @@ public class Controller {
             setLabel(temp.size());
             view.fillingTable(temp);
             pageSwitchingControl();
+            try {
+                out.write(Constant.FIRST_PAGE + "\n");
+                out.flush();
+                out.write(model.pointerPage + "\n");
+                out.flush();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
         });
         view.getPageLastButton().setOnAction(e -> {
             model.lastPage();
@@ -277,6 +301,14 @@ public class Controller {
             setLabel(temp.size());
             view.fillingTable(temp);
             pageSwitchingControl();
+            try {
+                out.write(Constant.LAST_PAGE + "\n");
+                out.flush();
+                out.write(model.pointerPage + "\n");
+                out.flush();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
         });
         view.getEditNumberRow().setOnAction(e -> {
             String stringNumberRow = view.getNumberRowField().getText();
@@ -288,6 +320,14 @@ public class Controller {
             setLabel(temp.size());
             view.fillingTable(temp);
             pageSwitchingControl();
+            try {
+                out.write(Constant.CHANGE_ROW_TABLE + "\n");
+                out.flush();
+                out.write(view.getNumberRowField().getText() + "\n");
+                out.flush();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
         });
     }
 
@@ -300,6 +340,18 @@ public class Controller {
         this.reader = reader;
         this.in = in;
         this.out = out;
+        primaryStage.setOnCloseRequest(e -> {
+            try {
+                out.write("/exit\n");
+                out.flush();
+                in.close();
+                out.close();
+                reader.close();
+                client.close();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+        });
         event();
     }
 }

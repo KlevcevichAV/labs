@@ -81,16 +81,18 @@ public class ModalWindowDelete {
             if (counterDelete == 0) {
                 alert.setContentText("Ничего не найдено!");
             } else alert.setContentText("Удалено спортсменов: " + counterDelete);
-            counterDelete = 0;
             alert.showAndWait();
             try {
                 out.write(Constant.DELETE + "\n");
                 out.flush();
                 out.write(pointerChoice + "\n");
                 out.flush();
+                out.write(counterDelete + "\n");
+                out.flush();
             } catch (IOException ioException) {
                 ioException.printStackTrace();
             }
+            counterDelete = 0;
             window.close();
         });
         cancel.setOnAction(e -> {
