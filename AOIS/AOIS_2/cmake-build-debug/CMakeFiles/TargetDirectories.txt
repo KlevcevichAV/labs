@@ -1,0 +1,3 @@
+/home/sanchir/CLionProjects/AOIS/AOIS_2/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/sanchir/CLionProjects/AOIS/AOIS_2/cmake-build-debug/CMakeFiles/AOIS_2.dir
+/home/sanchir/CLionProjects/AOIS/AOIS_2/cmake-build-debug/CMakeFiles/edit_cache.dir

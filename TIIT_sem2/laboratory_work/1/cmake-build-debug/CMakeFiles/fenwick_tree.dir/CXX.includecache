@@ -1,0 +1,18 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/sanchir/CLionProjects/TIIT/fenwick_tree.cpp
+vector
+-
+fenwick_tree.h
+/home/sanchir/CLionProjects/TIIT/fenwick_tree.h
+
+/home/sanchir/CLionProjects/TIIT/fenwick_tree.h
+vector
+-
+

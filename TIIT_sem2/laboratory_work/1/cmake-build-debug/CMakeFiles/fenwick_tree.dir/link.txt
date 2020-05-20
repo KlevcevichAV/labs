@@ -1,0 +1,2 @@
+/usr/bin/ar qc libfenwick_tree.a  CMakeFiles/fenwick_tree.dir/fenwick_tree.cpp.o
+/usr/bin/ranlib libfenwick_tree.a

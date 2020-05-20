@@ -1,0 +1,10 @@
+10 9
+rsq 1 10
+add 5 7
+add 4 -2
+add 9 10
+rsq 4 7
+rsq 4 10
+add 6 1
+add 7 2
+rsq 6 10
