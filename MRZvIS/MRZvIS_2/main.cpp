@@ -130,9 +130,9 @@ vector<vector<vector<double>>> createMatrixF(vector<vector<double>> matrix1, vec
     for(int i = 0; i < matrix1.size(); i++){
         for(int j = 0; j < matrix2.size(); j++){
             for(int k = 0; k < matrix1[0].size(); k++){
-                result[i][j][k] = fourthExtendedFunctionByTaskVariant(matrix1[i][j],matrix2[k][j]) * (2 * matrix3[k] - 1) *
-                        matrix3[k] + fifthExtendedFunctionByTaskVariant(matrix1[i][j],matrix2[k][j]) *
-                        (1 + (4 * fourthExtendedFunctionByTaskVariant(matrix1[i][j],matrix2[k][j]) - 2) * matrix3[k]) * (1 - matrix3[k]);
+                result[i][j][k] = fourthExtendedFunctionByTaskVariant(matrix1[i][k],matrix2[k][j]) * (2 * matrix3[k] - 1) *
+                        matrix3[k] + fifthExtendedFunctionByTaskVariant(matrix1[i][k],matrix2[k][j]) *
+                        (1 + (4 * fourthExtendedFunctionByTaskVariant(matrix1[i][k],matrix2[k][j]) - 2) * matrix3[k]) * (1 - matrix3[k]);
             }
         }
     }
