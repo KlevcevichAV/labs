@@ -1,6 +1,5 @@
 #include <iostream>
 #include <vector>
-#include <math.h>
 
 using namespace std;
 
@@ -113,12 +112,57 @@ double sixthExtendedFunctionByTaskVariant(double value1, double value2) {
     return value1 * value2;
 }
 
+vector<double> createElementsD(vector<vector<double>> a, vector<vector<double>> b, int i , int j){
+    vector<double> d;
+    for(int k = 0; k < b.size(); k++){
+        d.push_back(sixthExtendedFunctionByTaskVariant(a[i][k], b[k][j]));
+    }
+    return d;
+}
+
+vector<double> createElementsF(vector<vector<double>> a, vector<vector<double>> b, vector<double> e, int i , int j){
+    vector<double> d;
+    for(int k = 0; k < b.size(); k++){
+        double tempResult = fourthExtendedFunctionByTaskVariant(a[i][k],b[k][j]) * (2 * e[k] - 1) *
+                          e[k] + fifthExtendedFunctionByTaskVariant(a[i][k],b[k][j]) *
+                                       (1 + (4 * fourthExtendedFunctionByTaskVariant(a[i][k],b[k][j]) - 2) * e[k]) * (1 - e[k]);
+        d.push_back(tempResult);
+    }
+    return d;
+}
+
+//vector<vector<vector<double>>> createMatrixD(vector<vector<double>> matrix1, vector<vector<double>> matrix2){
+//    vector<vector<vector<double>>> result = initialize(matrix1.size(), matrix2.size(), matrix1[0].size());
+//    for(int i = 0; i < matrix1.size(); i++){
+//        for(int j = 0; j < matrix2.size(); j++){
+//            for(int k = 0; k < matrix1[0].size(); k++){
+//                result[i][j][k] = sixthExtendedFunctionByTaskVariant(matrix1[i][k], matrix2[k][j]);
+//            }
+//        }
+//    }
+//    return result;
+//}
+//
+//vector<vector<vector<double>>> createMatrixF(vector<vector<double>> matrix1, vector<vector<double>> matrix2, vector<double> matrix3){
+//    vector<vector<vector<double>>> result = initialize(matrix1.size(), matrix2.size(), matrix1[0].size());
+//    for(int i = 0; i < matrix1.size(); i++){
+//        for(int j = 0; j < matrix2.size(); j++){
+//            for(int k = 0; k < matrix1[0].size(); k++){
+//                result[i][j][k] = fourthExtendedFunctionByTaskVariant(matrix1[i][k],matrix2[k][j]) * (2 * matrix3[k] - 1) *
+//                                  matrix3[k] + fifthExtendedFunctionByTaskVariant(matrix1[i][k],matrix2[k][j]) *
+//                                               (1 + (4 * fourthExtendedFunctionByTaskVariant(matrix1[i][k],matrix2[k][j]) - 2) * matrix3[k]) * (1 - matrix3[k]);
+//            }
+//        }
+//    }
+//    return result;
+//}
+
 vector<vector<vector<double>>> createMatrixD(vector<vector<double>> matrix1, vector<vector<double>> matrix2){
     vector<vector<vector<double>>> result = initialize(matrix1.size(), matrix2.size(), matrix1[0].size());
     for(int i = 0; i < matrix1.size(); i++){
         for(int j = 0; j < matrix2.size(); j++){
             for(int k = 0; k < matrix1[0].size(); k++){
-                result[i][j][k] = sixthExtendedFunctionByTaskVariant(matrix1[i][k], matrix2[k][j]);
+                result[i][j] = createElementsD(matrix1, matrix2, i, j);
             }
         }
     }
@@ -130,23 +174,22 @@ vector<vector<vector<double>>> createMatrixF(vector<vector<double>> matrix1, vec
     for(int i = 0; i < matrix1.size(); i++){
         for(int j = 0; j < matrix2.size(); j++){
             for(int k = 0; k < matrix1[0].size(); k++){
-                result[i][j][k] = fourthExtendedFunctionByTaskVariant(matrix1[i][k],matrix2[k][j]) * (2 * matrix3[k] - 1) *
-                        matrix3[k] + fifthExtendedFunctionByTaskVariant(matrix1[i][k],matrix2[k][j]) *
-                        (1 + (4 * fourthExtendedFunctionByTaskVariant(matrix1[i][k],matrix2[k][j]) - 2) * matrix3[k]) * (1 - matrix3[k]);
+                result[i][j] = createElementsF(matrix1, matrix2, matrix3, i, j);
             }
         }
     }
     return result;
 }
 
-vector<vector<double>> createMatrixC(vector<vector<vector<double>>> f , vector<vector<vector<double>>> d, vector<vector<double>> g){
-    vector<vector<double>> c = initialize(d.size(), d[0].size());
-    for(int i = 0; i < d.size(); i++){
-        for(int j = 0; j < d[i].size(); j++){
-            c[i][j] = firstExtendedFunctionByTaskVariant(f[i][j]) * (3 * g[i][j] - 2) * g[i][j] +
-                    (secondExtendedFunctionByTaskVariant(d[i][j]) +
-                    (4 * thirdExtendedFunctionByTaskVariant(f[i][j], d[i][j]) -
-                    3 * secondExtendedFunctionByTaskVariant(d[i][j]) * g[i][j])) * (1 - g[i][j]);
+// CHECK SIZE!!!!!!!!!!!!
+vector<vector<double>> createMatrixC(vector<vector<double>> a , vector<vector<double>> b, vector<double> e, vector<vector<double>> g){
+    vector<vector<double>> c = initialize(a.size(), b[0].size());
+    for(int i = 0; i < a.size(); i++){
+        for(int j = 0; j < b[i].size(); j++){
+            c[i][j] = firstExtendedFunctionByTaskVariant(createElementsF(a, b, e, i, j)) * (3 * g[i][j] - 2) * g[i][j] +
+                      (secondExtendedFunctionByTaskVariant(createElementsD(a, b, i, j)) +
+                       (4 * thirdExtendedFunctionByTaskVariant(createElementsF(a, b, e, i, j), createElementsD(a, b, i, j)) -
+                        3 * secondExtendedFunctionByTaskVariant(createElementsD(a, b, i, j)) * g[i][j])) * (1 - g[i][j]);
         }
     }
     return c;
@@ -171,7 +214,7 @@ int main() {
     vector<vector<double>> matrixG = inputMatrix(P, Q);
     vector<vector<vector<double>>> matrixD = createMatrixD(matrixA, matrixB);
     vector<vector<vector<double>>> matrixF = createMatrixF(matrixA, matrixB, matrixE);
-    vector<vector<double>> matrixC = createMatrixC(matrixF, matrixD, matrixG);
+    vector<vector<double>> matrixC = createMatrixC(matrixA, matrixB, matrixE, matrixG);
 //    outputMatrix(matrixE);
 //    cout << "\n";
 //    outputMatrix(matrixA);
