@@ -90,16 +90,16 @@ public class Controller {
 
     private void definitionResultRemove() throws IOException {
         String result = server.in.readLine();
-        switch (result){
-            case "0":{
+        switch (result) {
+            case "0": {
                 addText("Nothing found\n");
                 break;
             }
-            case "1":{
+            case "1": {
                 addText("1 sportsman removed\n");
                 break;
             }
-            default:{
+            default: {
                 addText(result + " sportsmen removed\n");
             }
         }
@@ -107,16 +107,16 @@ public class Controller {
 
     private void definitionResultSearch() throws IOException {
         String result = server.in.readLine();
-        switch (result){
-            case "0":{
+        switch (result) {
+            case "0": {
                 addText("Nothing found\n");
                 break;
             }
-            case "1":{
+            case "1": {
                 addText("1 sportsman found\n");
                 break;
             }
-            default:{
+            default: {
                 addText(result + " sportsmen found\n");
             }
         }
@@ -172,33 +172,33 @@ public class Controller {
                 definitionResultSearch();
                 break;
             }
-            case Constant.NEXT_PAGE:{
+            case Constant.NEXT_PAGE: {
                 addText(Constant.NEXT_PAGE + "\n");
                 String currentPage = server.in.readLine();
                 addText(Constant.CURRENT_PAGE + currentPage + "\n");
                 break;
             }
-            case Constant.PREV_PAGE:{
+            case Constant.PREV_PAGE: {
                 addText(Constant.PREV_PAGE + "\n");
                 String currentPage = server.in.readLine();
                 addText(Constant.CURRENT_PAGE + currentPage + "\n");
                 break;
             }
-            case Constant.FIRST_PAGE:{
+            case Constant.FIRST_PAGE: {
                 addText(Constant.FIRST_PAGE + "\n");
                 String currentPage = server.in.readLine();
                 addText(Constant.CURRENT_PAGE + currentPage + "\n");
                 break;
             }
-            case Constant.LAST_PAGE:{
+            case Constant.LAST_PAGE: {
                 addText(Constant.LAST_PAGE + "\n");
                 String currentPage = server.in.readLine();
                 addText(Constant.CURRENT_PAGE + currentPage + "\n");
                 break;
             }
-            case Constant.CHANGE_ROW_TABLE:{
+            case Constant.CHANGE_ROW_TABLE: {
                 String currentRow = server.in.readLine();
-                addText(Constant.CHANGE_ROW_TABLE+ " " + currentRow+ "\n");
+                addText(Constant.CHANGE_ROW_TABLE + " " + currentRow + "\n");
                 break;
             }
             default: {
@@ -216,7 +216,7 @@ public class Controller {
         view = new View(primaryStage);
         listFiles = createList();
         loadCheck = false;
-        primaryStage.setOnCloseRequest(e->{
+        primaryStage.setOnCloseRequest(e -> {
             try {
                 server.closeServer();
             } catch (IOException ioException) {

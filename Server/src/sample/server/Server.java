@@ -6,6 +6,7 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.List;
 
 public class Server {
     public Socket clientSocket; //сокет для общения
@@ -41,6 +42,8 @@ public class Server {
     }
 
     public class AnotherThread extends Thread {
+
+        public List<Integer> list;
 
         @Override
         public void interrupt() {

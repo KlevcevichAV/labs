@@ -17,14 +17,14 @@ public class ModalWindowLoad {
     public static String table;
     private static ComboBox<String> listFile;
 
-    private static ComboBox<String> createList(String listString){
+    private static ComboBox<String> createList(String listString) {
         ComboBox<String> list = new ComboBox<>();
         String temp = "";
-        for(int i = 0; i < listString.length(); i++){
-            if(listString.charAt(i) == '\n' || i + 1 == listString.length()){
+        for (int i = 0; i < listString.length(); i++) {
+            if (listString.charAt(i) == '\n' || i + 1 == listString.length()) {
                 list.getItems().add(temp.toString());
                 temp = "";
-            }else temp = temp + listString.charAt(i);
+            } else temp = temp + listString.charAt(i);
         }
         return list;
     }
@@ -34,11 +34,12 @@ public class ModalWindowLoad {
         String serverWord = "";
         while (true) {
             String temp = in.readLine();
-            if(!checkEnd(temp))serverWord = serverWord + temp + "\n"; else break;
+            if (!checkEnd(temp)) serverWord = serverWord + temp + "\n";
+            else break;
         }
         listFile = createList(serverWord);
-        load.setOnAction(e->{
-            for(int i = 0; i < listFile.getItems().size(); i++){
+        load.setOnAction(e -> {
+            for (int i = 0; i < listFile.getItems().size(); i++) {
                 if (listFile.getItems().get(i).equals(listFile.getSelectionModel().getSelectedItem())) {
                     try {
                         out.write(listFile.getItems().get(i) + "\n");
@@ -48,12 +49,12 @@ public class ModalWindowLoad {
                     }
                     try {
                         table = "";
-                        while (true){
+                        while (true) {
                             String temp = in.readLine();
-                            if(temp.equals("</root>")) {
+                            if (temp.equals("</root>")) {
                                 table = table + temp;
                                 break;
-                            }else table = table + temp + "\n";
+                            } else table = table + temp + "\n";
                         }
                         window.close();
                         break;
@@ -65,7 +66,7 @@ public class ModalWindowLoad {
         });
     }
 
-    static boolean checkEnd(String string){
+    static boolean checkEnd(String string) {
         return string.equals("end");
     }
 

@@ -2,7 +2,6 @@ package sample.parser;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.transform.Transform;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -80,7 +79,7 @@ public class SAXXmlReader {
             }
         }
     }
-    
+
     private static int decisionCategory(String structure) {
         switch (structure) {
             case Constant.MASTER_OF_SPORT: {

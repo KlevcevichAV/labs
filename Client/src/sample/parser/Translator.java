@@ -12,17 +12,17 @@ public class Translator {
         FileReader reader = new FileReader(file);
         int pointer;
         String result = "";
-        while ((pointer = reader.read()) != -1){
+        while ((pointer = reader.read()) != -1) {
             result = result + (char) pointer;
         }
         return result;
     }
 
-    public static int searchIndex(String string, char c, int quantity){
+    public static int searchIndex(String string, char c, int quantity) {
         int counter = 0;
-        for(int i = 0; i < string.length(); i++){
-            if(string.charAt(i) == c){
-                if(++counter == quantity){
+        for (int i = 0; i < string.length(); i++) {
+            if (string.charAt(i) == c) {
+                if (++counter == quantity) {
                     return i;
                 }
             }
@@ -34,7 +34,7 @@ public class Translator {
         File file = new File(Constant.SETTINGS_FILE);
         String fileString = fileToString(file);
         String result = "";
-        for(int i = 1 + searchIndex(fileString, ':', 1); i < searchIndex(fileString, '\n', 1); i++){
+        for (int i = 1 + searchIndex(fileString, ':', 1); i < searchIndex(fileString, '\n', 1); i++) {
             result = result + fileString.charAt(i);
         }
         return result;
@@ -44,11 +44,12 @@ public class Translator {
         File file = new File(Constant.SETTINGS_FILE);
         String fileString = fileToString(file);
         String result = "";
-        for(int i = 1 + searchIndex(fileString, ':', 2); i < fileString.length(); i++){
-            if(fileString.charAt(i) >= '0' && fileString.charAt(i) <= '9'){
+        for (int i = 1 + searchIndex(fileString, ':', 2); i < fileString.length(); i++) {
+            if (fileString.charAt(i) >= '0' && fileString.charAt(i) <= '9') {
                 result = result + fileString.charAt(i);
-            }else{
-                if(fileString.charAt(i) == '\n')continue; else return 8000;
+            } else {
+                if (fileString.charAt(i) == '\n') continue;
+                else return 8000;
             }
         }
         int resultInt = Integer.parseInt(result);

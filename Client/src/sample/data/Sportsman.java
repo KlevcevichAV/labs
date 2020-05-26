@@ -98,7 +98,7 @@ public class Sportsman {
         return structure;
     }
 
-    public String toString(){
+    public String toString() {
         String result = "";
 
         return result;

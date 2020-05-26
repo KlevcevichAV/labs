@@ -13,7 +13,7 @@ public class View {
     private Button stop;
     private TextArea console;
 
-    public TextArea getConsole(){
+    public TextArea getConsole() {
         return console;
     }
 
@@ -25,7 +25,7 @@ public class View {
         return stop;
     }
 
-    private Scene createScene(){
+    private Scene createScene() {
         BorderPane root = new BorderPane();
         run = new Button("Запустить сервер");
         stop = new Button("Остановить сервер");
@@ -34,11 +34,11 @@ public class View {
         console.setEditable(false);
         root.setTop(buttonBox);
         root.setCenter(console);
-        Scene scene = new Scene(root, 400 , 350);
+        Scene scene = new Scene(root, 400, 350);
         return scene;
     }
 
-    public View(Stage primaryStage){
+    public View(Stage primaryStage) {
         primaryStage.setTitle("Hello World");
         primaryStage.setScene(createScene());
         primaryStage.show();

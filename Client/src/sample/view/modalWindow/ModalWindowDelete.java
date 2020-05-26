@@ -29,7 +29,7 @@ public class ModalWindowDelete {
     private static String choiceSearch = "";
     private static List<Sportsman> list;
 
-    public static List<Sportsman> getList(){
+    public static List<Sportsman> getList() {
         return list;
     }
 
@@ -185,7 +185,7 @@ public class ModalWindowDelete {
         window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
         Pane root = new Pane();
-        initialize(list,out);
+        initialize(list, out);
         VBox vBox = createVBox();
         root.getChildren().add(vBox);
         Scene scene = new Scene(root, 610, 200);

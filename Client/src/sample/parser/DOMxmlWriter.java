@@ -1,6 +1,5 @@
 package sample.parser;
 
-import javafx.collections.ObservableList;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import sample.data.Constant;
