@@ -11,6 +11,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import sample.controller.Controller;
 import sample.data.Constant;
 import sample.data.Sportsman;
 
@@ -27,9 +28,10 @@ public class ModalWindowSearch {
     private static TextField condition1Field, condition2Field;
     private static Label condition1Label, condition2Label;
     private static Button search, cancel;
-    private static TableView table;
-    private static int pointerChoice;
+    public static TableView table;
+    public static int pointerChoice;
     private static String choiceSearch = "";
+    private static Controller controller;
 
     private static void createTable() {
         table = new TableView();
@@ -89,28 +91,19 @@ public class ModalWindowSearch {
         fullNameOrCategory.setToggleGroup(groupStructure);
     }
 
-    private static void createButton(List<Sportsman> list, BufferedWriter out) {
+    private static void createButton(List<Sportsman> list) {
         search = new Button("Search");
         cancel = new Button("Cancel");
         search.setOnAction(e -> {
             table.setItems(search(choice, condition1Field.getText(), condition2Field.getText(), (ObservableList<Sportsman>) list));
-            try {
-                out.write(Constant.SEARCH + "\n");
-                out.flush();
-                out.write(pointerChoice + "\n");
-                out.flush();
-                out.write(table.getItems().size() + "\n");
-                out.flush();
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-            }
+            controller.dialogSearch();
         });
         cancel.setOnAction(e -> {
             window.close();
         });
     }
 
-    private static void initialize(List<Sportsman> list, BufferedWriter out) {
+    private static void initialize(List<Sportsman> list) {
         condition1Field = new TextField();
         condition1Field.setPrefWidth(400);
         condition2Field = new TextField();
@@ -119,7 +112,7 @@ public class ModalWindowSearch {
         condition1Label = new Label(Constant.FULL_NAME);
         condition2Label = new Label(Constant.KIND_OF_SPORT);
         createGroup();
-        createButton(list, out);
+        createButton(list);
         createTable();
         createCategoryButton(list);
         createKindOfSportButton(list);
@@ -190,11 +183,12 @@ public class ModalWindowSearch {
         }
     }
 
-    public static void newWindow(List<Sportsman> list, BufferedWriter out) {
+    public static void newWindow(List<Sportsman> list, Controller controller1) {
         window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
+        controller = controller1;
         Pane root = new Pane();
-        initialize(list, out);
+        initialize(list);
         table.setItems((ObservableList) list);
         VBox vBox = createVBox();
         root.getChildren().add(vBox);

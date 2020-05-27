@@ -137,6 +137,19 @@ public class Controller {
         view.setQuantityPages(model.getTableSize());
     }
 
+    public void dialogSearch(){
+        try {
+            out.write(Constant.SEARCH + "\n");
+            out.flush();
+            out.write(ModalWindowSearch.pointerChoice + "\n");
+            out.flush();
+            out.write(ModalWindowSearch.table.getItems().size() + "\n");
+            out.flush();
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        }
+    }
+
     private void event() {
         pageSwitchingControl();
         view.getAddButton().setOnAction(e -> {
@@ -164,10 +177,10 @@ public class Controller {
             }
         });
         view.getSearch().setOnAction(e -> {
-            ModalWindowSearch.newWindow(model.getWholeTable(), out);
+            ModalWindowSearch.newWindow(model.getWholeTable(), this);
         });
         view.search.setOnAction(e -> {
-            ModalWindowSearch.newWindow(model.getWholeTable(), out);
+            ModalWindowSearch.newWindow(model.getWholeTable(), this);
         });
         view.getDelete().setOnAction(e -> {
             model.deleteElements(out);

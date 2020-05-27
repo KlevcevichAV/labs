@@ -130,7 +130,6 @@ public class Controller {
                 String choice = server.in.readLine();
                 File file = new File("./Tables/" + choice);
                 String fileString = Translator.fileToString(file);
-//                System.out.println(fileString);
                 server.out.write(fileString);
                 server.out.flush();
                 loadCheck = true;
