@@ -11,7 +11,6 @@ public class Main extends Application {
         new Controller(primaryStage);
     }
 
-
     public static void main(String[] args) {
         launch(args);
     }

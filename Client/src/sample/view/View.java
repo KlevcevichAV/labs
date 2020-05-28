@@ -152,7 +152,6 @@ public class View {
     public View(Stage primaryStage, List<Sportsman> list) {
         root = new BorderPane();
         initialize();
-//        fillingTable(list);
         disableLeft();
         disableRight();
         primaryStage.setTitle("Hello World");

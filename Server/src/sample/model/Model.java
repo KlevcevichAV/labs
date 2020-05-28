@@ -4,16 +4,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.xml.sax.SAXException;
 import sample.data.Sportsman;
-import sample.parser.DOMxmlWriter;
 import sample.parser.SAXXmlReader;
 
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerException;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-
-
 
 public class Model {
     private List<Sportsman> list;
@@ -49,14 +45,6 @@ public class Model {
 
     public void openFile(File file) throws IOException, SAXException, ParserConfigurationException {
         if (file != null) list = SAXXmlReader.createList(file);
-    }
-
-    public void saveFile(File file) throws IOException, TransformerException, ParserConfigurationException {
-        if (file != null) DOMxmlWriter.createXml(list, file.getPath());
-    }
-
-    public void setNumberRow(int numberRow) {
-        this.numberRow = numberRow;
     }
 
     public void setQuantityPages() {

@@ -7,12 +7,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import sample.controller.Controller;
 import sample.data.Constant;
 import sample.data.Sportsman;
-
-import java.io.BufferedWriter;
-import java.io.IOException;
 
 public class ModalWindowAdd {
     private static Stage window;

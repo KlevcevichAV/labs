@@ -12,10 +12,10 @@ import java.net.SocketException;
 import java.util.List;
 
 public class Server {
-    public Socket clientSocket; //сокет для общения
-    public ServerSocket server; // серверсокет
-    public BufferedReader in; // поток чтения из сокета
-    public BufferedWriter out; // поток записи в сокет
+    public Socket clientSocket;
+    public ServerSocket server;
+    public BufferedReader in;
+    public BufferedWriter out;
     private boolean check;
     public Thread thread;
     Controller controller;
@@ -31,11 +31,9 @@ public class Server {
     public void createServer() throws IOException {
         thread = new AnotherThread();
         thread.start();
-//        System.exit(0);
     }
 
     public void closeServer() throws IOException {
-        System.out.println("Сервер закрыт!");
         server.close();
     }
 
@@ -63,17 +61,15 @@ public class Server {
         public void run() {
             try {
                 try {
-                    server = new ServerSocket(8000); // серверсокет прослушивает порт 4004
+                    server = new ServerSocket(8000);
                     while (check) {
-                        clientSocket = server.accept(); // accept() будет ждать пока
+                        clientSocket = server.accept();
                         controller.addText("Client connected\n");
                         in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                         out = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
                         while (true) {
-                            String word = in.readLine(); // ждём пока клиент что-нибудь нам напишет
-                            System.out.println(word);
+                            String word = in.readLine();
                             if (word.equals("/exit")) {
-                                out.flush();
                                 controller.addText("Client disconnected\n");
                                 controller.loadCheck = false;
                                 in.close();
@@ -96,7 +92,6 @@ public class Server {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            System.out.println("Сервер запущен!"); // хорошо бы серверу
         }
     }
 }

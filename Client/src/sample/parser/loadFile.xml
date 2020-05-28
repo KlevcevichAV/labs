@@ -1,10 +1,2 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<root>
-    <sportsman category="мастер спорта" fullName="Виктория Азаренко" kindOfSport="Тенис" position="-" structure="n/a" title="11"/>
-    <sportsman category="мастер спорта" fullName="Медведь Александр" kindOfSport="Вольная борьба" position="-" structure="n/a" title="17"/>
-    <sportsman category="мастер спорта" fullName="Калачев Артем" kindOfSport="Легкая атлетика" position="-" structure="n/a" title="13"/>
-    <sportsman category="мастер спорта" fullName="Мирзагаянова Виктория " kindOfSport="гимнастика художественная" position="-" structure="n/a" title="3"/>
-    <sportsman category="мастер спорта" fullName=" Тихонов Артем" kindOfSport="Шашки" position="-" structure="n/a" title="5"/>
-    <sportsman category="кмс" fullName="Кузавка Руслан Валерьевич" kindOfSport="Каратэ" position="-" structure="n/a" title="24"/>
-    <sportsman category="кмс" fullName="Шловенец Александр Здиславович" kindOfSport="Легкая атлетика" position="-" structure="n/a" title="14"/>
-</root>
+<root/>

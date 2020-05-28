@@ -1,13 +1,6 @@
 package sample.data;
 
 public class Constant {
-    public static final String FULL_NAME = "ФИО";
-    public static final String STRUCTURE = "Состав";
-    public static final String POSITION = "Позиция";
-    public static final String TITLE = "Титулы";
-    public static final String KIND_OF_SPORT = "Вид спорта";
-    public static final String CATEGORY = "Разряд";
-
     public static final String SPORTSMAN = "sportsman";
     public static final String FULL_NAME_EN = "fullName";
     public static final String STRUCTURE_EN = "structure";

@@ -20,12 +20,12 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Controller {
-    View view;
-    Model model;
-    Server server;
-    List<String> listFiles;
+    private View view;
+    private Model model;
+    private Server server;
+    private List<String> listFiles;
     public boolean loadCheck;
-    String nameFile;
+    private String nameFile;
 
     private void events() {
         view.getRun().setOnAction(e -> {
@@ -172,7 +172,7 @@ public class Controller {
                         break;
                     } else table = table + temp + "\n";
                 }
-                File file = Translator.stringToFile(table,Constant.ADD_FILE);
+                File file = Translator.stringToFile(table, Constant.ADD_FILE);
                 Sportsman sportsmanAdded = SAXXmlReader.receive(table);
                 model.addElement(sportsmanAdded);
                 view.getConsole().appendText(Constant.ADD + " sportsman" + "\n");
@@ -207,10 +207,10 @@ public class Controller {
                 condition = definitionOfTheCondition(condition);
                 view.getConsole().appendText(Constant.DELETE + " " + condition);
 
-                File file = Translator.stringToFile(table,Constant.LOAD_FILE);
+                File file = Translator.stringToFile(table, Constant.LOAD_FILE);
                 List<Sportsman> listDeleted = SAXXmlReader.createList(file);
                 int deleted = model.getTableSize() - listDeleted.size();
-                        definitionResultRemove(deleted);
+                definitionResultRemove(deleted);
                 model.deleteElements(listDeleted);
                 break;
             }
@@ -221,7 +221,7 @@ public class Controller {
                 server.out.flush();
                 while (true) {
                     String condition = server.in.readLine();
-                    if(condition.equals("end")) break;
+                    if (condition.equals("end")) break;
                     condition = definitionOfTheCondition(condition);
                     view.getConsole().appendText(Constant.SEARCH + " " + condition);
                     definitionResultSearch();
@@ -286,7 +286,6 @@ public class Controller {
             }
             case Constant.CHANGE_ROW_TABLE: {
                 String currentRow = server.in.readLine();
-                System.out.println(currentRow);
                 model.numberRow = Integer.parseInt(currentRow);
                 addText(Constant.CHANGE_ROW_TABLE + " " + currentRow + "\n");
                 model.pointerPage = 1;

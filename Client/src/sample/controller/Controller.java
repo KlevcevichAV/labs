@@ -23,15 +23,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Controller {
-    View view;
-    Socket client;
-    BufferedReader reader;
-    BufferedReader in;
+    private View view;
+    private Socket client;
+    private BufferedReader reader;
+    private BufferedReader in;
     public boolean check;
-    BufferedWriter out;
-    boolean checkLoad;
+    private BufferedWriter out;
+    private boolean checkLoad;
 
-    private void pageSwitchingControl(int pointerPage, int quantityPages ) {
+    private void pageSwitchingControl(int pointerPage, int quantityPages) {
         if (pointerPage == 1) {
             view.disableLeft();
         } else view.enableLeft();
@@ -93,11 +93,11 @@ public class Controller {
         if (!checkLoad) distanceDialog.show();
     }
 
-    private void setLabel(int pointerPage, int quantityPages){
+    private void setLabel(int pointerPage, int quantityPages) {
         view.setLabel(pointerPage, quantityPages);
     }
 
-    private void setLabel(int pointerPage, int quantityPages,  int counterElements, int numberRow, int size) {
+    private void setLabel(int pointerPage, int quantityPages, int counterElements, int numberRow, int size) {
         setLabel(pointerPage, quantityPages);
         view.setCounterElements(counterElements, numberRow);
         view.setQuantityPages(size);
@@ -116,7 +116,7 @@ public class Controller {
         return table;
     }
 
-    public void dialogAdd(Sportsman sportsman){
+    public void dialogAdd(Sportsman sportsman) {
         try {
             out.write(Constant.ADD + "\n");
             out.flush();
@@ -145,7 +145,7 @@ public class Controller {
         }
     }
 
-    public void dialogSearch1(){
+    public void dialogSearch1() {
         try {
             out.write(Constant.SEARCH + "\n");
             out.flush();
@@ -155,7 +155,7 @@ public class Controller {
             ModalWindowSearch.newWindow(tableSportsman, this);
         } catch (IOException ioException) {
             ioException.printStackTrace();
-        }  catch (ParserConfigurationException e) {
+        } catch (ParserConfigurationException e) {
             e.printStackTrace();
         } catch (SAXException e) {
             e.printStackTrace();
@@ -174,7 +174,7 @@ public class Controller {
         out.flush();
     }
 
-    public void dialogDelete(){
+    public void dialogDelete() {
         try {
             out.write(Constant.DELETE + "\n");
             out.flush();
@@ -193,7 +193,7 @@ public class Controller {
             out.flush();
         } catch (IOException ioException) {
             ioException.printStackTrace();
-        }  catch (ParserConfigurationException e) {
+        } catch (ParserConfigurationException e) {
             e.printStackTrace();
         } catch (SAXException e) {
             e.printStackTrace();

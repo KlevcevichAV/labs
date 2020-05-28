@@ -11,8 +11,6 @@ import javafx.stage.Stage;
 import sample.data.Constant;
 import sample.data.Sportsman;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
