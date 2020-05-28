@@ -1,11 +1,18 @@
 package sample.controller;
 
 import javafx.stage.Stage;
+import org.xml.sax.SAXException;
+import sample.data.Sportsman;
+import sample.model.Model;
+import sample.parser.DOMxmlWriter;
+import sample.parser.SAXXmlReader;
 import sample.parser.Translator;
 import sample.server.Server;
 import sample.view.View;
 import sample.data.Constant;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,6 +21,7 @@ import java.util.List;
 
 public class Controller {
     View view;
+    Model model;
     Server server;
     List<String> listFiles;
     public boolean loadCheck;
@@ -88,14 +96,13 @@ public class Controller {
         return result;
     }
 
-    private void definitionResultRemove() throws IOException {
-        String result = server.in.readLine();
+    private void definitionResultRemove(int result) throws IOException {
         switch (result) {
-            case "0": {
+            case 0: {
                 addText("Nothing found\n");
                 break;
             }
-            case "1": {
+            case 1: {
                 addText("1 sportsman removed\n");
                 break;
             }
@@ -122,22 +129,41 @@ public class Controller {
         }
     }
 
-    public void function(String operation) throws IOException {
+    public void function(String operation) throws IOException, ParserConfigurationException, SAXException, TransformerException {
         switch (operation) {
             case Constant.LOAD: {
                 server.out.write(stringFiles());
                 server.out.flush();
                 String choice = server.in.readLine();
                 File file = new File("./Tables/" + choice);
-                String fileString = Translator.fileToString(file);
+                model.openFile(file);
+                DOMxmlWriter.createXml(model.getTable(), Constant.LOAD_FILE);
+                String fileString = Translator.fileToString(new File(Constant.LOAD_FILE));
                 server.out.write(fileString);
                 server.out.flush();
                 loadCheck = true;
                 nameFile = file.getName();
                 view.getConsole().appendText(Constant.LOAD + " " + nameFile + "\n");
+                String letter = model.pointerPage + "\n";
+                server.out.write(letter);
+                server.out.flush();
+                server.out.write(model.quantityPages + "\n");
+                server.out.flush();
+                server.out.write(model.getTableSize() + "\n");
+                server.out.flush();
+                server.out.write(model.numberRow + "\n");
+                server.out.flush();
                 break;
             }
             case Constant.SAVE: {
+                if (!loadCheck) {
+                    nameFile = server.in.readLine();
+                }
+                DOMxmlWriter.createXml(model.getWholeTable(), "./Tables/" + nameFile);
+                view.getConsole().appendText(Constant.SAVE + " " + nameFile + "\n");
+                break;
+            }
+            case Constant.ADD: {
                 String table = "";
                 while (true) {
                     String temp = server.in.readLine();
@@ -146,58 +172,134 @@ public class Controller {
                         break;
                     } else table = table + temp + "\n";
                 }
-                if (!loadCheck) {
-                    nameFile = server.in.readLine();
-                }
-                File file = Translator.stringToFile(table, "./Tables/" + nameFile);
-                view.getConsole().appendText(Constant.SAVE + " " + nameFile + "\n");
-                break;
-            }
-            case Constant.ADD: {
+                File file = Translator.stringToFile(table,Constant.ADD_FILE);
+                Sportsman sportsmanAdded = SAXXmlReader.receive(table);
+                model.addElement(sportsmanAdded);
                 view.getConsole().appendText(Constant.ADD + " sportsman" + "\n");
+                DOMxmlWriter.createXml(model.getTable(), Constant.LOAD_FILE);
+                String letter = Translator.fileToString(new File(Constant.LOAD_FILE));
+                server.out.write(letter);
+                server.out.flush();
+                server.out.write(model.pointerPage + "\n");
+                server.out.flush();
+                server.out.write(model.quantityPages + "\n");
+                server.out.flush();
+                server.out.write(model.getTableSize() + "\n");
+                server.out.flush();
+                server.out.write(model.numberRow + "\n");
+                server.out.flush();
                 break;
             }
             case Constant.DELETE: {
+                DOMxmlWriter.createXml(model.getWholeTable(), Constant.LOAD_FILE);
+                String letter = Translator.fileToString(new File(Constant.LOAD_FILE));
+                server.out.write(letter);
+                server.out.flush();
+                String table = "";
+                while (true) {
+                    String temp = server.in.readLine();
+                    if (temp.equals("</root>")) {
+                        table = table + temp;
+                        break;
+                    } else table = table + temp + "\n";
+                }
                 String condition = server.in.readLine();
                 condition = definitionOfTheCondition(condition);
                 view.getConsole().appendText(Constant.DELETE + " " + condition);
-                definitionResultRemove();
+
+                File file = Translator.stringToFile(table,Constant.LOAD_FILE);
+                List<Sportsman> listDeleted = SAXXmlReader.createList(file);
+                int deleted = model.getTableSize() - listDeleted.size();
+                        definitionResultRemove(deleted);
+                model.deleteElements(listDeleted);
                 break;
             }
             case Constant.SEARCH: {
-                String condition = server.in.readLine();
-                condition = definitionOfTheCondition(condition);
-                view.getConsole().appendText(Constant.SEARCH + " " + condition);
-                definitionResultSearch();
+                DOMxmlWriter.createXml(model.getWholeTable(), Constant.LOAD_FILE);
+                String letter = Translator.fileToString(new File(Constant.LOAD_FILE));
+                server.out.write(letter);
+                server.out.flush();
+                while (true) {
+                    String condition = server.in.readLine();
+                    if(condition.equals("end")) break;
+                    condition = definitionOfTheCondition(condition);
+                    view.getConsole().appendText(Constant.SEARCH + " " + condition);
+                    definitionResultSearch();
+                }
                 break;
             }
             case Constant.NEXT_PAGE: {
                 addText(Constant.NEXT_PAGE + "\n");
-                String currentPage = server.in.readLine();
-                addText(Constant.CURRENT_PAGE + currentPage + "\n");
+                model.nextPage();
+                addText(Constant.CURRENT_PAGE + model.pointerPage + "\n");
+                DOMxmlWriter.createXml(model.getTable(), Constant.LOAD_FILE);
+                String file = Translator.fileToString(new File(Constant.LOAD_FILE));
+                server.out.write(file);
+                server.out.flush();
+                server.out.write(model.pointerPage + "\n");
+                server.out.flush();
+                server.out.write(model.quantityPages + "\n");
+                server.out.flush();
                 break;
             }
             case Constant.PREV_PAGE: {
                 addText(Constant.PREV_PAGE + "\n");
-                String currentPage = server.in.readLine();
-                addText(Constant.CURRENT_PAGE + currentPage + "\n");
+                model.prevPage();
+                addText(Constant.CURRENT_PAGE + model.pointerPage + "\n");
+                DOMxmlWriter.createXml(model.getTable(), Constant.LOAD_FILE);
+                String file = Translator.fileToString(new File(Constant.LOAD_FILE));
+                server.out.write(file);
+                server.out.flush();
+                server.out.write(model.pointerPage + "\n");
+                server.out.flush();
+                server.out.write(model.quantityPages + "\n");
+                server.out.flush();
                 break;
             }
             case Constant.FIRST_PAGE: {
                 addText(Constant.FIRST_PAGE + "\n");
-                String currentPage = server.in.readLine();
-                addText(Constant.CURRENT_PAGE + currentPage + "\n");
+                model.pageOne();
+                addText(Constant.CURRENT_PAGE + model.pointerPage + "\n");
+                DOMxmlWriter.createXml(model.getTable(), Constant.LOAD_FILE);
+                String file = Translator.fileToString(new File(Constant.LOAD_FILE));
+                server.out.write(file);
+                server.out.flush();
+                server.out.write(model.pointerPage + "\n");
+                server.out.flush();
+                server.out.write(model.quantityPages + "\n");
+                server.out.flush();
                 break;
             }
             case Constant.LAST_PAGE: {
                 addText(Constant.LAST_PAGE + "\n");
-                String currentPage = server.in.readLine();
-                addText(Constant.CURRENT_PAGE + currentPage + "\n");
+                model.lastPage();
+                addText(Constant.CURRENT_PAGE + model.pointerPage + "\n");
+                DOMxmlWriter.createXml(model.getTable(), Constant.LOAD_FILE);
+                String file = Translator.fileToString(new File(Constant.LOAD_FILE));
+                server.out.write(file);
+                server.out.flush();
+                server.out.write(model.pointerPage + "\n");
+                server.out.flush();
+                server.out.write(model.quantityPages + "\n");
+                server.out.flush();
                 break;
             }
             case Constant.CHANGE_ROW_TABLE: {
                 String currentRow = server.in.readLine();
+                System.out.println(currentRow);
+                model.numberRow = Integer.parseInt(currentRow);
                 addText(Constant.CHANGE_ROW_TABLE + " " + currentRow + "\n");
+                model.pointerPage = 1;
+                DOMxmlWriter.createXml(model.getTable(), Constant.LOAD_FILE);
+                String file = Translator.fileToString(new File(Constant.LOAD_FILE));
+                server.out.write(file);
+                server.out.flush();
+                server.out.write(model.pointerPage + "\n");
+                server.out.flush();
+                server.out.write(model.quantityPages + "\n");
+                server.out.flush();
+                server.out.write(model.getTableSize() + "\n");
+                server.out.flush();
                 break;
             }
             default: {
@@ -212,6 +314,7 @@ public class Controller {
 
     public Controller(Stage primaryStage) {
         server = new Server(this);
+        model = new Model(10);
         view = new View(primaryStage);
         listFiles = createList();
         loadCheck = false;

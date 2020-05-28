@@ -3,24 +3,23 @@ package sample.model;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.xml.sax.SAXException;
-import sample.view.modalWindow.ModalWindowDelete;
 import sample.data.Sportsman;
 import sample.parser.DOMxmlWriter;
 import sample.parser.SAXXmlReader;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+
+
 
 public class Model {
     private List<Sportsman> list;
     public int quantityPages;
     public int pointerPage;
     public int numberRow;
-    public String nameTable;
 
     public void addElement(Sportsman sportsman) {
         list.add(sportsman);
@@ -28,9 +27,8 @@ public class Model {
         if (list.size() % numberRow == 0) quantityPages--;
     }
 
-    public void deleteElements(BufferedWriter out) {
-        ModalWindowDelete.newWindow(list, out);
-        list = ModalWindowDelete.getList();
+    public void deleteElements(List<Sportsman> list) {
+        this.list = list;
     }
 
     public void nextPage() {
@@ -95,6 +93,5 @@ public class Model {
         quantityPages = 1;
         this.numberRow = numberRow;
         list = FXCollections.observableArrayList();
-        nameTable = "";
     }
 }

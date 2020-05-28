@@ -1,7 +1,10 @@
 package sample.server;
 
+import org.xml.sax.SAXException;
 import sample.controller.Controller;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -70,7 +73,6 @@ public class Server {
                             String word = in.readLine(); // ждём пока клиент что-нибудь нам напишет
                             System.out.println(word);
                             if (word.equals("/exit")) {
-//                            out.write("asdads");
                                 out.flush();
                                 controller.addText("Client disconnected\n");
                                 controller.loadCheck = false;
@@ -84,6 +86,12 @@ public class Server {
                     }
                 } catch (SocketException se) {
                     System.out.println(11);
+                } catch (ParserConfigurationException e) {
+                    e.printStackTrace();
+                } catch (TransformerException e) {
+                    e.printStackTrace();
+                } catch (SAXException e) {
+                    e.printStackTrace();
                 }
             } catch (IOException e) {
                 e.printStackTrace();

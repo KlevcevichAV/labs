@@ -37,9 +37,8 @@ public class Constant {
     public static final String FIRST_PAGE = "/first_page";
     public static final String CHANGE_ROW_TABLE = "/change_number_row_table";
 
-    public static final String ADD_FILE = "./src/sample/parser/addFile.txt";
+    public static final String ADD_FILE = "./src/sample/parser/addFile.xml";
     public static final String LOAD_FILE = "./src/sample/parser/loadFile.xml";
-    public static final String SAVE_FILE = "./src/sample/parser/saveFile.xml";
     public static final String SETTINGS_FILE = "./settings.properties";
 
 

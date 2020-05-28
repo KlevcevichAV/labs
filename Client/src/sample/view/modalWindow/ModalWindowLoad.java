@@ -7,14 +7,11 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-
 public class ModalWindowLoad {
     private static Stage window;
     private static Button load;
     public static String table;
+    public static String nameFile;
     private static ComboBox<String> listFile;
 
     private static ComboBox<String> createList(String listString) {
@@ -29,38 +26,14 @@ public class ModalWindowLoad {
         return list;
     }
 
-    private static void initialize(BufferedReader in, BufferedWriter out) throws IOException {
+    private static void initialize(String serverWord) {
         load = new Button("Load");
-        String serverWord = "";
-        while (true) {
-            String temp = in.readLine();
-            if (!checkEnd(temp)) serverWord = serverWord + temp + "\n";
-            else break;
-        }
         listFile = createList(serverWord);
         load.setOnAction(e -> {
             for (int i = 0; i < listFile.getItems().size(); i++) {
                 if (listFile.getItems().get(i).equals(listFile.getSelectionModel().getSelectedItem())) {
-                    try {
-                        out.write(listFile.getItems().get(i) + "\n");
-                        out.flush();
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
-                    }
-                    try {
-                        table = "";
-                        while (true) {
-                            String temp = in.readLine();
-                            if (temp.equals("</root>")) {
-                                table = table + temp;
-                                break;
-                            } else table = table + temp + "\n";
-                        }
-                        window.close();
-                        break;
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
-                    }
+                    nameFile = listFile.getItems().get(i);
+                    window.close();
                 }
             }
         });
@@ -70,11 +43,11 @@ public class ModalWindowLoad {
         return string.equals("end");
     }
 
-    public static void newWindow(BufferedReader in, BufferedWriter out) throws IOException {
+    public static void newWindow(String serverWord) {
         window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
         Pane root = new Pane();
-        initialize(in, out);
+        initialize(serverWord);
         VBox vBox = new VBox(listFile, load);
         root.getChildren().add(vBox);
         Scene scene = new Scene(root, 200, 100);

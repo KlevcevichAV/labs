@@ -20,7 +20,7 @@ public class ModalWindowDelete {
     private static Stage window;
     private static int choice = 0;
     private static int counterDelete = 0;
-    private static int pointerChoice;
+    public static int pointerChoice;
     private static MenuButton kindOfSportButton, categoryButton;
     private static RadioButton fullNameOrKindOfSport, title, fullNameOrCategory;
     private static TextField condition1Field, condition2Field;
@@ -72,7 +72,7 @@ public class ModalWindowDelete {
         fullNameOrCategory.setToggleGroup(groupStructure);
     }
 
-    private static void createButton(BufferedWriter out) {
+    private static void createButton() {
         delete = new Button("Delete");
         cancel = new Button("Cancel");
         delete.setOnAction(e -> {
@@ -82,16 +82,6 @@ public class ModalWindowDelete {
                 alert.setContentText("Ничего не найдено!");
             } else alert.setContentText("Удалено спортсменов: " + counterDelete);
             alert.showAndWait();
-            try {
-                out.write(Constant.DELETE + "\n");
-                out.flush();
-                out.write(pointerChoice + "\n");
-                out.flush();
-                out.write(counterDelete + "\n");
-                out.flush();
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-            }
             counterDelete = 0;
             window.close();
         });
@@ -100,7 +90,7 @@ public class ModalWindowDelete {
         });
     }
 
-    private static void initialize(List<Sportsman> list, BufferedWriter out) {
+    private static void initialize(List<Sportsman> list) {
         condition1Field = new TextField();
         condition1Field.setPrefWidth(400);
         condition2Field = new TextField();
@@ -110,7 +100,7 @@ public class ModalWindowDelete {
         condition2Label = new Label(Constant.KIND_OF_SPORT);
         createGroup();
         ModalWindowDelete.list = list;
-        createButton(out);
+        createButton();
         createCategoryButton();
         createKindOfSportButton();
     }
@@ -181,11 +171,11 @@ public class ModalWindowDelete {
         }
     }
 
-    public static void newWindow(List<Sportsman> list, BufferedWriter out) {
+    public static void newWindow(List<Sportsman> list) {
         window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
         Pane root = new Pane();
-        initialize(list, out);
+        initialize(list);
         VBox vBox = createVBox();
         root.getChildren().add(vBox);
         Scene scene = new Scene(root, 610, 200);

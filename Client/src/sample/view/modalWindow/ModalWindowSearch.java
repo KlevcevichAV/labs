@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ModalWindowSearch {
-    private static Stage window;
+    public static Stage window;
     private static int choice = 0;
     private static MenuButton kindOfSportButton, categoryButton;
     private static RadioButton fullNameOrKindOfSport, title, fullNameOrCategory;
@@ -96,9 +96,18 @@ public class ModalWindowSearch {
         cancel = new Button("Cancel");
         search.setOnAction(e -> {
             table.setItems(search(choice, condition1Field.getText(), condition2Field.getText(), (ObservableList<Sportsman>) list));
-            controller.dialogSearch();
+            try {
+                controller.dialogSearch2();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
         });
         cancel.setOnAction(e -> {
+            try {
+                controller.cancelSearch();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
             window.close();
         });
     }

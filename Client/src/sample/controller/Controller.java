@@ -1,18 +1,16 @@
 package sample.controller;
 
-import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.xml.sax.SAXException;
 import sample.data.Constant;
 import sample.parser.Translator;
 import sample.view.modalWindow.ModalWindowAdd;
+import sample.view.modalWindow.ModalWindowDelete;
 import sample.view.modalWindow.ModalWindowLoad;
 import sample.view.modalWindow.ModalWindowSearch;
 import sample.data.Sportsman;
-import sample.model.Model;
 import sample.parser.DOMxmlWriter;
 import sample.parser.SAXXmlReader;
 import sample.view.View;
@@ -21,11 +19,10 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class Controller {
-    Model model;
     View view;
     Socket client;
     BufferedReader reader;
@@ -34,23 +31,11 @@ public class Controller {
     BufferedWriter out;
     boolean checkLoad;
 
-    private void add() throws IOException, TransformerException, ParserConfigurationException, SAXException {
-        ModalWindowAdd.newWindow(out);
-        Sportsman newSportsman = ModalWindowAdd.getResult();
-        String sportsmanString = "";
-        if (newSportsman != null) {
-            sportsmanString = DOMxmlWriter.createSportsman(newSportsman);
-            System.out.println(sportsmanString);
-            Sportsman sportsman = SAXXmlReader.receive(sportsmanString);
-            System.out.println("YesZ");
-        }
-    }
-
-    private void pageSwitchingControl() {
-        if (model.pointerPage == 1) {
+    private void pageSwitchingControl(int pointerPage, int quantityPages ) {
+        if (pointerPage == 1) {
             view.disableLeft();
         } else view.enableLeft();
-        if (model.pointerPage == model.quantityPages) {
+        if (pointerPage == quantityPages) {
             view.disableRight();
         } else view.enableRight();
 
@@ -77,25 +62,11 @@ public class Controller {
         return alert;
     }
 
-    private String table;
-
-    private File onOpen() throws IOException {
-        out.write(Constant.LOAD + "\n");
-        out.flush();
-        ModalWindowLoad.newWindow(in, out);
-        File file = null;
-//        System.out.println(table);
-//        System.out.println(ModalWindowLoad.table);
-        if (ModalWindowLoad.table != "") file = Translator.stringToFile(ModalWindowLoad.table, Constant.LOAD_FILE);
-        checkLoad = true;
-        return file;
-    }
-
-    static boolean checkEnd(String string) {
+    private boolean checkEnd(String string) {
         return string.equals("end");
     }
 
-    private File onSave() throws IOException, TransformerException, ParserConfigurationException {
+    private void onSave() throws IOException, TransformerException, ParserConfigurationException {
         out.write(Constant.SAVE + "\n");
         out.flush();
         GridPane gridPane = new GridPane();
@@ -120,96 +91,182 @@ public class Controller {
         });
 
         if (!checkLoad) distanceDialog.show();
+    }
 
-        File file = new File(Constant.SAVE_FILE);
-        if (file != null) {
-            DOMxmlWriter.createXml(model.getWholeTable(), Constant.SAVE_FILE);
-            String result = Translator.fileToString(file);
-            out.write(result);
-            out.flush();
+    private void setLabel(int pointerPage, int quantityPages){
+        view.setLabel(pointerPage, quantityPages);
+    }
+
+    private void setLabel(int pointerPage, int quantityPages,  int counterElements, int numberRow, int size) {
+        setLabel(pointerPage, quantityPages);
+        view.setCounterElements(counterElements, numberRow);
+        view.setQuantityPages(size);
+    }
+
+
+    private String inputTable() throws IOException {
+        String table = "";
+        while (true) {
+            String temp = in.readLine();
+            if (temp.equals("</root>")) {
+                table = table + temp;
+                break;
+            } else table = table + temp + "\n";
         }
-        return file;
+        return table;
     }
 
-    private void setLabel(int counterElements) {
-        view.setLabel(model.pointerPage, model.quantityPages);
-        view.setCounterElements(counterElements, model.numberRow);
-        view.setQuantityPages(model.getTableSize());
+    public void dialogAdd(Sportsman sportsman){
+        try {
+            out.write(Constant.ADD + "\n");
+            out.flush();
+            String fileString = DOMxmlWriter.createSportsman(sportsman);
+            out.write(fileString);
+            out.flush();
+            String table = inputTable();
+            File file = Translator.stringToFile(table, Constant.LOAD_FILE);
+            List<Sportsman> tableSportsman = SAXXmlReader.createList(file);
+            view.fillingTable(tableSportsman);
+            int pointerPage = Integer.parseInt(in.readLine());
+            int quantityPages = Integer.parseInt(in.readLine());
+            int counterElements = tableSportsman.size();
+            int numberRow = Integer.parseInt(in.readLine());
+            int size = Integer.parseInt(in.readLine());
+            setLabel(pointerPage, quantityPages, counterElements, numberRow, size);
+            pageSwitchingControl(pointerPage, quantityPages);
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        } catch (TransformerException e) {
+            e.printStackTrace();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        } catch (SAXException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void dialogSearch(){
+    public void dialogSearch1(){
         try {
             out.write(Constant.SEARCH + "\n");
             out.flush();
-            out.write(ModalWindowSearch.pointerChoice + "\n");
-            out.flush();
-            out.write(ModalWindowSearch.table.getItems().size() + "\n");
-            out.flush();
+            String table = inputTable();
+            File file = Translator.stringToFile(table, Constant.LOAD_FILE);
+            List<Sportsman> tableSportsman = SAXXmlReader.createList(file);
+            ModalWindowSearch.newWindow(tableSportsman, this);
         } catch (IOException ioException) {
             ioException.printStackTrace();
+        }  catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        } catch (SAXException e) {
+            e.printStackTrace();
         }
     }
 
+    public void dialogSearch2() throws IOException {
+        out.write(ModalWindowSearch.pointerChoice + "\n");
+        out.flush();
+        out.write(ModalWindowSearch.table.getItems().size() + "\n");
+        out.flush();
+    }
+
+    public void cancelSearch() throws IOException {
+        out.write("end\n");
+        out.flush();
+    }
+
+    public void dialogDelete(){
+        try {
+            out.write(Constant.DELETE + "\n");
+            out.flush();
+            String table = inputTable();
+            File file = Translator.stringToFile(table, Constant.LOAD_FILE);
+            List<Sportsman> tableSportsman = SAXXmlReader.createList(file);
+            ModalWindowDelete.newWindow(tableSportsman);
+            List<Sportsman> temp = ModalWindowDelete.getList();
+            view.fillingTable(temp);
+            DOMxmlWriter.createXml(temp, Constant.LOAD_FILE);
+            String letter = Translator.fileToString(new File(Constant.LOAD_FILE));
+            out.write(letter);
+            out.flush();
+
+            out.write(ModalWindowDelete.pointerChoice + "\n");
+            out.flush();
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        }  catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        } catch (SAXException e) {
+            e.printStackTrace();
+        } catch (TransformerException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void dialogLoad() throws IOException, ParserConfigurationException, SAXException {
+        out.write(Constant.LOAD + "\n");
+        out.flush();
+        String serverWord = "";
+        while (true) {
+            String temp = in.readLine();
+            if (!checkEnd(temp)) serverWord = serverWord + temp + "\n";
+            else break;
+        }
+        ModalWindowLoad.newWindow(serverWord);
+        out.write(ModalWindowLoad.nameFile + "\n");
+        out.flush();
+        String table = inputTable();
+        File file = Translator.stringToFile(table, Constant.LOAD_FILE);
+        List<Sportsman> tableSportsman = SAXXmlReader.createList(file);
+        String intValue = in.readLine();
+        int pointerPage = Integer.parseInt(intValue);
+        int quantityPages = Integer.parseInt(in.readLine());
+        int counterElements = tableSportsman.size();
+        int numberRow = Integer.parseInt(in.readLine());
+        int size = Integer.parseInt(in.readLine());
+        setLabel(pointerPage, quantityPages, counterElements, numberRow, size);
+        pageSwitchingControl(pointerPage, quantityPages);
+        view.fillingTable(tableSportsman);
+        checkLoad = true;
+    }
+
     private void event() {
-        pageSwitchingControl();
+        pageSwitchingControl(1, 1);
         view.getAddButton().setOnAction(e -> {
-            ModalWindowAdd.newWindow(out);
+            ModalWindowAdd.newWindow();
             Sportsman newSportsman = ModalWindowAdd.getResult();
             if (newSportsman != null) {
-                model.addElement(newSportsman);
-                List<Sportsman> temp = model.getTable();
-                setLabel(temp.size());
-                view.fillingTable(temp);
-                pageSwitchingControl();
+                dialogAdd(newSportsman);
             }
         });
         view.add.setOnAction(e -> {
-            try {
-                add();
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-            } catch (TransformerException transformerException) {
-                transformerException.printStackTrace();
-            } catch (ParserConfigurationException parserConfigurationException) {
-                parserConfigurationException.printStackTrace();
-            } catch (SAXException saxException) {
-                saxException.printStackTrace();
+            ModalWindowAdd.newWindow();
+            Sportsman newSportsman = ModalWindowAdd.getResult();
+            if (newSportsman != null) {
+                dialogAdd(newSportsman);
             }
         });
         view.getSearch().setOnAction(e -> {
-            ModalWindowSearch.newWindow(model.getWholeTable(), this);
+            dialogSearch1();
         });
         view.search.setOnAction(e -> {
-            ModalWindowSearch.newWindow(model.getWholeTable(), this);
+            dialogSearch1();
         });
         view.getDelete().setOnAction(e -> {
-            model.deleteElements(out);
-            List<Sportsman> temp = model.getTable();
-            setLabel(temp.size());
-            view.fillingTable(temp);
-            pageSwitchingControl();
+            dialogDelete();
         });
         view.delete.setOnAction(e -> {
-            model.deleteElements(out);
-            List<Sportsman> temp = model.getTable();
-            setLabel(temp.size());
-            view.fillingTable(temp);
-            pageSwitchingControl();
+            dialogDelete();
         });
         view.getOpenButton().setOnAction(e -> {
             try {
-                model.openFile(onOpen());
+                dialogLoad();
             } catch (IOException ioException) {
                 ioException.printStackTrace();
-            } catch (SAXException saxException) {
-                saxException.printStackTrace();
             } catch (ParserConfigurationException parserConfigurationException) {
                 parserConfigurationException.printStackTrace();
+            } catch (SAXException saxException) {
+                saxException.printStackTrace();
             }
-            List<Sportsman> temp = model.getTable();
-            setLabel(temp.size());
-            view.fillingTable(temp);
-            pageSwitchingControl();
         });
         view.exit.setOnAction(e -> {
             try {
@@ -226,22 +283,18 @@ public class Controller {
         });
         view.load.setOnAction(e -> {
             try {
-                model.openFile(onOpen());
+                dialogLoad();
             } catch (IOException ioException) {
                 ioException.printStackTrace();
-            } catch (SAXException saxException) {
-                saxException.printStackTrace();
             } catch (ParserConfigurationException parserConfigurationException) {
                 parserConfigurationException.printStackTrace();
+            } catch (SAXException saxException) {
+                saxException.printStackTrace();
             }
-            List<Sportsman> temp = model.getTable();
-            setLabel(temp.size());
-            view.fillingTable(temp);
-            pageSwitchingControl();
         });
         view.getSaveButton().setOnAction(e -> {
             try {
-                model.saveFile(onSave());
+                onSave();
             } catch (IOException ioException) {
                 ioException.printStackTrace();
             } catch (TransformerException transformerException) {
@@ -252,7 +305,7 @@ public class Controller {
         });
         view.save.setOnAction(e -> {
             try {
-                model.saveFile(onSave());
+                onSave();
             } catch (IOException ioException) {
                 ioException.printStackTrace();
             } catch (TransformerException transformerException) {
@@ -262,84 +315,100 @@ public class Controller {
             }
         });
         view.getPageNextButton().setOnAction(e -> {
-            model.nextPage();
-            List<Sportsman> temp = model.getTable();
-            setLabel(temp.size());
-            view.fillingTable(temp);
-            pageSwitchingControl();
             try {
                 out.write(Constant.NEXT_PAGE + "\n");
                 out.flush();
-                out.write(model.pointerPage + "\n");
-                out.flush();
-
-
+                String fileString = inputTable();
+                File file = Translator.stringToFile(fileString, Constant.LOAD_FILE);
+                List<Sportsman> tableSportsman = SAXXmlReader.createList(file);
+                view.fillingTable(tableSportsman);
+                int pointerPage = Integer.parseInt(in.readLine());
+                int quantityPages = Integer.parseInt(in.readLine());
+                pageSwitchingControl(pointerPage, quantityPages);
+                setLabel(pointerPage, quantityPages);
             } catch (IOException ioException) {
                 ioException.printStackTrace();
+            } catch (SAXException saxException) {
+                saxException.printStackTrace();
+            } catch (ParserConfigurationException parserConfigurationException) {
+                parserConfigurationException.printStackTrace();
             }
         });
         view.getPagePrevButton().setOnAction(e -> {
-            model.prevPage();
-            List<Sportsman> temp = model.getTable();
-            setLabel(temp.size());
-            view.fillingTable(temp);
-            pageSwitchingControl();
             try {
                 out.write(Constant.PREV_PAGE + "\n");
                 out.flush();
-                out.write(model.pointerPage + "\n");
-                out.flush();
-            } catch (IOException ioException) {
+                String fileString = inputTable();
+                File file = Translator.stringToFile(fileString, Constant.LOAD_FILE);
+                List<Sportsman> tableSportsman = SAXXmlReader.createList(file);
+                view.fillingTable(tableSportsman);
+                int pointerPage = Integer.parseInt(in.readLine());
+                int quantityPages = Integer.parseInt(in.readLine());
+                pageSwitchingControl(pointerPage, quantityPages);
+                setLabel(pointerPage, quantityPages);
+            } catch (IOException | ParserConfigurationException | SAXException ioException) {
                 ioException.printStackTrace();
             }
         });
         view.getPageOneButton().setOnAction(e -> {
-            model.pageOne();
-            List<Sportsman> temp = model.getTable();
-            setLabel(temp.size());
-            view.fillingTable(temp);
-            pageSwitchingControl();
             try {
                 out.write(Constant.FIRST_PAGE + "\n");
                 out.flush();
-                out.write(model.pointerPage + "\n");
-                out.flush();
-            } catch (IOException ioException) {
+                String fileString = inputTable();
+                File file = Translator.stringToFile(fileString, Constant.LOAD_FILE);
+                List<Sportsman> tableSportsman = SAXXmlReader.createList(file);
+                view.fillingTable(tableSportsman);
+                int pointerPage = Integer.parseInt(in.readLine());
+                int quantityPages = Integer.parseInt(in.readLine());
+                pageSwitchingControl(pointerPage, quantityPages);
+                setLabel(pointerPage, quantityPages);
+            } catch (IOException | ParserConfigurationException | SAXException ioException) {
                 ioException.printStackTrace();
             }
         });
         view.getPageLastButton().setOnAction(e -> {
-            model.lastPage();
-            List<Sportsman> temp = model.getTable();
-            setLabel(temp.size());
-            view.fillingTable(temp);
-            pageSwitchingControl();
             try {
                 out.write(Constant.LAST_PAGE + "\n");
                 out.flush();
-                out.write(model.pointerPage + "\n");
-                out.flush();
-            } catch (IOException ioException) {
+                String fileString = inputTable();
+                File file = Translator.stringToFile(fileString, Constant.LOAD_FILE);
+                List<Sportsman> tableSportsman = SAXXmlReader.createList(file);
+                view.fillingTable(tableSportsman);
+                int pointerPage = Integer.parseInt(in.readLine());
+                int quantityPages = Integer.parseInt(in.readLine());
+                pageSwitchingControl(pointerPage, quantityPages);
+                setLabel(pointerPage, quantityPages);
+            } catch (IOException | ParserConfigurationException | SAXException ioException) {
                 ioException.printStackTrace();
             }
         });
         view.getEditNumberRow().setOnAction(e -> {
             String stringNumberRow = view.getNumberRowField().getText();
             int numberRow = Integer.parseInt(stringNumberRow);
-            model.setNumberRow(numberRow);
-            model.pointerPage = 1;
-            view.setSettingsTable(model.numberRow);
-            List<Sportsman> temp = model.getTable();
-            setLabel(temp.size());
-            view.fillingTable(temp);
-            pageSwitchingControl();
+            view.setSettingsTable(numberRow);
+            String stringTable = "";
+            List<Sportsman> list = null;
             try {
                 out.write(Constant.CHANGE_ROW_TABLE + "\n");
                 out.flush();
-                out.write(view.getNumberRowField().getText() + "\n");
+                out.write(numberRow + "\n");
                 out.flush();
+                stringTable = inputTable();
+                list = SAXXmlReader.createList(Translator.stringToFile(stringTable, Constant.LOAD_FILE));
+                String intValue = in.readLine();
+                int pointerPage = Integer.parseInt(intValue);
+                int quantityPages = Integer.parseInt(in.readLine());
+                int counterElements = list.size();
+                int size = Integer.parseInt(in.readLine());
+                setLabel(pointerPage, quantityPages, counterElements, numberRow, size);
+                pageSwitchingControl(pointerPage, quantityPages);
+                view.fillingTable(list);
+            } catch (ParserConfigurationException parserConfigurationException) {
+                parserConfigurationException.printStackTrace();
             } catch (IOException ioException) {
                 ioException.printStackTrace();
+            } catch (SAXException saxException) {
+                saxException.printStackTrace();
             }
         });
     }
@@ -347,8 +416,8 @@ public class Controller {
     public Controller(Stage primaryStage, Socket client, BufferedReader reader, BufferedReader in, BufferedWriter out) throws IOException {
         check = true;
         checkLoad = false;
-        model = new Model(10);
-        view = new View(primaryStage, model.getTable());
+        List<Sportsman> temp = new ArrayList<>();
+        view = new View(primaryStage, temp);
         this.client = client;
         this.reader = reader;
         this.in = in;

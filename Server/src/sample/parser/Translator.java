@@ -13,7 +13,6 @@ public class Translator {
         while ((pointer = reader.read()) != -1) {
             result = result + (char) pointer;
         }
-        result = result + "\n";
         return result;
     }
 

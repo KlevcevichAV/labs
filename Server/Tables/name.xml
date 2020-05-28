@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <root>
-    <sportsman category="мастер спорта" fullName="1" kindOfSport="1" position="1" structure="основной" title="1"/>
-    <sportsman category="мастер спорта" fullName="2" kindOfSport="2" position="2" structure="основной" title="2"/>
+    <sportsman category="мастер спорта" fullName="2" kindOfSport="2" position="2" structure="n/a" title="2"/>
+    <sportsman category="мастер спорта" fullName="1" kindOfSport="1" position="1" structure="n/a" title="1"/>
+    <sportsman category="мастер спорта" fullName="4" kindOfSport="4" position="4" structure="n/a" title="4"/>
 </root>
