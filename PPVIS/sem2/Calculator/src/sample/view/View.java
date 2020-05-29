@@ -15,6 +15,14 @@ public class View {
         calculator = new VBox(display, keyboard.getKeyboard());
     }
 
+    public Keyboard getKeyboard() {
+        return keyboard;
+    }
+
+    public Display getDisplay() {
+        return display;
+    }
+
     public VBox getCalculator() {
         return calculator;
     }

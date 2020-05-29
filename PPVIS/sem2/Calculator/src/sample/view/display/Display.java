@@ -6,6 +6,10 @@ import javafx.scene.control.TextField;
 public class Display extends TextField {
     private ScrollPane scrollPane;
 
+    public TextField getDisplay(){
+        return this;
+    }
+
     public ScrollPane getScrollPane() {
         return scrollPane;
     }

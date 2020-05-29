@@ -31,24 +31,24 @@ public class DigitalKeyboard {
         decimalPoint = new Button(".", 2);
     }
 
-    private VBox createKeyboard(){
-        HBox sevenOne = new HBox(seven, four, one);
+    private void createKeyboard(){
+        VBox sevenOne = new VBox(seven, four, one);
         sevenOne.spacingProperty().set(10);
-        HBox eightTwo = new HBox(eight, five, two);
+        VBox eightTwo = new VBox(eight, five, two);
         eightTwo.spacingProperty().set(10);
-        HBox nineThree = new HBox(nine, six, three);
+        VBox nineThree = new VBox(nine, six, three);
         nineThree.spacingProperty().set(10);
         HBox zeroAndPoint = new HBox(zero, decimalPoint);
         zeroAndPoint.spacingProperty().set(10);
-        VBox digitalKeyboard = new VBox(sevenOne, eightTwo, nineThree, zeroAndPoint);
+        HBox temp = new HBox(sevenOne, eightTwo, nineThree);
+        temp.spacingProperty().set(10);
+        digitalKeyboard = new VBox(temp,zeroAndPoint);
         digitalKeyboard.spacingProperty().set(10);
-
-        return digitalKeyboard;
     }
 
     public DigitalKeyboard(){
         createButton();
-        digitalKeyboard = createKeyboard();
+        createKeyboard();
     }
 
     public VBox getDigitalKeyboard() {

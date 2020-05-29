@@ -24,6 +24,14 @@ public class Keyboard {
         setStyleOne();
     }
 
+    public DigitalKeyboard getDigitalKeyboard() {
+        return digitalKeyboard;
+    }
+
+    public KeyboardOperations getKeyboardOperations() {
+        return keyboardOperations;
+    }
+
     public HBox getKeyboard() { ;
         return keyboard;
     }
