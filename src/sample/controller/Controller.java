@@ -28,54 +28,108 @@ public class Controller {
         alert.showAndWait();
     }
 
-    private boolean checkPoint(char symbol){
+    private boolean checkPoint(char symbol) {
         return symbol == '.';
     }
 
-    private boolean checkSign(char symbol){
-        if(symbol == '+') return true;
-        if(symbol == '-') return true;
-        if(symbol == '*') return true;
-        if(symbol == '/') return true;
-        if(symbol == '%') return true;
-        if(symbol == '√') return true;
+    private boolean checkBracket(String expression){
+        int counter = 0;
+        for(int i = 0; i < expression.length(); i++){
+            if(expression.charAt(i) == '(') counter++;
+            if(expression.charAt(i) == ')') counter--;
+        }
+        if(counter == 0) return true;
         return false;
     }
 
-    private boolean checkAnotherPoint(String expression){
-        if(expression.length() == 0) return true;
-        for(int i = expression.length() - 1; i >= 0; i--){
-            if(expression.charAt(i) < '0' || expression.charAt(i) > '9'){
-                if(expression.charAt(i) =='.') return true; else return false;
+    private boolean checkSign(char symbol) {
+        if (symbol == '+') return true;
+        if (symbol == '-') return true;
+        if (symbol == '*') return true;
+        if (symbol == '/') return true;
+        if (symbol == '%') return true;
+        if (symbol == '√') return true;
+        return false;
+    }
+
+    private boolean checkAnotherPoint(String expression) {
+        if (expression.length() == 0) return true;
+        for (int i = expression.length() - 1; i >= 0; i--) {
+            if (expression.charAt(i) < '0' || expression.charAt(i) > '9') {
+                if (expression.charAt(i) == '.') return true;
+                else return false;
             }
         }
         return false;
     }
 
-    private int checkTrigonometricFunction(String expression){
-        if(expression.length() == 0 || expression.length() < 3) return -1;
-        if(expression.charAt(expression.length() - 1) != '(') return -1;
+    private int checkTrigonometricFunction(String expression) {
+        if (expression.length() == 0 || expression.length() < 3) return -1;
+        if (expression.charAt(expression.length() - 1) != '(') return -1;
         String check = copy(expression.length() - 4, expression.length(), expression);
-        if(check == "tg(") return 3;
-        if(expression.length() != 4) return -1;
+        if (check == "tg(") return 3;
+        if (expression.length() != 4) return -1;
         check = copy(expression.length() - 5, expression.length(), expression);
-        if(check == "sin(") return 1;
-        if(check == "cos(") return 2;
-        if(check == "ctg(") return 4;
+        if (check == "sin(") return 1;
+        if (check == "cos(") return 2;
+        if (check == "ctg(") return 4;
         return -1;
+    }
+
+    private void deleteOneCharacter() {
+        String expression = view.getDisplay().getText();
+        if (expression.length() == 0) return;
+        int check = checkTrigonometricFunction(expression);
+        switch (check) {
+            case -1: {
+                String newExpression = copy(0, expression.length() - 1, expression);
+                view.getDisplay().setText(newExpression);
+                break;
+            }
+            case 3: {
+                String newExpression = copy(0, expression.length() - 3, expression);
+                view.getDisplay().setText(newExpression);
+                break;
+            }
+            default: {
+                String newExpression = copy(0, expression.length() - 4, expression);
+                view.getDisplay().setText(newExpression);
+            }
+        }
+    }
+
+    private void openingBracket() {
+        String expression = view.getDisplay().getText();
+        if (expression.length() == 0) {
+            view.getDisplay().setText("(");
+            return;
+        }
+        char symbol = expression.charAt(expression.length() - 1);
+        if (symbol == ')') return;
+        if (symbol >= '0' && symbol <= '9') return;
+        view.getDisplay().setText(expression + "(");
+    }
+
+    private void closingBracket() {
+        String expression = view.getDisplay().getText();
+        if (expression.length() == 0) return;
+        char symbol = expression.charAt(expression.length() - 1);
+        if (symbol == '(') return;
+        if (checkSign(symbol)) return;
+        if(checkBracket(expression)) return;
+        view.getDisplay().setText(expression + ")");
     }
 
     private void setEventButton(Button button) {
         button.setOnAction(e -> {
             String expression = view.getDisplay().getText();
-            if(expression.length() == 0){
+            if (expression.length() == 0) {
                 view.getDisplay().setText(view.getDisplay().getText() + button.getText());
                 return;
             }
-            if(expression.charAt(expression.length() - 1) == ')'){
-                createInformationWindow("Поставьте какой-нибудь знак перед вводом числа или уберите скобку.");
-            }
-            else view.getDisplay().setText(view.getDisplay().getText() + button.getText());
+            if (expression.charAt(expression.length() - 1) == ')') {
+                return;
+            } else view.getDisplay().setText(view.getDisplay().getText() + button.getText());
         });
     }
 
@@ -87,59 +141,49 @@ public class Controller {
                 return;
             }
             char symbol = expression.charAt(expression.length() - 1);
-            if(checkSign(symbol)){
+            if (checkSign(symbol)) {
                 view.getDisplay().setText(expression + 0 + button.getText());
                 return;
             }
-            if(symbol >= '0' && symbol <= '9'){
+            if (checkAnotherPoint(expression)) {
+//                createInformationWindow("В числе не может быть 2 точки.");
+                return;
+            }
+            if (symbol >= '0' && symbol <= '9') {
                 view.getDisplay().setText(expression + button.getText());
                 return;
             }
-            if(checkAnotherPoint(expression)){
-                createInformationWindow("В числе не может быть 2 точки.");
-                return;
-            }
-            if(symbol == '('){
+            if (symbol == '(') {
                 view.getDisplay().setText(expression + 0 + button.getText());
                 return;
-            }else {
-                createInformationWindow("Нельзя поставить точку после закрывающейся скобки.");
+            } else {
+//                createInformationWindow("Нельзя поставить точку после закрывающейся скобки.");
                 return;
             }
         });
     }
 
-    private void setEventClear(Button button){
-        button.setOnAction(e->{
+    private void setEventClear(Button button) {
+        button.setOnAction(e -> {
             view.getDisplay().clear();
         });
     }
 
-    private void deleteOneCharacter(){
-        String expression = view.getDisplay().getText();
-        if(expression.length() == 0) return;
-        int check = checkTrigonometricFunction(expression);
-        switch (check){
-            case -1:{
-                String newExpression = copy(0, expression.length() - 1, expression);
-                view.getDisplay().setText(newExpression);
-                break;
-            }
-            case 3:{
-                String newExpression = copy(0, expression.length() - 3, expression);
-                view.getDisplay().setText(newExpression);
-                break;
-            }
-            default:{
-                String newExpression = copy(0, expression.length() - 4, expression);
-                view.getDisplay().setText(newExpression);
-            }
-        }
+    private void setEventDeleteOneCharacter(Button button) {
+        button.setOnAction(e -> {
+            deleteOneCharacter();
+        });
     }
 
-    private void setEventDeleteOneCharacter(Button button){
-        button.setOnAction(e->{
-            deleteOneCharacter();
+    private void setEventOpeningBracket(Button button) {
+        button.setOnAction(e -> {
+            openingBracket();
+        });
+    }
+
+    private void setEventClosingBracket(Button button) {
+        button.setOnAction(e -> {
+            closingBracket();
         });
     }
 
@@ -157,9 +201,11 @@ public class Controller {
         setEventPoint(view.getKeyboard().getDigitalKeyboard().getDecimalPoint());
     }
 
-    private void setEventOperationKeyboard(){
+    private void setEventOperationKeyboard() {
         setEventClear(view.getKeyboard().getKeyboardOperations().getCleaningSign());
         setEventDeleteOneCharacter(view.getKeyboard().getKeyboardOperations().getSingleCharacterDelete());
+        setEventOpeningBracket(view.getKeyboard().getKeyboardOperations().getLeftBracket());
+        setEventClosingBracket(view.getKeyboard().getKeyboardOperations().getRightBracket());
     }
 
     private void setEvent() {
