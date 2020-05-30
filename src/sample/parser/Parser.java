@@ -53,7 +53,13 @@ public class Parser {
             if (expression.charAt(i) == '(') i = checkParentheses(i, expression) - 1;
         }
         for (int i = 0; i < expression.length(); i++) {
-            if (expression.charAt(i) == '*' || expression.charAt(i) == '/') {
+            if (expression.charAt(i) == '*') {
+                return i;
+            }
+            if (expression.charAt(i) == '(') i = checkParentheses(i, expression) - 1;
+        }
+        for (int i = 0; i < expression.length(); i++) {
+            if (expression.charAt(i) == '/') {
                 return i;
             }
             if (expression.charAt(i) == '(') i = checkParentheses(i, expression) - 1;

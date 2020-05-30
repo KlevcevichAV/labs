@@ -7,19 +7,21 @@ import javafx.scene.layout.VBox;
 public class Keyboard {
     private DigitalKeyboard digitalKeyboard;
     private KeyboardOperations keyboardOperations;
-    private HBox keyboard;
+    private VBox keyboard;
 
-    private void setStyleOne(){
+    private void setStyle(){
         VBox group = new VBox(keyboardOperations.getTopGroup(), digitalKeyboard.getDigitalKeyboard());
         group.spacingProperty().set(10);
-        keyboard = new HBox(group, keyboardOperations.getLeftGroup());
+        HBox group1 = new HBox(group, keyboardOperations.getLeftGroup());
+        group1.spacingProperty().set(10);
+        keyboard = new VBox(keyboardOperations.getTrigonometricGroup(), group1);
         keyboard.spacingProperty().set(10);
     }
 
     public Keyboard(){
         digitalKeyboard = new DigitalKeyboard();
         keyboardOperations = new KeyboardOperations();
-        setStyleOne();
+        setStyle();
     }
 
     public DigitalKeyboard getDigitalKeyboard() {
@@ -30,7 +32,7 @@ public class Keyboard {
         return keyboardOperations;
     }
 
-    public HBox getKeyboard() { ;
+    public VBox getKeyboard() { ;
         return keyboard;
     }
 }

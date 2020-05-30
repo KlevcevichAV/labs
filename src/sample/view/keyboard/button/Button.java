@@ -22,6 +22,11 @@ public class Button extends javafx.scene.control.Button {
             }
             case 3:{
                 super.getStylesheets().add(getClass().getResource("buttonNull.css").toExternalForm());
+                break;
+            }
+            case 4:{
+                super.getStylesheets().add(getClass().getResource("trigonometricButton.css").toExternalForm());
+                break;
             }
         }
     }
