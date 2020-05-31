@@ -56,10 +56,15 @@ public class Parser {
         }
         for (int i = 0; i < expression.length(); i++) {
             if (expression.charAt(i) == '-') {
+                if (i == 0) {
+                    result = 0;
+                    continue;
+                }
                 return i;
             }
             if (expression.charAt(i) == '(') i = checkParentheses(i, expression) - 1;
         }
+        if (result == 0) return result;
         for (int i = 0; i < expression.length(); i++) {
             if (expression.charAt(i) == '*') {
                 return i;
@@ -119,11 +124,11 @@ public class Parser {
     }
 
     public Double parsing(String expression) {
-        if (expression.charAt(0) == '(') {
+        while (expression.charAt(0) == '(') {
             int pointer = checkParentheses(0, expression);
             if (pointer == expression.length()) {
                 expression = copy(1, expression.length() - 1, expression);
-            }
+            } else break;
         }
         int pointer = searchMainPointer(expression);
         if (expression.charAt(expression.length() - 1) == '!') {
@@ -131,6 +136,12 @@ public class Parser {
                 String newExpression = copy(0, expression.length() - 1, expression);
                 return factorial(parsing(newExpression));
             }
+        }
+        if (pointer == 0) {
+            String newExpression = copy(1, expression.length(), expression);
+            arrayExpression.add("--");
+            double result = -parsing(newExpression);
+            return result;
         }
         String trigFunc = searchTrigFunc(expression);
         if (trigFunc != null) {
@@ -170,29 +181,45 @@ public class Parser {
             arrayExpression.add(addedElement);
             switch (expression.charAt(pointer)) {
                 case '+': {
-                    return parsing(numberLeft) + parsing(numberRight);
+                    Double left = parsing(numberLeft);
+                    Double right = parsing(numberRight);
+                    if(left == null || right == null) return null;
+                    return left + right;
                 }
                 case '-': {
-                    return parsing(numberLeft) - parsing(numberRight);
+                    numberRight = copy(pointer, expression.length(), expression);
+                    Double left = parsing(numberLeft);
+                    Double right = parsing(numberRight);
+                    if(left == null || right == null) return null;
+                    return left + right;
                 }
                 case '*': {
-                    return parsing(numberLeft) * parsing(numberRight);
+                    Double left = parsing(numberLeft);
+                    Double right = parsing(numberRight);
+                    if(left == null || right == null) return null;
+                    return left * right;
                 }
                 case '^': {
                     return Math.pow(parsing(numberLeft), parsing(numberRight));
                 }
                 case '/': {
-                    double numberLeftD = parsing(numberLeft);
-                    double numberRightD = parsing(numberRight);
-                    if (numberRightD == 0.0) {
+                    Double left = parsing(numberLeft);
+                    Double right = parsing(numberRight);
+                    if(left == null || right == null) return null;
+                    if (right == 0.0) {
                         return null;
-                    } else return numberLeftD / numberRightD;
+                    } else return left / right;
                 }
                 case '%': {
-                    return parsing(numberLeft) % parsing(numberRight);
+                    Double left = parsing(numberLeft);
+                    Double right = parsing(numberRight);
+                    if(left == null || right == null) return null;
+                    return left % right;
                 }
                 case '√': {
-                    return Math.sqrt(parsing(numberRight));
+                    Double right = parsing(numberRight);
+                    if(right == null) return null;
+                    return Math.sqrt(right);
                 }
                 default: {
                     return null;
@@ -204,7 +231,7 @@ public class Parser {
     public Double start(String expression) {
         pointerExpression = 0;
         arrayExpression = new ArrayList<>();
-        double result = parsing(expression);
+        Double result = parsing(expression);
         System.out.println("hah");
         return result;
     }

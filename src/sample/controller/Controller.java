@@ -131,6 +131,26 @@ public class Controller {
         view.getDisplay().setText(expression + ")");
     }
 
+    private void signMinus(String sign) {
+        String expression = view.getDisplay().getText();
+        if (expression.length() == 0) {
+            view.getDisplay().setText(sign);
+            return;
+        }
+        char symbol = expression.charAt(expression.length() - 1);
+        if (symbol == '(') {
+            view.getDisplay().setText(expression + sign);
+            return;
+        }
+        if (symbol == '√') return;
+        if (checkSign(symbol)) {
+            String newExpression = copy(0, expression.length() - 1, expression);
+            view.getDisplay().setText(newExpression + sign);
+            return;
+        }
+        view.getDisplay().setText(expression + sign);
+    }
+
     private void sign(String sign) {
         String expression = view.getDisplay().getText();
         if (expression.length() == 0) return;
@@ -138,6 +158,8 @@ public class Controller {
         if (symbol == '(') return;
         if (symbol == '√') return;
         if (checkSign(symbol)) {
+            if(expression.length() == 1) return;
+            if(expression == "(-") return;
             String newExpression = copy(0, expression.length() - 1, expression);
             view.getDisplay().setText(newExpression + sign);
             return;
@@ -169,12 +191,16 @@ public class Controller {
         for(int i = 0; i < pointer; i++){
             expression = expression + ')';
         }
-        double resultD = parser.start(expression);
+        view.getDisplay().setText(expression);
+        Double resultD = parser.start(expression);
+        if(resultD == null){
+            System.out.println("Infinity");
+            return;
+        }
         String result = "" + resultD;
         if (result.charAt(result.length() - 1) == '0' && result.charAt(result.length() - 2) == '.') {
             result = copy(0, result.length() - 2, result);
         }
-        view.getDisplay().setText(expression);
         System.out.println(resultD);
     }
 
@@ -265,6 +291,12 @@ public class Controller {
         });
     }
 
+    private void setEventSignMinus(Button button) {
+        button.setOnAction(e -> {
+            signMinus(button.getText());
+        });
+    }
+
     private void setEventSign(Button button) {
         button.setOnAction(e -> {
             sign(button.getText());
@@ -333,7 +365,7 @@ public class Controller {
         setEventOpeningBracket(view.getKeyboard().getKeyboardOperations().getLeftBracket());
         setEventClosingBracket(view.getKeyboard().getKeyboardOperations().getRightBracket());
         setEventSign(view.getKeyboard().getKeyboardOperations().getPlusSign());
-        setEventSign(view.getKeyboard().getKeyboardOperations().getMinusSign());
+        setEventSignMinus(view.getKeyboard().getKeyboardOperations().getMinusSign());
         setEventSign(view.getKeyboard().getKeyboardOperations().getMultiplicationSign());
         setEventSign(view.getKeyboard().getKeyboardOperations().getDivisionSign());
         setEventSign(view.getKeyboard().getKeyboardOperations().getModSign());
