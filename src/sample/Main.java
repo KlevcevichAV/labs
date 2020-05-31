@@ -17,7 +17,7 @@ public class Main extends Application {
         root.setCenter(controller.getView().getKeyboard().getKeyboard());
         root.setTop(controller.getView().getDisplay().getScrollPane());
         root.setStyle(Constant.BLACK_FILL);
-        primaryStage.setScene(new Scene(root, 235, 425, Color.BLACK));
+        primaryStage.setScene(new Scene(root, 235, 485, Color.BLACK));
         primaryStage.show();
     }
 

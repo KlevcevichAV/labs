@@ -1,6 +1,12 @@
 package sample.parser;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Parser {
+
+    public int pointerExpression;
+    public List<String> arrayExpression;
 
     public int checkParentheses(int begin, String expression) {
         int pointer = -1;
@@ -16,10 +22,6 @@ public class Parser {
             return i;
         } else return pointer;
     }
-
-//    public boolean checkAnotherSign(String expression){
-//
-//    }
 
     public String copy(int begin, int end, String expression) {
         String result = "";
@@ -47,7 +49,13 @@ public class Parser {
             if (expression.charAt(i) == '(') i = checkParentheses(i, expression) - 1;
         }
         for (int i = 0; i < expression.length(); i++) {
-            if (expression.charAt(i) == '+' || expression.charAt(i) == '-') {
+            if (expression.charAt(i) == '+') {
+                return i;
+            }
+            if (expression.charAt(i) == '(') i = checkParentheses(i, expression) - 1;
+        }
+        for (int i = 0; i < expression.length(); i++) {
+            if (expression.charAt(i) == '-') {
                 return i;
             }
             if (expression.charAt(i) == '(') i = checkParentheses(i, expression) - 1;
@@ -126,6 +134,7 @@ public class Parser {
         }
         String trigFunc = searchTrigFunc(expression);
         if (trigFunc != null) {
+            arrayExpression.add(trigFunc);
             switch (trigFunc) {
                 case "cos": {
                     String newExpression = copy(3, expression.length(), expression);
@@ -151,10 +160,14 @@ public class Parser {
         }
         if (pointer == -1) {
             double number = Double.parseDouble(expression);
+            String addedElement = "" + number;
+            arrayExpression.add(addedElement);
             return number;
         } else {
             String numberLeft = copy(0, pointer, expression);
             String numberRight = copy(pointer + 1, expression.length(), expression);
+            String addedElement = "" + expression.charAt(pointer);
+            arrayExpression.add(addedElement);
             switch (expression.charAt(pointer)) {
                 case '+': {
                     return parsing(numberLeft) + parsing(numberRight);
@@ -169,10 +182,11 @@ public class Parser {
                     return Math.pow(parsing(numberLeft), parsing(numberRight));
                 }
                 case '/': {
+                    double numberLeftD = parsing(numberLeft);
                     double numberRightD = parsing(numberRight);
                     if (numberRightD == 0.0) {
                         return null;
-                    } else return parsing(numberLeft) / numberRightD;
+                    } else return numberLeftD / numberRightD;
                 }
                 case '%': {
                     return parsing(numberLeft) % parsing(numberRight);
@@ -185,5 +199,13 @@ public class Parser {
                 }
             }
         }
+    }
+
+    public Double start(String expression) {
+        pointerExpression = 0;
+        arrayExpression = new ArrayList<>();
+        double result = parsing(expression);
+        System.out.println("hah");
+        return result;
     }
 }

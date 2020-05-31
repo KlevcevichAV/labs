@@ -32,12 +32,17 @@ public class Controller {
         return symbol == '.';
     }
 
-    private boolean checkBracket(String expression) {
+    private int checkClosingBracket(String expression) {
         int counter = 0;
         for (int i = 0; i < expression.length(); i++) {
             if (expression.charAt(i) == '(') counter++;
             if (expression.charAt(i) == ')') counter--;
         }
+        return counter;
+    }
+
+    private boolean checkBracket(String expression) {
+        int counter = checkClosingBracket(expression);
         if (counter == 0) return true;
         return false;
     }
@@ -157,17 +162,23 @@ public class Controller {
         view.getDisplay().setText(expression + "√");
     }
 
-    private void equal(){
+    private void equal() {
         String expression = view.getDisplay().getText();
-        double resultD = parser.parsing(expression);
-        String result = "" + resultD;
-        if(result.charAt(result.length() - 1) == '0' && result.charAt(result.length() - 2) == '.'){
-            result = copy(0,result.length() - 2, result);
+        if(expression.length() == 0) return;
+        int pointer = checkClosingBracket(expression);
+        for(int i = 0; i < pointer; i++){
+            expression = expression + ')';
         }
-        view.getDisplay().setText(result);
+        double resultD = parser.start(expression);
+        String result = "" + resultD;
+        if (result.charAt(result.length() - 1) == '0' && result.charAt(result.length() - 2) == '.') {
+            result = copy(0, result.length() - 2, result);
+        }
+        view.getDisplay().setText(expression);
+        System.out.println(resultD);
     }
 
-    private void sin(String sign){
+    private void trigonometric(String sign) {
         sign = sign + '(';
         String expression = view.getDisplay().getText();
         if (expression.length() == 0) {
@@ -175,11 +186,11 @@ public class Controller {
             return;
         }
         char symbol = expression.charAt(expression.length() - 1);
-        if(checkNumber(symbol) || symbol == ')'){
-            view.getDisplay().setText("*" + sign);
+        if (checkNumber(symbol) || symbol == ')') {
+            view.getDisplay().setText(expression + "*" + sign);
             return;
         }
-        if(checkSign(symbol) || symbol == '('){
+        if (checkSign(symbol) || symbol == '(') {
             view.getDisplay().setText(expression + sign);
             return;
         }
@@ -285,20 +296,20 @@ public class Controller {
     }
 
     private void setEventFraction(Button button) {
-        button.setOnAction(e->{
+        button.setOnAction(e -> {
             fraction("1/");
         });
     }
 
     private void setEventEqual(Button button) {
-        button.setOnAction(e->{
+        button.setOnAction(e -> {
             equal();
         });
     }
 
-    private void setEventSin(Button button) {
-        button.setOnAction(e->{
-            sin(button.getText());
+    private void setEventTrigonometric(Button button) {
+        button.setOnAction(e -> {
+            trigonometric(button.getText());
         });
     }
 
@@ -328,7 +339,10 @@ public class Controller {
         setEventSign(view.getKeyboard().getKeyboardOperations().getModSign());
         setEventFraction(view.getKeyboard().getKeyboardOperations().getFractionSign());
         setEventRoot(view.getKeyboard().getKeyboardOperations().getRootSign());
-        setEventSin(view.getKeyboard().getKeyboardOperations().getSinSign());
+        setEventTrigonometric(view.getKeyboard().getKeyboardOperations().getSinSign());
+        setEventTrigonometric(view.getKeyboard().getKeyboardOperations().getCosSign());
+        setEventTrigonometric(view.getKeyboard().getKeyboardOperations().getTgSign());
+        setEventTrigonometric(view.getKeyboard().getKeyboardOperations().getCtgSign());
         setEventEqual(view.getKeyboard().getKeyboardOperations().getEqualSign());
     }
 
