@@ -75,14 +75,15 @@ public class Controller {
     private int checkTrigonometricFunction(String expression) {
         if (expression.length() == 0 || expression.length() < 3) return -1;
         if (expression.charAt(expression.length() - 1) != '(') return -1;
-        String check = copy(expression.length() - 4, expression.length(), expression);
-        if (check == "tg(") return 3;
-        if (expression.length() != 4) return -1;
-        check = copy(expression.length() - 5, expression.length(), expression);
-        if (check == "sin(") return 1;
-        if (check == "cos(") return 2;
-        if (check == "ctg(") return 4;
-        return -1;
+        String check = copy(expression.length() - 3, expression.length(), expression);
+        int result = -1;
+        if (check.equals("tg(")) result = 3;
+        if (expression.length() < 4) return result;
+        check = copy(expression.length() - 4, expression.length(), expression);
+        if (check.equals("sin(")) return 1;
+        if (check.equals("cos(")) return 2;
+        if (check.equals("ctg(")) return 4;
+        return result;
     }
 
     private void deleteOneCharacter() {
@@ -138,6 +139,7 @@ public class Controller {
             return;
         }
         char symbol = expression.charAt(expression.length() - 1);
+        if (symbol == '.') return;
         if (symbol == '(') {
             view.getDisplay().setText(expression + sign);
             return;
@@ -156,10 +158,11 @@ public class Controller {
         if (expression.length() == 0) return;
         char symbol = expression.charAt(expression.length() - 1);
         if (symbol == '(') return;
+        if (symbol == '.') return;
         if (symbol == '√') return;
         if (checkSign(symbol)) {
-            if(expression.length() == 1) return;
-            if(expression == "(-") return;
+            if (expression.length() == 1) return;
+            if (expression == "(-") return;
             String newExpression = copy(0, expression.length() - 1, expression);
             view.getDisplay().setText(newExpression + sign);
             return;
@@ -186,14 +189,14 @@ public class Controller {
 
     private void equal() {
         String expression = view.getDisplay().getText();
-        if(expression.length() == 0) return;
+        if (expression.length() == 0) return;
         int pointer = checkClosingBracket(expression);
-        for(int i = 0; i < pointer; i++){
+        for (int i = 0; i < pointer; i++) {
             expression = expression + ')';
         }
         view.getDisplay().setText(expression);
         Double resultD = parser.start(expression);
-        if(resultD == null){
+        if (resultD == null) {
             System.out.println("Infinity");
             return;
         }
