@@ -5,6 +5,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.TreeItem;
 import javafx.scene.layout.BorderPane;
 import sample.parser.Parser;
+import sample.parser.TreeNote;
 import sample.view.View;
 import sample.view.keyboard.button.Button;
 
@@ -108,74 +109,74 @@ public class Controller {
     }
 
     private void deleteOneCharacter() {
-        String expression = view.getDisplay().getText();
+        String expression = view.getDisplayExpression().getText();
         if (expression.length() == 0) return;
         int check = checkTrigonometricFunction(expression);
         switch (check) {
             case -1: {
                 String newExpression = copy(0, expression.length() - 1, expression);
-                view.getDisplay().setText(newExpression);
+                view.getDisplayExpression().setText(newExpression);
                 break;
             }
             case 3: {
                 String newExpression = copy(0, expression.length() - 3, expression);
-                view.getDisplay().setText(newExpression);
+                view.getDisplayExpression().setText(newExpression);
                 break;
             }
             default: {
                 String newExpression = copy(0, expression.length() - 4, expression);
-                view.getDisplay().setText(newExpression);
+                view.getDisplayExpression().setText(newExpression);
             }
         }
     }
 
     private void openingBracket() {
-        String expression = view.getDisplay().getText();
+        String expression = view.getDisplayExpression().getText();
         if (expression.length() == 0) {
-            view.getDisplay().setText("(");
+            view.getDisplayExpression().setText("(");
             return;
         }
         char symbol = expression.charAt(expression.length() - 1);
         if (checkNumber(symbol) || symbol == ')') {
-            view.getDisplay().setText(expression + "*(");
+            view.getDisplayExpression().setText(expression + "*(");
             return;
         }
-        view.getDisplay().setText(expression + "(");
+        view.getDisplayExpression().setText(expression + "(");
     }
 
     private void closingBracket() {
-        String expression = view.getDisplay().getText();
+        String expression = view.getDisplayExpression().getText();
         if (expression.length() == 0) return;
         char symbol = expression.charAt(expression.length() - 1);
         if (symbol == '(') return;
         if (checkSign(symbol)) return;
         if (checkBracket(expression)) return;
-        view.getDisplay().setText(expression + ")");
+        view.getDisplayExpression().setText(expression + ")");
     }
 
     private void signMinus(String sign) {
-        String expression = view.getDisplay().getText();
+        String expression = view.getDisplayExpression().getText();
         if (expression.length() == 0) {
-            view.getDisplay().setText(sign);
+            view.getDisplayExpression().setText(sign);
             return;
         }
         char symbol = expression.charAt(expression.length() - 1);
         if (symbol == '.') return;
         if (symbol == '(') {
-            view.getDisplay().setText(expression + sign);
+            view.getDisplayExpression().setText(expression + sign);
             return;
         }
         if (symbol == '√') return;
         if (checkSign(symbol)) {
             String newExpression = copy(0, expression.length() - 1, expression);
-            view.getDisplay().setText(newExpression + sign);
+            view.getDisplayExpression().setText(newExpression + sign);
             return;
         }
-        view.getDisplay().setText(expression + sign);
+        view.getDisplayExpression().setText(expression + sign);
     }
 
     private void sign(String sign) {
-        String expression = view.getDisplay().getText();
+        String expression = view.getDisplayExpression().getText();
         if (expression.length() == 0) return;
         char symbol = expression.charAt(expression.length() - 1);
         if (symbol == '(') return;
@@ -185,37 +186,37 @@ public class Controller {
             if (expression.length() == 1) return;
             if (expression == "(-") return;
             String newExpression = copy(0, expression.length() - 1, expression);
-            view.getDisplay().setText(newExpression + sign);
+            view.getDisplayExpression().setText(newExpression + sign);
             return;
         }
-        view.getDisplay().setText(expression + sign);
+        view.getDisplayExpression().setText(expression + sign);
     }
 
     private void root() {
-        String expression = view.getDisplay().getText();
+        String expression = view.getDisplayExpression().getText();
         if (expression.length() == 0) {
-            view.getDisplay().setText("√");
+            view.getDisplayExpression().setText("√");
             return;
         }
         char symbol = expression.charAt(expression.length() - 1);
         if (symbol == ')' || checkNumber(symbol)) {
-            view.getDisplay().setText(expression + "*√");
+            view.getDisplayExpression().setText(expression + "*√");
             return;
         }
 //        if (checkSign(symbol)) {
-//            view.getDisplay().setText(expression + "√");
+//            view.getDisplayExpression().setText(expression + "√");
 //        }
-        view.getDisplay().setText(expression + "√");
+        view.getDisplayExpression().setText(expression + "√");
     }
 
     private void equal() {
-        String expression = view.getDisplay().getText();
+        String expression = view.getDisplayExpression().getText();
         if (expression.length() == 0) return;
         int pointer = checkClosingBracket(expression);
         for (int i = 0; i < pointer; i++) {
             expression = expression + ')';
         }
-        view.getDisplay().setText(expression);
+        view.getDisplayExpression().setText(expression);
         Double resultD = parser.start(expression);
         if (resultD == null) {
             System.out.println("Infinity");
@@ -231,65 +232,65 @@ public class Controller {
 
     private void trigonometric(String sign) {
         sign = sign + '(';
-        String expression = view.getDisplay().getText();
+        String expression = view.getDisplayExpression().getText();
         if (expression.length() == 0) {
-            view.getDisplay().setText(sign);
+            view.getDisplayExpression().setText(sign);
             return;
         }
         char symbol = expression.charAt(expression.length() - 1);
         if (checkNumber(symbol) || symbol == ')') {
-            view.getDisplay().setText(expression + "*" + sign);
+            view.getDisplayExpression().setText(expression + "*" + sign);
             return;
         }
         if (checkSign(symbol) || symbol == '(') {
-            view.getDisplay().setText(expression + sign);
+            view.getDisplayExpression().setText(expression + sign);
             return;
         }
     }
 
     private void fraction(String sign) {
-        String expression = view.getDisplay().getText();
+        String expression = view.getDisplayExpression().getText();
         if (expression.length() == 0) {
-            view.getDisplay().setText(sign);
+            view.getDisplayExpression().setText(sign);
             return;
         }
         char symbol = expression.charAt(expression.length() - 1);
         if (checkNumber(symbol)) {
-            view.getDisplay().setText(expression + "*" + sign);
+            view.getDisplayExpression().setText(expression + "*" + sign);
             return;
         }
         if (symbol == ')') {
-            view.getDisplay().setText(expression + "*" + sign);
+            view.getDisplayExpression().setText(expression + "*" + sign);
             return;
         }
         if (checkSign(symbol) || symbol == '(') {
-            view.getDisplay().setText(expression + sign);
+            view.getDisplayExpression().setText(expression + sign);
         }
     }
 
     private void setEventButton(Button button) {
         button.setOnAction(e -> {
-            String expression = view.getDisplay().getText();
+            String expression = view.getDisplayExpression().getText();
             if (expression.length() == 0) {
-                view.getDisplay().setText(view.getDisplay().getText() + button.getText());
+                view.getDisplayExpression().setText(view.getDisplayExpression().getText() + button.getText());
                 return;
             }
             if (expression.charAt(expression.length() - 1) == ')') {
                 return;
-            } else view.getDisplay().setText(view.getDisplay().getText() + button.getText());
+            } else view.getDisplayExpression().setText(view.getDisplayExpression().getText() + button.getText());
         });
     }
 
     private void setEventPoint(Button button) {
         button.setOnAction(e -> {
-            String expression = view.getDisplay().getText();
+            String expression = view.getDisplayExpression().getText();
             if (expression.length() == 0) {
-                view.getDisplay().setText(0 + button.getText());
+                view.getDisplayExpression().setText(0 + button.getText());
                 return;
             }
             char symbol = expression.charAt(expression.length() - 1);
             if (checkSign(symbol)) {
-                view.getDisplay().setText(expression + 0 + button.getText());
+                view.getDisplayExpression().setText(expression + 0 + button.getText());
                 return;
             }
             if (checkAnotherPoint(expression)) {
@@ -297,11 +298,11 @@ public class Controller {
                 return;
             }
             if (symbol >= '0' && symbol <= '9') {
-                view.getDisplay().setText(expression + button.getText());
+                view.getDisplayExpression().setText(expression + button.getText());
                 return;
             }
             if (symbol == '(') {
-                view.getDisplay().setText(expression + 0 + button.getText());
+                view.getDisplayExpression().setText(expression + 0 + button.getText());
                 return;
             } else {
 //                createInformationWindow("Нельзя поставить точку после закрывающейся скобки.");
@@ -312,7 +313,7 @@ public class Controller {
 
     private void setEventClear(Button button) {
         button.setOnAction(e -> {
-            view.getDisplay().clear();
+            view.getDisplayExpression().clear();
         });
     }
 
@@ -413,23 +414,38 @@ public class Controller {
     }
 
     private void createTree() {
-        TreeItem<String> root = fillTree(new TreeItem());
+        TreeItem<String> root = fillTree(new TreeItem(), 0, 0);
         root = root.getChildren().get(0);
         view.createTree(root);
     }
 
-    private TreeItem fillTree(TreeItem root) {
+    private TreeItem fillTree(TreeItem root, int pointer, int pointerRoot) {
         if(!parser.comparingArraySizeAndPointer()) return null;
+        int pointerArray = parser.pointerExpression;
         String element = parser.getElement();
+        String expression = parser.arrayExpression.get(parser.pointerExpression).value;
         parser.incPointerExpression();
-        TreeItem<String> item = new TreeItem<>(element);
+        TreeItem<String> item = new TreeItem<>(expression);
         if(checkUnaryOperation(element)){
-            item = fillTree(item);
+            item = fillTree(item, 0, pointerArray);
         }
         if(checkOperation(element)){
-            item = fillTree(item);
-            item = fillTree(item);
+            item = fillTree(item, 1, pointerArray);
+            item = fillTree(item, 2, pointerArray);
         }
+        if(pointer == 2){
+            if(parser.arrayExpression.get(pointerRoot).sign.equals("-")){
+                if(item.getValue().charAt(0) == '-'){
+                    String newNumber = copy(1, item.getValue().length(), item.getValue());
+                    item.setValue(newNumber);
+                }
+            }
+        }
+        TreeItem<String> finalItem = item;
+        item.expandedProperty().addListener(e->{
+            finalItem.setValue(finalItem.isExpanded() ? parser.arrayExpression.get(pointerArray).sign : parser.arrayExpression.get(pointerArray).value);
+        });
+//        finalItem.setValue(parser.arrayExpression.get(pointerArray).value);
         root.getChildren().add(item);
         return root;
     }

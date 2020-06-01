@@ -9,7 +9,7 @@ import sample.view.keyboard.Keyboard;
 
 public class View {
     private BorderPane root;
-    private Display display;
+    private Display displayExpression;
     private Keyboard keyboard;
     private VBox calculator;
     private TreeView<String> tree;
@@ -21,19 +21,20 @@ public class View {
 
     public View(BorderPane root){
         this.root = root;
-        display = new Display();
-        TreeItem<String> temp = new TreeItem<>("asd");
-        createTree(temp);
+        displayExpression = new Display();
+        createTree(new TreeItem<>());
+        tree.getStylesheets().add(getClass().getResource("tree.css").toExternalForm());;
         keyboard = new Keyboard();
-        calculator = new VBox(display, keyboard.getKeyboard());
+        calculator = new VBox(displayExpression, keyboard.getKeyboard());
+
     }
 
     public Keyboard getKeyboard() {
         return keyboard;
     }
 
-    public Display getDisplay() {
-        return display;
+    public Display getDisplayExpression() {
+        return displayExpression;
     }
 
     public TreeView<String> getTree() {

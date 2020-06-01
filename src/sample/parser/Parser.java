@@ -6,14 +6,22 @@ import java.util.List;
 public class Parser {
 
     public int pointerExpression;
-    public List<String> arrayExpression;
+    public List<TreeNote> arrayExpression;
 
     public boolean comparingArraySizeAndPointer(){
         return pointerExpression < arrayExpression.size();
     }
 
     public String getElement(){
-        return arrayExpression.get(pointerExpression);
+        return arrayExpression.get(pointerExpression).sign;
+    }
+
+    public String getPrevElementExpression(){
+        return arrayExpression.get(pointerExpression - 1).expression;
+    }
+
+    public String getPrevElementValue(){
+        return arrayExpression.get(pointerExpression - 1).value;
     }
 
     public void incPointerExpression(){
@@ -136,6 +144,8 @@ public class Parser {
     }
 
     public Double parsing(String expression) {
+        int thisPointer = arrayExpression.size();
+        arrayExpression.add(new TreeNote(2, expression));
         while (expression.charAt(0) == '(') {
             int pointer = checkParentheses(0, expression);
             if (pointer == expression.length()) {
@@ -152,28 +162,38 @@ public class Parser {
         if (pointer == 0 && expression.charAt(0) == '-') {
             String newExpression = copy(1, expression.length(), expression);
             double result = -parsing(newExpression);
-            arrayExpression.set(arrayExpression.size() - 1, "-" + arrayExpression.get(arrayExpression.size() - 1));
+            arrayExpression.get(arrayExpression.size() - 2).edit(0, arrayExpression.get(arrayExpression.size() - 1).expression);
+            arrayExpression.remove(arrayExpression.size() - 1);
+//            arrayExpression.get(arrayExpression.size() - 1).edit(2, "-" + arrayExpression.get(arrayExpression.size() - 1).expression);
             return result;
         }
         String trigFunc = searchTrigFunc(expression);
         if (trigFunc != null) {
-            arrayExpression.add(trigFunc);
+            arrayExpression.add(new TreeNote(1, trigFunc));
             switch (trigFunc) {
                 case "cos": {
                     String newExpression = copy(3, expression.length(), expression);
-                    return Math.cos(parsing(newExpression));
+                    Double result = Math.cos(parsing(newExpression));
+                    arrayExpression.get(thisPointer).edit(0, ""+result);
+                    return result;
                 }
                 case "sin": {
                     String newExpression = copy(3, expression.length(), expression);
-                    return Math.sin(parsing(newExpression));
+                    Double result = Math.sin(parsing(newExpression));
+                    arrayExpression.get(thisPointer).edit(0, ""+result);
+                    return result;
                 }
                 case "tg": {
                     String newExpression = copy(2, expression.length(), expression);
-                    return Math.tan(parsing(newExpression));
+                    Double result = Math.cos(parsing(newExpression));
+                    arrayExpression.get(thisPointer).edit(0, ""+result);
+                    return result;
                 }
                 case "ctg": {
                     String newExpression = copy(3, expression.length(), expression);
-                    return 1.0 / Math.tan(parsing(newExpression));
+                    Double result = 1.0 / Math.tan(parsing(newExpression));
+                    arrayExpression.get(thisPointer).edit(0, ""+result);
+                    return result;
                 }
                 case "lg": {
                     String newExpression = copy(2, expression.length(), expression);
@@ -184,33 +204,43 @@ public class Parser {
         if (pointer == -1) {
             double number = Double.parseDouble(expression);
             String addedElement = "" + number;
-            arrayExpression.add(addedElement);
+//            arrayExpression.add(new TreeNote(1, addedElement));
+//            arrayExpression.get(arrayExpression.size() - 1).edit(2, addedElement);
+//            arrayExpression.get(arrayExpression.size() - 1).edit(1, addedElement);
+            arrayExpression.get(arrayExpression.size() - 1).edit(0, addedElement);
             return number;
         } else {
             String numberLeft = copy(0, pointer, expression);
             String numberRight = copy(pointer + 1, expression.length(), expression);
             String addedElement = "" + expression.charAt(pointer);
-            arrayExpression.add(addedElement);
+            arrayExpression.get(arrayExpression.size() - 1).edit(1, addedElement);
+//            arrayExpression.add(new TreeNote(1, addedElement));
             switch (expression.charAt(pointer)) {
                 case '+': {
                     Double left = parsing(numberLeft);
                     Double right = parsing(numberRight);
                     if(left == null || right == null) return null;
+                    Double result = left + right;
+                    arrayExpression.get(thisPointer).edit(0,"" + result);
                     return left + right;
                 }
                 case '-': {
-                    arrayExpression.set(arrayExpression.size() - 1, "+");
+//                    arrayExpression.set(arrayExpression.size() - 1, "+");
                     numberRight = copy(pointer, expression.length(), expression);
                     Double left = parsing(numberLeft);
                     Double right = parsing(numberRight);
                     if(left == null || right == null) return null;
-                    return left + right;
+                    Double result = left + right;
+                    arrayExpression.get(thisPointer).edit(0,"" + result);
+                    return result;
                 }
                 case '*': {
                     Double left = parsing(numberLeft);
                     Double right = parsing(numberRight);
                     if(left == null || right == null) return null;
-                    return left * right;
+                    Double result = left * right;
+                    arrayExpression.get(thisPointer).edit(0,"" + result);
+                    return result;
                 }
                 case '^': {
                     return Math.pow(parsing(numberLeft), parsing(numberRight));
@@ -221,17 +251,25 @@ public class Parser {
                     if(left == null || right == null) return null;
                     if (right == 0.0) {
                         return null;
-                    } else return left / right;
+                    } else {
+                        Double result = left / right;
+                        arrayExpression.get(thisPointer).edit(0,"" + result);
+                        return result;
+                    }
                 }
                 case '%': {
                     Double left = parsing(numberLeft);
                     Double right = parsing(numberRight);
                     if(left == null || right == null) return null;
-                    return left % right;
+                    Double result = left % right;
+                    arrayExpression.get(thisPointer).edit(0,"" + result);
+                    return result;
                 }
                 case '√': {
                     Double right = parsing(numberRight);
                     if(right == null) return null;
+                    Double result = Math.sqrt(right);
+                    arrayExpression.get(thisPointer).edit(0,"" + result);
                     return Math.sqrt(right);
                 }
                 default: {

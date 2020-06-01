@@ -15,7 +15,7 @@ public class Main extends Application {
         primaryStage.setTitle("Calculator");
         Controller controller = new Controller(root);
         root.setCenter(controller.getView().getKeyboard().getKeyboard());
-        root.setTop(controller.getView().getDisplay().getScrollPane());
+        root.setTop(controller.getView().getDisplayExpression().getScrollPane());
         root.setRight(controller.getView().getTree());
         root.setStyle(Constant.BLACK_FILL);
         primaryStage.setScene(new Scene(root, 235, 485, Color.BLACK));
