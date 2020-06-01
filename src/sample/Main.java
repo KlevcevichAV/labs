@@ -13,9 +13,10 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         BorderPane root = new BorderPane();
         primaryStage.setTitle("Calculator");
-        Controller controller = new Controller();
+        Controller controller = new Controller(root);
         root.setCenter(controller.getView().getKeyboard().getKeyboard());
         root.setTop(controller.getView().getDisplay().getScrollPane());
+        root.setRight(controller.getView().getTree());
         root.setStyle(Constant.BLACK_FILL);
         primaryStage.setScene(new Scene(root, 235, 485, Color.BLACK));
         primaryStage.show();

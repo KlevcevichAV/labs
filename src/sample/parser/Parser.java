@@ -8,6 +8,18 @@ public class Parser {
     public int pointerExpression;
     public List<String> arrayExpression;
 
+    public boolean comparingArraySizeAndPointer(){
+        return pointerExpression < arrayExpression.size();
+    }
+
+    public String getElement(){
+        return arrayExpression.get(pointerExpression);
+    }
+
+    public void incPointerExpression(){
+        pointerExpression++;
+    }
+
     public int checkParentheses(int begin, String expression) {
         int pointer = -1;
         int check = 0;
@@ -137,10 +149,10 @@ public class Parser {
                 return factorial(parsing(newExpression));
             }
         }
-        if (pointer == 0) {
+        if (pointer == 0 && expression.charAt(0) == '-') {
             String newExpression = copy(1, expression.length(), expression);
-            arrayExpression.add("--");
             double result = -parsing(newExpression);
+            arrayExpression.set(arrayExpression.size() - 1, "-" + arrayExpression.get(arrayExpression.size() - 1));
             return result;
         }
         String trigFunc = searchTrigFunc(expression);
@@ -187,6 +199,7 @@ public class Parser {
                     return left + right;
                 }
                 case '-': {
+                    arrayExpression.set(arrayExpression.size() - 1, "+");
                     numberRight = copy(pointer, expression.length(), expression);
                     Double left = parsing(numberLeft);
                     Double right = parsing(numberRight);

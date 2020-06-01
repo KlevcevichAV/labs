@@ -2,6 +2,8 @@ package sample.controller;
 
 
 import javafx.scene.control.Alert;
+import javafx.scene.control.TreeItem;
+import javafx.scene.layout.BorderPane;
 import sample.parser.Parser;
 import sample.view.View;
 import sample.view.keyboard.button.Button;
@@ -54,6 +56,25 @@ public class Controller {
         if (symbol == '/') return true;
         if (symbol == '%') return true;
         if (symbol == '√') return true;
+        return false;
+    }
+
+    private boolean checkUnaryOperation(String operation) {
+        if (operation.equals("--")) return true;
+        if (operation.equals("√")) return true;
+        if (operation.equals("cos")) return true;
+        if (operation.equals("sin")) return true;
+        if (operation.equals("tg")) return true;
+        if (operation.equals("ctg")) return true;
+        return false;
+    }
+
+    private boolean checkOperation(String operation) {
+        if (operation.equals("+")) return true;
+        if (operation.equals("-")) return true;
+        if (operation.equals("*")) return true;
+        if (operation.equals("/")) return true;
+        if (operation.equals("%")) return true;
         return false;
     }
 
@@ -201,6 +222,7 @@ public class Controller {
             return;
         }
         String result = "" + resultD;
+        createTree();
         if (result.charAt(result.length() - 1) == '0' && result.charAt(result.length() - 2) == '.') {
             result = copy(0, result.length() - 2, result);
         }
@@ -390,8 +412,30 @@ public class Controller {
         return view;
     }
 
-    public Controller() {
-        view = new View();
+    private void createTree() {
+        TreeItem<String> root = fillTree(new TreeItem());
+        root = root.getChildren().get(0);
+        view.createTree(root);
+    }
+
+    private TreeItem fillTree(TreeItem root) {
+        if(!parser.comparingArraySizeAndPointer()) return null;
+        String element = parser.getElement();
+        parser.incPointerExpression();
+        TreeItem<String> item = new TreeItem<>(element);
+        if(checkUnaryOperation(element)){
+            item = fillTree(item);
+        }
+        if(checkOperation(element)){
+            item = fillTree(item);
+            item = fillTree(item);
+        }
+        root.getChildren().add(item);
+        return root;
+    }
+
+    public Controller(BorderPane root) {
+        view = new View(root);
         parser = new Parser();
         setEvent();
     }
