@@ -12,6 +12,7 @@ import sample.view.keyboard.button.Button;
 public class Controller {
     private View view;
     private Parser parser;
+    private TreeItem<String> root;
 
     private String copy(int begin, int end, String expression) {
         String result = "";
@@ -88,6 +89,16 @@ public class Controller {
             }
         }
         return false;
+    }
+
+    private boolean checkNumeric(String numeric){
+        for(int i = 0; i < numeric.length(); i++){
+            if(i == 0 && numeric.charAt(i) == '-') continue;
+            if(numeric.charAt(i) < '0' || numeric.charAt(i) > '9'){
+                if(numeric.charAt(i) != '.') return false;
+            }
+        }
+        return true;
     }
 
     private boolean checkNumber(char symbol) {
@@ -414,9 +425,37 @@ public class Controller {
     }
 
     private void createTree() {
-        TreeItem<String> root = fillTree(new TreeItem(), 0, 0);
+        root = fillTree(new TreeItem(), 0, 0);
         root = root.getChildren().get(0);
         view.createTree(root);
+    }
+
+    private String createExpression(){
+        String result = "";
+        if(checkNumeric(root.getValue())){
+            result = root.getValue();
+            if (result.charAt(result.length() - 1) == '0' && result.charAt(result.length() - 2) == '.') {
+                result = copy(0, result.length() - 2, result);
+            }
+            return result;
+        }
+        result = createElementExpression(root);
+        return result;
+    }
+
+    public String createElementExpression(TreeItem<String> item){
+        String result = "";
+        if(checkNumeric(item.getValue())) {
+            result = item.getValue();
+            if (result.charAt(result.length() - 1) == '0' && result.charAt(result.length() - 2) == '.') {
+                result = copy(0, result.length() - 2, result);
+            }
+            return result;
+        }
+        if(checkOperation(item.getValue())){
+            result = '(' + createElementExpression(item.getChildren().get(0)) + item.getValue() + createElementExpression(item.getChildren().get(1)) + ')';
+        }
+        return result;
     }
 
     private TreeItem fillTree(TreeItem root, int pointer, int pointerRoot) {
@@ -444,6 +483,8 @@ public class Controller {
         TreeItem<String> finalItem = item;
         item.expandedProperty().addListener(e->{
             finalItem.setValue(finalItem.isExpanded() ? parser.arrayExpression.get(pointerArray).sign : parser.arrayExpression.get(pointerArray).value);
+            String fullExpression = view.getDisplayExpression().getText();
+            view.getDisplayExpression().setText(createExpression());
         });
 //        finalItem.setValue(parser.arrayExpression.get(pointerArray).value);
         root.getChildren().add(item);
