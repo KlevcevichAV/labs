@@ -4,6 +4,7 @@ package sample.controller;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TreeItem;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
 import sample.parser.Parser;
 import sample.parser.TreeNote;
 import sample.view.View;
@@ -92,6 +93,7 @@ public class Controller {
     }
 
     private boolean checkNumeric(String numeric){
+        if(numeric.equals("-")) return false;
         for(int i = 0; i < numeric.length(); i++){
             if(i == 0 && numeric.charAt(i) == '-') continue;
             if(numeric.charAt(i) < '0' || numeric.charAt(i) > '9'){
@@ -238,6 +240,7 @@ public class Controller {
         if (result.charAt(result.length() - 1) == '0' && result.charAt(result.length() - 2) == '.') {
             result = copy(0, result.length() - 2, result);
         }
+        view.getDisplayResult().setText(result);
         System.out.println(resultD);
     }
 
@@ -325,6 +328,8 @@ public class Controller {
     private void setEventClear(Button button) {
         button.setOnAction(e -> {
             view.getDisplayExpression().clear();
+            view.getDisplayResult().clear();
+            view.createTree(null);
         });
     }
 
@@ -453,7 +458,12 @@ public class Controller {
             return result;
         }
         if(checkOperation(item.getValue())){
-            result = '(' + createElementExpression(item.getChildren().get(0)) + item.getValue() + createElementExpression(item.getChildren().get(1)) + ')';
+            String left = createElementExpression(item.getChildren().get(0));
+            String right = createElementExpression(item.getChildren().get(1));
+            result = '(' + left + item.getValue() + right + ')';
+        }
+        if(checkUnaryOperation(item.getValue())){
+            result = item.getValue() + '(' + createElementExpression(item.getChildren().get(0)) + ')';
         }
         return result;
     }
@@ -491,8 +501,8 @@ public class Controller {
         return root;
     }
 
-    public Controller(BorderPane root) {
-        view = new View(root);
+    public Controller(Stage stage) {
+        view = new View(stage);
         parser = new Parser();
         setEvent();
     }

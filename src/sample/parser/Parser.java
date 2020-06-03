@@ -169,7 +169,8 @@ public class Parser {
         }
         String trigFunc = searchTrigFunc(expression);
         if (trigFunc != null) {
-            arrayExpression.add(new TreeNote(1, trigFunc));
+            arrayExpression.get(thisPointer).edit(1, ""+trigFunc);
+//            arrayExpression.add(new TreeNote(1, trigFunc));
             switch (trigFunc) {
                 case "cos": {
                     String newExpression = copy(3, expression.length(), expression);
