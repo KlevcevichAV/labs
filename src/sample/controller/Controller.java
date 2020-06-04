@@ -3,10 +3,8 @@ package sample.controller;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.TreeItem;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import sample.parser.Parser;
-import sample.parser.TreeNote;
 import sample.view.View;
 import sample.view.keyboard.button.Button;
 
@@ -216,9 +214,6 @@ public class Controller {
             view.getDisplayExpression().setText(expression + "*√");
             return;
         }
-//        if (checkSign(symbol)) {
-//            view.getDisplayExpression().setText(expression + "√");
-//        }
         view.getDisplayExpression().setText(expression + "√");
     }
 
@@ -232,7 +227,7 @@ public class Controller {
         view.getDisplayExpression().setText(expression);
         Double resultD = parser.start(expression);
         if (resultD == null) {
-            System.out.println("Infinity");
+            view.getDisplayExpression().setText("Undefined");
             return;
         }
         String result = "" + resultD;
@@ -241,7 +236,7 @@ public class Controller {
             result = copy(0, result.length() - 2, result);
         }
         view.getDisplayResult().setText(result);
-        System.out.println(resultD);
+//        System.out.println(resultD);
     }
 
     private void trigonometric(String sign) {

@@ -284,7 +284,7 @@ public class Parser {
         pointerExpression = 0;
         arrayExpression = new ArrayList<>();
         Double result = parsing(expression);
-        System.out.println("hah");
+//        System.out.println("hah");
         return result;
     }
 }
