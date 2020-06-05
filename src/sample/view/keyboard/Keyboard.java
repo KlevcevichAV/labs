@@ -13,7 +13,7 @@ public class Keyboard {
     private RadioButton trigonometry;
     private boolean check;
 
-    private void setStyle(){
+    private void setStyle() {
         VBox group = new VBox(keyboardOperations.getTopGroup(), digitalKeyboard.getDigitalKeyboard());
         group.spacingProperty().set(10);
         HBox group1 = new HBox(group, keyboardOperations.getLeftGroup());
@@ -22,8 +22,8 @@ public class Keyboard {
         keyboard.spacingProperty().set(10);
     }
 
-    void setAssesTrigonometry(){
-        trigonometry.setOnAction(e->{
+    void setAssesTrigonometry() {
+        trigonometry.setOnAction(e -> {
             check = !check;
             keyboardOperations.getSinSign().setDisable(check);
             keyboardOperations.getCosSign().setDisable(check);
@@ -32,14 +32,14 @@ public class Keyboard {
         });
     }
 
-    public void disable(){
+    public void disable() {
         keyboardOperations.getSinSign().setDisable(true);
         keyboardOperations.getCosSign().setDisable(true);
         keyboardOperations.getTgSign().setDisable(true);
         keyboardOperations.getCtgSign().setDisable(true);
     }
 
-    public Keyboard(){
+    public Keyboard() {
         digitalKeyboard = new DigitalKeyboard();
         keyboardOperations = new KeyboardOperations();
         disable();
@@ -57,7 +57,8 @@ public class Keyboard {
         return keyboardOperations;
     }
 
-    public VBox getKeyboard() { ;
+    public VBox getKeyboard() {
+        ;
         return keyboard;
     }
 }

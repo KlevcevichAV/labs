@@ -8,16 +8,24 @@ import sample.parser.Parser;
 import sample.view.View;
 import sample.view.keyboard.button.Button;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Controller {
     private View view;
     private Parser parser;
     private TreeItem<String> root;
+    private final String sign = "+-*/%√";
+    private final String operation = "+-*/%";
+    private List<String> unaryOperation;
 
-    private String copy(int begin, int end, String expression) {
+    public String copy(int begin, int end, String expression) {
         String result = "";
+        StringBuilder stringBuilder = new StringBuilder(result);
         for (int i = begin; i < end; i++) {
-            result = result + expression.charAt(i);
+            stringBuilder.append(expression.charAt(i));
         }
+        result = stringBuilder.toString();
         return result;
     }
 
@@ -29,6 +37,16 @@ public class Controller {
         alert.setContentText(content);
 
         alert.showAndWait();
+    }
+
+    private void createUnaryOperation(){
+        unaryOperation = List.of("--", "√", "cos", "sin", "tg", "ctg");
+//        unaryOperation.add("--");
+//        unaryOperation.add("√");
+//        unaryOperation.add("cos");
+//        unaryOperation.add("sin");
+//        unaryOperation.add("tg");
+//        unaryOperation.add("ctg");
     }
 
     private boolean checkPoint(char symbol) {
@@ -51,32 +69,19 @@ public class Controller {
     }
 
     private boolean checkSign(char symbol) {
-        if (symbol == '+') return true;
-        if (symbol == '-') return true;
-        if (symbol == '*') return true;
-        if (symbol == '/') return true;
-        if (symbol == '%') return true;
-        if (symbol == '√') return true;
-        return false;
+        int check = sign.indexOf(symbol);
+        return check != -1;
     }
 
     private boolean checkUnaryOperation(String operation) {
-        if (operation.equals("--")) return true;
-        if (operation.equals("√")) return true;
-        if (operation.equals("cos")) return true;
-        if (operation.equals("sin")) return true;
-        if (operation.equals("tg")) return true;
-        if (operation.equals("ctg")) return true;
-        return false;
+        boolean check = unaryOperation.contains(operation);
+        return check;
     }
 
     private boolean checkOperation(String operation) {
-        if (operation.equals("+")) return true;
-        if (operation.equals("-")) return true;
-        if (operation.equals("*")) return true;
-        if (operation.equals("/")) return true;
-        if (operation.equals("%")) return true;
-        return false;
+        if(operation.equals("")) return false;
+        int check = this.operation.indexOf(operation);
+        return check != -1;
     }
 
     private boolean checkAnotherPoint(String expression) {
@@ -497,6 +502,7 @@ public class Controller {
     }
 
     public Controller(Stage stage) {
+        createUnaryOperation();
         view = new View(stage);
         parser = new Parser();
         setEvent();

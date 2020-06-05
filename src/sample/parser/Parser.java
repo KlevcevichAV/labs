@@ -8,23 +8,23 @@ public class Parser {
     public int pointerExpression;
     public List<TreeNote> arrayExpression;
 
-    public boolean comparingArraySizeAndPointer(){
+    public boolean comparingArraySizeAndPointer() {
         return pointerExpression < arrayExpression.size();
     }
 
-    public String getElement(){
+    public String getElement() {
         return arrayExpression.get(pointerExpression).sign;
     }
 
-    public String getPrevElementExpression(){
+    public String getPrevElementExpression() {
         return arrayExpression.get(pointerExpression - 1).expression;
     }
 
-    public String getPrevElementValue(){
+    public String getPrevElementValue() {
         return arrayExpression.get(pointerExpression - 1).value;
     }
 
-    public void incPointerExpression(){
+    public void incPointerExpression() {
         pointerExpression++;
     }
 
@@ -45,9 +45,11 @@ public class Parser {
 
     public String copy(int begin, int end, String expression) {
         String result = "";
+        StringBuilder stringBuilder = new StringBuilder(result);
         for (int i = begin; i < end; i++) {
-            result = result + expression.charAt(i);
+            stringBuilder.append(expression.charAt(i));
         }
+        result = stringBuilder.toString();
         return result;
     }
 
@@ -169,31 +171,31 @@ public class Parser {
         }
         String trigFunc = searchTrigFunc(expression);
         if (trigFunc != null) {
-            arrayExpression.get(thisPointer).edit(1, ""+trigFunc);
+            arrayExpression.get(thisPointer).edit(1, "" + trigFunc);
 //            arrayExpression.add(new TreeNote(1, trigFunc));
             switch (trigFunc) {
                 case "cos": {
                     String newExpression = copy(3, expression.length(), expression);
                     Double result = Math.cos(parsing(newExpression));
-                    arrayExpression.get(thisPointer).edit(0, ""+result);
+                    arrayExpression.get(thisPointer).edit(0, "" + result);
                     return result;
                 }
                 case "sin": {
                     String newExpression = copy(3, expression.length(), expression);
                     Double result = Math.sin(parsing(newExpression));
-                    arrayExpression.get(thisPointer).edit(0, ""+result);
+                    arrayExpression.get(thisPointer).edit(0, "" + result);
                     return result;
                 }
                 case "tg": {
                     String newExpression = copy(2, expression.length(), expression);
                     Double result = Math.cos(parsing(newExpression));
-                    arrayExpression.get(thisPointer).edit(0, ""+result);
+                    arrayExpression.get(thisPointer).edit(0, "" + result);
                     return result;
                 }
                 case "ctg": {
                     String newExpression = copy(3, expression.length(), expression);
                     Double result = 1.0 / Math.tan(parsing(newExpression));
-                    arrayExpression.get(thisPointer).edit(0, ""+result);
+                    arrayExpression.get(thisPointer).edit(0, "" + result);
                     return result;
                 }
                 case "lg": {
@@ -220,9 +222,9 @@ public class Parser {
                 case '+': {
                     Double left = parsing(numberLeft);
                     Double right = parsing(numberRight);
-                    if(left == null || right == null) return null;
+                    if (left == null || right == null) return null;
                     Double result = left + right;
-                    arrayExpression.get(thisPointer).edit(0,"" + result);
+                    arrayExpression.get(thisPointer).edit(0, "" + result);
                     return left + right;
                 }
                 case '-': {
@@ -230,17 +232,17 @@ public class Parser {
                     numberRight = copy(pointer, expression.length(), expression);
                     Double left = parsing(numberLeft);
                     Double right = parsing(numberRight);
-                    if(left == null || right == null) return null;
+                    if (left == null || right == null) return null;
                     Double result = left + right;
-                    arrayExpression.get(thisPointer).edit(0,"" + result);
+                    arrayExpression.get(thisPointer).edit(0, "" + result);
                     return result;
                 }
                 case '*': {
                     Double left = parsing(numberLeft);
                     Double right = parsing(numberRight);
-                    if(left == null || right == null) return null;
+                    if (left == null || right == null) return null;
                     Double result = left * right;
-                    arrayExpression.get(thisPointer).edit(0,"" + result);
+                    arrayExpression.get(thisPointer).edit(0, "" + result);
                     return result;
                 }
                 case '^': {
@@ -249,28 +251,28 @@ public class Parser {
                 case '/': {
                     Double left = parsing(numberLeft);
                     Double right = parsing(numberRight);
-                    if(left == null || right == null) return null;
+                    if (left == null || right == null) return null;
                     if (right == 0.0) {
                         return null;
                     } else {
                         Double result = left / right;
-                        arrayExpression.get(thisPointer).edit(0,"" + result);
+                        arrayExpression.get(thisPointer).edit(0, "" + result);
                         return result;
                     }
                 }
                 case '%': {
                     Double left = parsing(numberLeft);
                     Double right = parsing(numberRight);
-                    if(left == null || right == null) return null;
+                    if (left == null || right == null) return null;
                     Double result = left % right;
-                    arrayExpression.get(thisPointer).edit(0,"" + result);
+                    arrayExpression.get(thisPointer).edit(0, "" + result);
                     return result;
                 }
                 case '√': {
                     Double right = parsing(numberRight);
-                    if(right == null) return null;
+                    if (right == null) return null;
                     Double result = Math.sqrt(right);
-                    arrayExpression.get(thisPointer).edit(0,"" + result);
+                    arrayExpression.get(thisPointer).edit(0, "" + result);
                     return Math.sqrt(right);
                 }
                 default: {

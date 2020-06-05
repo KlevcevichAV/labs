@@ -21,13 +21,13 @@ public class View {
     private VBox calculator;
     private TreeView<String> tree;
 
-    public void createTree(TreeItem<String> root){
+    public void createTree(TreeItem<String> root) {
         tree = new TreeView<>(root);
-        tree.getStylesheets().add(getClass().getResource("tree.css").toExternalForm())  ;
+        tree.getStylesheets().add(getClass().getResource("tree.css").toExternalForm());
         this.root.setRight(tree);
     }
 
-    public View(Stage stage){
+    public View(Stage stage) {
         this.stage = stage;
         root = new BorderPane();
         displayExpression = new Display();
@@ -42,7 +42,7 @@ public class View {
 
     }
 
-    private void accommodation(){
+    private void accommodation() {
         HBox displays = new HBox(displayExpression.getScrollPane(), displayResult.getScrollPane());
         displays.spacingProperty().set(10);
         root.setTop(displays);
