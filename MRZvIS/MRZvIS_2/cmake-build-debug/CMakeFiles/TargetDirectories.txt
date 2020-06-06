@@ -1,3 +1,3 @@
-/home/sanchir/labs/MRZvIS/MRZvIS_2/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/sanchir/labs/MRZvIS/MRZvIS_2/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/sanchir/labs/MRZvIS/MRZvIS_2/cmake-build-debug/CMakeFiles/MRZvIS_2.dir
+/home/sanchir/CLionProjects/MRZvIS_2/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/sanchir/CLionProjects/MRZvIS_2/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/sanchir/CLionProjects/MRZvIS_2/cmake-build-debug/CMakeFiles/MRZvIS_2.dir

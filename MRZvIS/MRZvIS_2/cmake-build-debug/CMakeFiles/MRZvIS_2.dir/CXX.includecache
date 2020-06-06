@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/home/sanchir/labs/MRZvIS/MRZvIS_2/main.cpp
+/home/sanchir/CLionProjects/MRZvIS_2/main.cpp
 iostream
 -
 ctime

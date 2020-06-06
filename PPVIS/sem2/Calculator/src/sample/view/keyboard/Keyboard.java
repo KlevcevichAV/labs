@@ -9,8 +9,6 @@ public class Keyboard {
     private KeyboardOperations keyboardOperations;
     private HBox keyboard;
 
-
-
     private void setStyleOne(){
         VBox group = new VBox(keyboardOperations.getTopGroup(), digitalKeyboard.getDigitalKeyboard());
         group.spacingProperty().set(10);

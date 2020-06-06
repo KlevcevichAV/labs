@@ -3,6 +3,7 @@
 #include <vector>
 
 using namespace std;
+int T1, Tn;
 
 double generation() {
     double result = 0;
@@ -129,6 +130,7 @@ vector<double> createElementsD(vector<vector<double>> a, vector<vector<double>> 
     vector<double> d;
     for (int k = 0; k < b.size(); k++) {
         d.push_back(sixthExtendedFunctionByTaskVariant(a[i][k], b[k][j]));
+        T1++;
     }
     return d;
 }
@@ -140,7 +142,10 @@ vector<double> createElementsF(vector<vector<double>> a, vector<vector<double>> 
                             e[k] + fifthExtendedFunctionByTaskVariant(a[i][k], b[k][j]) *
                                    (1 + (4 * fourthExtendedFunctionByTaskVariant(a[i][k], b[k][j]) - 2) * e[k]) *
                                    (1 - e[k]);
+        T1 += 21;
+        Tn++;
         d.push_back(tempResult);
+
     }
     return d;
 }
@@ -176,18 +181,25 @@ createMatrixC(vector<vector<double>> a, vector<vector<double>> b, vector<double>
     vector<vector<double>> c = initialize(a.size(), b[0].size());
     for (int i = 0; i < a.size(); i++) {
         for (int j = 0; j < b[i].size(); j++) {
-            c[i][j] = firstExtendedFunctionByTaskVariant(createElementsF(a, b, e, i, j)) * (3 * g[i][j] - 2) * g[i][j] +
-                      (secondExtendedFunctionByTaskVariant(createElementsD(a, b, i, j)) +
-                       (4 * thirdExtendedFunctionByTaskVariant(createElementsF(a, b, e, i, j),
-                                                               createElementsD(a, b, i, j)) -
-                        3 * secondExtendedFunctionByTaskVariant(createElementsD(a, b, i, j)) * g[i][j])) *
+            vector<double> dk = createElementsD(a, b, i, j);
+            vector<double> fk = createElementsF(a, b, e, i, j);
+            c[i][j] = firstExtendedFunctionByTaskVariant(fk) * (3 * g[i][j] - 2) * g[i][j] +
+                      (secondExtendedFunctionByTaskVariant(dk) +
+                       (4 * thirdExtendedFunctionByTaskVariant(fk,
+                                                               dk) -
+                        3 * secondExtendedFunctionByTaskVariant(dk) * g[i][j])) *
                       (1 - g[i][j]);
+            if(b.size() > 1)
+                T1 +=  27 + 8 * (b.size() - 2);
+            else T1 += 18;
+            Tn++;
         }
     }
     return c;
 }
 
-void outputMatrix(vector<vector<double>> a, vector<vector<double>> b, vector<double> e, vector<vector<double>> g, vector<vector<double>> c) {
+void outputMatrix(vector<vector<double>> a, vector<vector<double>> b, vector<double> e, vector<vector<double>> g,
+                  vector<vector<double>> c) {
     cout << "Matrix A :\n";
     outputMatrix(a);
     cout << "Matrix B :\n";
@@ -206,11 +218,14 @@ int main() {
     srand(time(NULL));
     int P, M, Q;
     inputSizeMatrix(P, M, Q);
-    vector<vector<double>> matrixA = inputMatrix(P, M);
+    vector<vector<double>>
+    matrixA = inputMatrix(P, M);
     vector<vector<double>> matrixB = inputMatrix(M, Q);
     vector<double> matrixE = inputMatrix(M);
     vector<vector<double>> matrixG = inputMatrix(P, Q);
     vector<vector<double>> matrixC = createMatrixC(matrixA, matrixB, matrixE, matrixG);
     outputMatrix(matrixA, matrixB, matrixE, matrixG, matrixC);
+    cout << "T1 = " << T1 << endl;
+    cout << "Tn = " << Tn;
     return 0;
 }

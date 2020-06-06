@@ -17,6 +17,10 @@ public class KeyboardOperations {
     private Button singleCharacterDelete;
     private Button leftBracket;
     private Button rightBracket;
+    private Button sinSign;
+    private Button cosSign;
+    private Button tgSign;
+    private Button ctgSign;
 
     private VBox leftGroup;
     private VBox topGroup;
@@ -34,6 +38,10 @@ public class KeyboardOperations {
         singleCharacterDelete = new Button("⊠", 0);
         leftBracket = new Button("(", 1);
         rightBracket = new Button(")", 1);
+        sinSign = new Button("sin", 1);
+        cosSign = new Button("cos", 1);
+        tgSign = new Button("tg", 1);
+        ctgSign = new Button("ctg", 1);
     }
 
     private void createLeftGroup(){

@@ -21,16 +21,6 @@ public class Parser {
 //
 //    }
 
-    public boolean checkAnotherPoint(String expression){
-        if(expression.length() == 0) return true;
-        for(int i = expression.length() - 1; i >= 0; i--){
-            if(expression.charAt(i) < '0' || expression.charAt(i) > '9'){
-                if(expression.charAt(i) =='.') return false; else return true;
-            }
-        }
-        return true;
-    }
-
     public String copy(int begin, int end, String expression) {
         String result = "";
         for (int i = begin; i < end; i++) {
