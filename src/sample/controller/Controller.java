@@ -41,12 +41,6 @@ public class Controller {
 
     private void createUnaryOperation(){
         unaryOperation = List.of("--", "√", "cos", "sin", "tg", "ctg");
-//        unaryOperation.add("--");
-//        unaryOperation.add("√");
-//        unaryOperation.add("cos");
-//        unaryOperation.add("sin");
-//        unaryOperation.add("tg");
-//        unaryOperation.add("ctg");
     }
 
     private boolean checkPoint(char symbol) {

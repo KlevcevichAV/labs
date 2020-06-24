@@ -86,7 +86,6 @@ public class Parser {
             }
             if (expression.charAt(i) == '(') i = checkParentheses(i, expression) - 1;
         }
-        if (result == 0) return result;
         for (int i = 0; i < expression.length(); i++) {
             if (expression.charAt(i) == '*') {
                 return i;
@@ -105,6 +104,7 @@ public class Parser {
             }
             if (expression.charAt(i) == '(') i = checkParentheses(i, expression) - 1;
         }
+        if (result == 0) return result;
         for (int i = 0; i < expression.length(); i++) {
             if (expression.charAt(i) == '√') {
                 return i;
@@ -165,6 +165,8 @@ public class Parser {
             String newExpression = copy(1, expression.length(), expression);
             double result = -parsing(newExpression);
             arrayExpression.get(arrayExpression.size() - 2).edit(0, arrayExpression.get(arrayExpression.size() - 1).expression);
+            arrayExpression.get(arrayExpression.size() - 2).edit(1, arrayExpression.get(arrayExpression.size() - 1).expression);
+            arrayExpression.get(arrayExpression.size() - 2).edit(0, Double.toString(result));
             arrayExpression.remove(arrayExpression.size() - 1);
 //            arrayExpression.get(arrayExpression.size() - 1).edit(2, "-" + arrayExpression.get(arrayExpression.size() - 1).expression);
             return result;
