@@ -39,7 +39,7 @@ public class Controller {
         alert.showAndWait();
     }
 
-    private void createUnaryOperation(){
+    private void createUnaryOperation() {
         unaryOperation = List.of("--", "√", "cos", "sin", "tg", "ctg");
     }
 
@@ -73,7 +73,7 @@ public class Controller {
     }
 
     private boolean checkOperation(String operation) {
-        if(operation.equals("")) return false;
+        if (operation.equals("")) return false;
         int check = this.operation.indexOf(operation);
         return check != -1;
     }
@@ -89,12 +89,12 @@ public class Controller {
         return false;
     }
 
-    private boolean checkNumeric(String numeric){
-        if(numeric.equals("-")) return false;
-        for(int i = 0; i < numeric.length(); i++){
-            if(i == 0 && numeric.charAt(i) == '-') continue;
-            if(numeric.charAt(i) < '0' || numeric.charAt(i) > '9'){
-                if(numeric.charAt(i) != '.') return false;
+    private boolean checkNumeric(String numeric) {
+        if (numeric.equals("-")) return false;
+        for (int i = 0; i < numeric.length(); i++) {
+            if (i == 0 && numeric.charAt(i) == '-') continue;
+            if (numeric.charAt(i) < '0' || numeric.charAt(i) > '9') {
+                if (numeric.charAt(i) != '.') return false;
             }
         }
         return true;
@@ -429,9 +429,9 @@ public class Controller {
         view.createTree(root);
     }
 
-    private String createExpression(){
+    private String createExpression() {
         String result = "";
-        if(checkNumeric(root.getValue())){
+        if (checkNumeric(root.getValue())) {
             result = root.getValue();
             if (result.charAt(result.length() - 1) == '0' && result.charAt(result.length() - 2) == '.') {
                 result = copy(0, result.length() - 2, result);
@@ -442,50 +442,50 @@ public class Controller {
         return result;
     }
 
-    public String createElementExpression(TreeItem<String> item){
+    public String createElementExpression(TreeItem<String> item) {
         String result = "";
-        if(checkNumeric(item.getValue())) {
+        if (checkNumeric(item.getValue())) {
             result = item.getValue();
             if (result.charAt(result.length() - 1) == '0' && result.charAt(result.length() - 2) == '.') {
                 result = copy(0, result.length() - 2, result);
             }
             return result;
         }
-        if(checkOperation(item.getValue())){
+        if (checkOperation(item.getValue())) {
             String left = createElementExpression(item.getChildren().get(0));
             String right = createElementExpression(item.getChildren().get(1));
             result = '(' + left + item.getValue() + right + ')';
         }
-        if(checkUnaryOperation(item.getValue())){
+        if (checkUnaryOperation(item.getValue())) {
             result = item.getValue() + '(' + createElementExpression(item.getChildren().get(0)) + ')';
         }
         return result;
     }
 
     private TreeItem fillTree(TreeItem root, int pointer, int pointerRoot) {
-        if(!parser.comparingArraySizeAndPointer()) return null;
+        if (!parser.comparingArraySizeAndPointer()) return null;
         int pointerArray = parser.pointerExpression;
         String element = parser.getElement();
         String expression = parser.arrayExpression.get(parser.pointerExpression).value;
         parser.incPointerExpression();
         TreeItem<String> item = new TreeItem<>(expression);
-        if(checkUnaryOperation(element)){
+        if (checkUnaryOperation(element)) {
             item = fillTree(item, 0, pointerArray);
         }
-        if(checkOperation(element)){
+        if (checkOperation(element)) {
             item = fillTree(item, 1, pointerArray);
             item = fillTree(item, 2, pointerArray);
         }
-        if(pointer == 2){
-            if(parser.arrayExpression.get(pointerRoot).sign.equals("-")){
-                if(item.getValue().charAt(0) == '-'){
+        if (pointer == 2) {
+            if (parser.arrayExpression.get(pointerRoot).sign.equals("-")) {
+                if (item.getValue().charAt(0) == '-') {
                     String newNumber = copy(1, item.getValue().length(), item.getValue());
                     item.setValue(newNumber);
                 }
             }
         }
         TreeItem<String> finalItem = item;
-        item.expandedProperty().addListener(e->{
+        item.expandedProperty().addListener(e -> {
             finalItem.setValue(finalItem.isExpanded() ? parser.arrayExpression.get(pointerArray).sign : parser.arrayExpression.get(pointerArray).value);
             String fullExpression = view.getDisplayExpression().getText();
             view.getDisplayExpression().setText(createExpression());
