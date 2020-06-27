@@ -19,6 +19,7 @@ public class View {
     private Display displayResult;
     private Keyboard keyboard;
     private VBox calculator;
+    private Scene scene;
     private TreeView<String> tree;
 
     public void createTree(TreeItem<String> root) {
@@ -36,7 +37,7 @@ public class View {
         keyboard = new Keyboard();
         accommodation();
         root.setStyle(Constant.BLACK_FILL);
-        Scene scene = new Scene(root, 535, 510);
+        scene = new Scene(root, 535, 510);
         stage.setScene(scene);
         stage.show();
 
@@ -67,6 +68,10 @@ public class View {
 
     public Stage getStage() {
         return stage;
+    }
+
+    public Scene getScene(){
+        return scene;
     }
 
     public VBox getCalculator() {

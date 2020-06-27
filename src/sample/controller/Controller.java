@@ -1,6 +1,5 @@
 package sample.controller;
 
-
 import javafx.scene.control.Alert;
 import javafx.scene.control.TreeItem;
 import javafx.stage.Stage;
@@ -8,7 +7,7 @@ import sample.parser.Parser;
 import sample.view.View;
 import sample.view.keyboard.button.Button;
 
-import java.util.ArrayList;
+import java.awt.event.KeyEvent;
 import java.util.List;
 
 public class Controller {
@@ -311,11 +310,8 @@ public class Controller {
             }
             if (symbol == '(') {
                 view.getDisplayExpression().setText(expression + 0 + button.getText());
-                return;
-            } else {
-//                createInformationWindow("Нельзя поставить точку после закрывающейся скобки.");
-                return;
             }
+            return;
         });
     }
 
@@ -381,8 +377,15 @@ public class Controller {
         });
     }
 
+    private void setEventButtonKey(Button button) {
+        view.getScene().setOnKeyPressed(e -> {
+            setEventButton(button);
+        });
+    }
+
     private void setEventDigitalKeyboard() {
         setEventButton(view.getKeyboard().getDigitalKeyboard().getZero());
+        setEventButtonKey(view.getKeyboard().getDigitalKeyboard().getZero());
         setEventButton(view.getKeyboard().getDigitalKeyboard().getOne());
         setEventButton(view.getKeyboard().getDigitalKeyboard().getTwo());
         setEventButton(view.getKeyboard().getDigitalKeyboard().getThree());
@@ -454,6 +457,7 @@ public class Controller {
         if (checkOperation(item.getValue())) {
             String left = createElementExpression(item.getChildren().get(0));
             String right = createElementExpression(item.getChildren().get(1));
+            if (right.charAt(0) == '-') right = '(' + right + ')';
             result = '(' + left + item.getValue() + right + ')';
         }
         if (checkUnaryOperation(item.getValue())) {
@@ -476,14 +480,14 @@ public class Controller {
             item = fillTree(item, 1, pointerArray);
             item = fillTree(item, 2, pointerArray);
         }
-        if (pointer == 2) {
-            if (parser.arrayExpression.get(pointerRoot).sign.equals("-")) {
-                if (item.getValue().charAt(0) == '-') {
-                    String newNumber = copy(1, item.getValue().length(), item.getValue());
-                    item.setValue(newNumber);
-                }
-            }
-        }
+//        if (pointer == 2) {
+//            if (parser.arrayExpression.get(pointerRoot).sign.equals("-")) {
+//                if (item.getValue().charAt(0) == '-') {
+////                    String newNumber = copy(1, item.getValue().length(), item.getValue());
+//                    item.setValue(newNumber);
+//                }
+//            }
+//        }
         TreeItem<String> finalItem = item;
         item.expandedProperty().addListener(e -> {
             finalItem.setValue(finalItem.isExpanded() ? parser.arrayExpression.get(pointerArray).sign : parser.arrayExpression.get(pointerArray).value);

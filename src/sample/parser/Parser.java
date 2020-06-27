@@ -165,7 +165,7 @@ public class Parser {
             String newExpression = copy(1, expression.length(), expression);
             double result = -parsing(newExpression);
             arrayExpression.get(arrayExpression.size() - 2).edit(2, "(" + expression + ")");
-            arrayExpression.get(arrayExpression.size() - 2).edit(1, "(" + expression + ")");
+//            arrayExpression.get(arrayExpression.size() - 2).edit(1, "(" + expression + ")");
             arrayExpression.get(arrayExpression.size() - 2).edit(0, Double.toString(result));
             arrayExpression.remove(arrayExpression.size() - 1);
 //            arrayExpression.get(arrayExpression.size() - 1).edit(2, "-" + arrayExpression.get(arrayExpression.size() - 1).expression);
