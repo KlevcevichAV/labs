@@ -72,7 +72,7 @@ public class Controller {
         return check;
     }
 
-    private boolean checkOperationPM(String operation){
+    private boolean checkOperationPM(String operation) {
         if (operation.equals("")) return false;
         int check = this.operationPM.indexOf(operation);
         return check != -1;
@@ -461,7 +461,7 @@ public class Controller {
             }
             return result;
         }
-        if(checkOperationPM(item.getValue())){
+        if (checkOperationPM(item.getValue())) {
             String left = createElementExpression(item.getChildren().get(0));
             String right = createElementExpression(item.getChildren().get(1));
             if (right.charAt(0) == '-') result = left + right;
