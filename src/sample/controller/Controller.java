@@ -1,13 +1,15 @@
 package sample.controller;
 
+import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TreeItem;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import sample.parser.Parser;
 import sample.view.View;
 import sample.view.keyboard.button.Button;
 
-import java.awt.event.KeyEvent;
 import java.util.List;
 
 public class Controller {
@@ -513,9 +515,66 @@ public class Controller {
         return root;
     }
 
+    private void eventDigitalKey(String number){
+        String expression = view.getDisplayExpression().getText();
+        if (expression.length() == 0) {
+            view.getDisplayExpression().setText(expression + number);
+            return;
+        }
+        if (expression.charAt(expression.length() - 1) == ')') {
+            return;
+        } else view.getDisplayExpression().setText(expression + number);
+    }
+
+    private void eventDigitalPoint(){
+        String expression = view.getDisplayExpression().getText();
+        if (expression.length() == 0) {
+            view.getDisplayExpression().setText(0 + ".");
+            return;
+        }
+        char symbol = expression.charAt(expression.length() - 1);
+        if (checkSign(symbol)) {
+            view.getDisplayExpression().setText(expression + 0 + ".");
+            return;
+        }
+        if (checkAnotherPoint(expression)) {
+//                createInformationWindow("В числе не может быть 2 точки.");
+            return;
+        }
+        if (symbol >= '0' && symbol <= '9') {
+            view.getDisplayExpression().setText(expression + ".");
+            return;
+        }
+        if (symbol == '(') {
+            view.getDisplayExpression().setText(expression + 0 + ".");
+        }
+        return;
+    }
+
+    private void setKeyAction(){
+        view.getScene().addEventFilter(KeyEvent.KEY_RELEASED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent keyEvent) {
+                if(keyEvent.getCode() == KeyCode.MINUS){
+                    System.out.println(44444444);
+                }
+                if(keyEvent.getCode() == KeyCode.BACK_SPACE){
+                    deleteOneCharacter();
+                }
+                for(int i = 0; i < 10; i++){
+                    if(keyEvent.getCode() == KeyCode.getKeyCode(Integer.toString(i))){
+                        eventDigitalKey(Integer.toString(i));
+                    }
+                }
+
+            }
+        });
+    }
+
     public Controller(Stage stage) {
         createUnaryOperation();
         view = new View(stage);
+        setKeyAction();
         parser = new Parser();
         setEvent();
     }

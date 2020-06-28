@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Parser {
-
     public int pointerExpression;
     public List<TreeNote> arrayExpression;
     private final String operation = "*/%";
