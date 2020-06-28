@@ -7,6 +7,17 @@ public class Parser {
 
     public int pointerExpression;
     public List<TreeNote> arrayExpression;
+    private final String operation = "*/%";
+    private final String operationPM = "+-";
+
+    private boolean checkOperationPM(String operation) {
+        if (operation.equals("")) return false;
+        for(int i = 1; i < operation.length(); i++){
+            if (this.operation.indexOf(operation.charAt(i)) != -1) return true;
+            if (this.operationPM.indexOf(operation.charAt(i)) != -1) return false;
+        }
+        return false;
+    }
 
     public boolean comparingArraySizeAndPointer() {
         return pointerExpression < arrayExpression.size();
@@ -231,9 +242,19 @@ public class Parser {
                 }
                 case '-': {
 //                    arrayExpression.set(arrayExpression.size() - 1, "+");
-                    numberRight = copy(pointer, expression.length(), expression);
+                    boolean checkSign = checkOperationPM(numberRight);
+                    if (checkSign) numberRight = copy(pointer + 1, expression.length(), expression);
+                    else numberRight = copy(pointer, expression.length(), expression);
                     Double left = parsing(numberLeft);
+                    int pointerElement = arrayExpression.size();
                     Double right = parsing(numberRight);
+                    if (checkSign){
+                        Double result = left - right;
+                        arrayExpression.get(thisPointer).edit(0, "" + result);
+                        return result;
+                    }
+                    Double temp = right * -1;
+                    arrayExpression.get(pointerElement).edit(0, temp.toString());
                     if (left == null || right == null) return null;
                     Double result = left + right;
                     arrayExpression.get(thisPointer).edit(0, "" + result);

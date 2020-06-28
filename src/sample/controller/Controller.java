@@ -16,6 +16,7 @@ public class Controller {
     private TreeItem<String> root;
     private final String sign = "+-*/%√";
     private final String operation = "+-*/%";
+    private final String operationPM = "+-";
     private List<String> unaryOperation;
 
     public String copy(int begin, int end, String expression) {
@@ -69,6 +70,12 @@ public class Controller {
     private boolean checkUnaryOperation(String operation) {
         boolean check = unaryOperation.contains(operation);
         return check;
+    }
+
+    private boolean checkOperationPM(String operation){
+        if (operation.equals("")) return false;
+        int check = this.operationPM.indexOf(operation);
+        return check != -1;
     }
 
     private boolean checkOperation(String operation) {
@@ -452,6 +459,13 @@ public class Controller {
             if (result.charAt(result.length() - 1) == '0' && result.charAt(result.length() - 2) == '.') {
                 result = copy(0, result.length() - 2, result);
             }
+            return result;
+        }
+        if(checkOperationPM(item.getValue())){
+            String left = createElementExpression(item.getChildren().get(0));
+            String right = createElementExpression(item.getChildren().get(1));
+            if (right.charAt(0) == '-') result = left + right;
+            else result = left + item.getValue() + right;
             return result;
         }
         if (checkOperation(item.getValue())) {
