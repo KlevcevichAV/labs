@@ -245,7 +245,6 @@ public class Controller {
             result = copy(0, result.length() - 2, result);
         }
         view.getDisplayResult().setText(result);
-//        System.out.println(resultD);
     }
 
     private void trigonometric(String sign) {
@@ -286,16 +285,20 @@ public class Controller {
         }
     }
 
+    private void eventDigitalKey(String number) {
+        String expression = view.getDisplayExpression().getText();
+        if (expression.length() == 0) {
+            view.getDisplayExpression().setText(expression + number);
+            return;
+        }
+        if (expression.charAt(expression.length() - 1) == ')') {
+            return;
+        } else view.getDisplayExpression().setText(expression + number);
+    }
+
     private void setEventButton(Button button) {
         button.setOnAction(e -> {
-            String expression = view.getDisplayExpression().getText();
-            if (expression.length() == 0) {
-                view.getDisplayExpression().setText(view.getDisplayExpression().getText() + button.getText());
-                return;
-            }
-            if (expression.charAt(expression.length() - 1) == ')') {
-                return;
-            } else view.getDisplayExpression().setText(view.getDisplayExpression().getText() + button.getText());
+            eventDigitalKey(button.getText());
         });
     }
 
@@ -312,7 +315,6 @@ public class Controller {
                 return;
             }
             if (checkAnotherPoint(expression)) {
-//                createInformationWindow("В числе не может быть 2 точки.");
                 return;
             }
             if (symbol >= '0' && symbol <= '9') {
@@ -437,10 +439,6 @@ public class Controller {
         setEventOperationKeyboard();
     }
 
-    public View getView() {
-        return view;
-    }
-
     private void createTree() {
         root = fillTree(new TreeItem(), 0, 0);
         root = root.getChildren().get(0);
@@ -502,59 +500,14 @@ public class Controller {
             item = fillTree(item, 1, pointerArray);
             item = fillTree(item, 2, pointerArray);
         }
-//        if (pointer == 2) {
-//            if (parser.arrayExpression.get(pointerRoot).sign.equals("-")) {
-//                if (item.getValue().charAt(0) == '-') {
-////                    String newNumber = copy(1, item.getValue().length(), item.getValue());
-//                    item.setValue(newNumber);
-//                }
-//            }
-//        }
         TreeItem<String> finalItem = item;
         item.expandedProperty().addListener(e -> {
             finalItem.setValue(finalItem.isExpanded() ? parser.arrayExpression.get(pointerArray).sign : parser.arrayExpression.get(pointerArray).value);
             String fullExpression = view.getDisplayExpression().getText();
             view.getDisplayExpression().setText(createExpression());
         });
-//        finalItem.setValue(parser.arrayExpression.get(pointerArray).value);
         root.getChildren().add(item);
         return root;
-    }
-
-    private void eventDigitalKey(String number) {
-        String expression = view.getDisplayExpression().getText();
-        if (expression.length() == 0) {
-            view.getDisplayExpression().setText(expression + number);
-            return;
-        }
-        if (expression.charAt(expression.length() - 1) == ')') {
-            return;
-        } else view.getDisplayExpression().setText(expression + number);
-    }
-
-    private void eventDigitalPoint() {
-        String expression = view.getDisplayExpression().getText();
-        if (expression.length() == 0) {
-            view.getDisplayExpression().setText(0 + ".");
-            return;
-        }
-        char symbol = expression.charAt(expression.length() - 1);
-        if (checkSign(symbol)) {
-            view.getDisplayExpression().setText(expression + 0 + ".");
-            return;
-        }
-        if (checkAnotherPoint(expression)) {
-//                createInformationWindow("В числе не может быть 2 точки.");
-            return;
-        }
-        if (symbol >= '0' && symbol <= '9') {
-            view.getDisplayExpression().setText(expression + ".");
-            return;
-        }
-        if (symbol == '(') {
-            view.getDisplayExpression().setText(expression + 0 + ".");
-        }
-        return;
     }
 
     private void actions() {
@@ -582,7 +535,6 @@ public class Controller {
             sign("/");
             return;
         }
-
         if (pressedKeys.contains(KeyCode.EQUALS) || pressedKeys.contains(KeyCode.ENTER)) {
             equal();
             return;

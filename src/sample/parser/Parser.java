@@ -153,16 +153,13 @@ public class Parser {
         String newExpression = copy(1, expression.length(), expression);
         double result = -parsing(newExpression);
         arrayExpression.get(arrayExpression.size() - 2).edit(2, "(" + expression + ")");
-//            arrayExpression.get(arrayExpression.size() - 2).edit(1, "(" + expression + ")");
         arrayExpression.get(arrayExpression.size() - 2).edit(0, Double.toString(result));
         arrayExpression.remove(arrayExpression.size() - 1);
-//            arrayExpression.get(arrayExpression.size() - 1).edit(2, "-" + arrayExpression.get(arrayExpression.size() - 1).expression);
         return result;
     }
 
     private Double trigonometricFunctionAndLg(String expression, String function, int thisPointer) {
         arrayExpression.get(thisPointer).edit(1, "" + function);
-//            arrayExpression.add(new TreeNote(1, trigFunc));
         switch (function) {
             case "cos": {
                 String newExpression = copy(3, expression.length(), expression);

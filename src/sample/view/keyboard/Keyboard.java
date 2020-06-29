@@ -1,6 +1,5 @@
 package sample.view.keyboard;
 
-import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
