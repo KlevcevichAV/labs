@@ -1,6 +1,5 @@
 package sample.controller;
 
-import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TreeItem;
 import javafx.scene.input.KeyCode;
@@ -10,7 +9,9 @@ import sample.parser.Parser;
 import sample.view.View;
 import sample.view.keyboard.button.Button;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Controller {
     private View view;
@@ -19,6 +20,7 @@ public class Controller {
     private final String sign = "+-*/%√";
     private final String operation = "+-*/%";
     private final String operationPM = "+-";
+    private final Set<KeyCode> pressedKeys = new HashSet<>();
     private List<String> unaryOperation;
 
     public String copy(int begin, int end, String expression) {
@@ -324,11 +326,15 @@ public class Controller {
         });
     }
 
+    private void clear(){
+        view.getDisplayExpression().clear();
+        view.getDisplayResult().clear();
+        view.createTree(null);
+    }
+
     private void setEventClear(Button button) {
         button.setOnAction(e -> {
-            view.getDisplayExpression().clear();
-            view.getDisplayResult().clear();
-            view.createTree(null);
+            clear();
         });
     }
 
@@ -515,7 +521,7 @@ public class Controller {
         return root;
     }
 
-    private void eventDigitalKey(String number){
+    private void eventDigitalKey(String number) {
         String expression = view.getDisplayExpression().getText();
         if (expression.length() == 0) {
             view.getDisplayExpression().setText(expression + number);
@@ -526,7 +532,7 @@ public class Controller {
         } else view.getDisplayExpression().setText(expression + number);
     }
 
-    private void eventDigitalPoint(){
+    private void eventDigitalPoint() {
         String expression = view.getDisplayExpression().getText();
         if (expression.length() == 0) {
             view.getDisplayExpression().setText(0 + ".");
@@ -551,23 +557,54 @@ public class Controller {
         return;
     }
 
-    private void setKeyAction(){
-        view.getScene().addEventFilter(KeyEvent.KEY_RELEASED, new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent keyEvent) {
-                if(keyEvent.getCode() == KeyCode.MINUS){
-                    System.out.println(44444444);
-                }
-                if(keyEvent.getCode() == KeyCode.BACK_SPACE){
-                    deleteOneCharacter();
-                }
-                for(int i = 0; i < 10; i++){
-                    if(keyEvent.getCode() == KeyCode.getKeyCode(Integer.toString(i))){
-                        eventDigitalKey(Integer.toString(i));
-                    }
-                }
+    private void actions() {
+        if ((pressedKeys.contains(KeyCode.SHIFT) && pressedKeys.contains(KeyCode.getKeyCode("8"))) || pressedKeys.contains(KeyCode.MULTIPLY)) {
+            sign("*");
+            return;
+        }
+        if (pressedKeys.contains(KeyCode.SHIFT) && pressedKeys.contains(KeyCode.getKeyCode("5"))) {
+            sign("%");
+            return;
+        }
+        if (pressedKeys.contains(KeyCode.SHIFT) && pressedKeys.contains(KeyCode.getKeyCode("9"))) {
+            openingBracket();
+            return;
+        }
+        if (pressedKeys.contains(KeyCode.SHIFT) && pressedKeys.contains(KeyCode.getKeyCode("0"))) {
+            closingBracket();
+            return;
+        }
+        if ((pressedKeys.contains(KeyCode.SHIFT) && pressedKeys.contains(KeyCode.EQUALS)) || pressedKeys.contains(KeyCode.PLUS)) {
+            sign("+");
+            return;
+        }
+        if (pressedKeys.contains(KeyCode.SLASH) || pressedKeys.contains(KeyCode.DIVIDE)) {
+            sign("/");
+            return;
+        }
 
+        if (pressedKeys.contains(KeyCode.EQUALS) || pressedKeys.contains(KeyCode.ENTER)) {
+            equal();
+            return;
+        }
+        if (pressedKeys.contains(KeyCode.MINUS)) {
+            signMinus("-");
+            return;
+        }
+        for (int i = 0; i < 10; i++) {
+            if (pressedKeys.contains(KeyCode.getKeyCode(Integer.toString(i)))) {
+                eventDigitalKey(Integer.toString(i));
             }
+        }
+        if (pressedKeys.contains(KeyCode.DELETE)) clear();
+        if (pressedKeys.contains(KeyCode.BACK_SPACE)) deleteOneCharacter();
+    }
+
+    private void setKeyAction() {
+        view.getScene().addEventFilter(KeyEvent.KEY_PRESSED, e -> pressedKeys.add(e.getCode()));
+        view.getScene().addEventFilter(KeyEvent.KEY_RELEASED, e -> {
+            actions();
+            pressedKeys.remove(e.getCode());
         });
     }
 
