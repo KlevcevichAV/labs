@@ -43,6 +43,7 @@ public class Keyboard {
         keyboardOperations = new KeyboardOperations();
         disable();
         trigonometry = new RadioButton("Trigonometry");
+        trigonometry.setStyle("-fx-text-fill: white;");
         setAssesTrigonometry();
         setStyle();
         check = true;
