@@ -454,12 +454,13 @@ public class Controller {
             }
             return result;
         }
-        result = createElementExpression(root);
+        result = createElementExpression(root, "");
         return result;
     }
 
-    public String createElementExpression(TreeItem<String> item) {
+    public String createElementExpression(TreeItem<String> item, String prevOperation) {
         String result = "";
+        //?
         if (checkNumeric(item.getValue())) {
             result = item.getValue();
             if (result.charAt(result.length() - 1) == '0' && result.charAt(result.length() - 2) == '.') {
@@ -467,21 +468,25 @@ public class Controller {
             }
             return result;
         }
+        //
         if (checkOperationPM(item.getValue())) {
-            String left = createElementExpression(item.getChildren().get(0));
-            String right = createElementExpression(item.getChildren().get(1));
+            String left = createElementExpression(item.getChildren().get(0), item.getValue());
+            String right = createElementExpression(item.getChildren().get(1), item.getValue());
             if (right.charAt(0) == '-') result = left + right;
             else result = left + item.getValue() + right;
+            if(!checkOperationPM(prevOperation)){
+                result = '(' + result + ')';
+            }
             return result;
         }
         if (checkOperation(item.getValue())) {
-            String left = createElementExpression(item.getChildren().get(0));
-            String right = createElementExpression(item.getChildren().get(1));
+            String left = createElementExpression(item.getChildren().get(0), item.getValue());
+            String right = createElementExpression(item.getChildren().get(1), item.getValue());
             if (right.charAt(0) == '-') right = '(' + right + ')';
             result = '(' + left + item.getValue() + right + ')';
         }
         if (checkUnaryOperation(item.getValue())) {
-            result = item.getValue() + '(' + createElementExpression(item.getChildren().get(0)) + ')';
+            result = item.getValue() + '(' + createElementExpression(item.getChildren().get(0), "") + ')';
         }
         return result;
     }
