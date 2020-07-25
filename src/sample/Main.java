@@ -63,9 +63,9 @@ public class Main extends Application{
         canvas = new Canvas(600, 600);
         GraphicsContext gc = canvas.getGraphicsContext2D();
         gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        backAndForward = new BackAndForward(canvas);
         toolBarPaint = new ToolBarPaint();
         initializeVariable();
-        backAndForward = new BackAndForward(canvas);
         menuPaint = new MenuPaint(canvas, toolBarPaint.rectSelection, toolBarPaint, backAndForward);
         menuPaint.onClear(canvas);
         backAndForward.addSnapshot(canvas);

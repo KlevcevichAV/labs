@@ -142,8 +142,6 @@ public class Events {
             }
             case 6:{
                 toolBarPaint.text.design(x, y);
-                backAndForward.removingUnnecessary();
-                backAndForward.addSnapshot(canvas);
                 click = true;
                 break;
             }
