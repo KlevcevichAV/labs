@@ -28,6 +28,7 @@ public class Main extends Application{
     public void createTop(){
         HBox top1 = new HBox(menuPaint.menuBar);
         HBox top2 = new HBox(nameTextField, brushSize, colorPicker, toolBarPaint.fill);
+        top2.setSpacing(10);
         VBox top = new VBox(top1, top2);
         root.setTop(top);
     }
