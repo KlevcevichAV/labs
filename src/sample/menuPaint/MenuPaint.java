@@ -6,10 +6,12 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.ToolBar;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
+import sample.toolbar.BackAndForward;
 import sample.toolbar.RectSelection;
 import sample.toolbar.ToolBarPaint;
 
@@ -21,6 +23,9 @@ import java.io.IOException;
 
 public class MenuPaint {
     public MenuBar menuBar;
+    private MenuItem back, forward;
+
+
 
     public void onOpen(Canvas canvas) throws FileNotFoundException {
         FileChooser fileChooser = new FileChooser();
@@ -94,21 +99,35 @@ public class MenuPaint {
         return fileMenu;
     }
 
-    Menu createEditMenu(Canvas canvas, RectSelection rectSelection, ToolBarPaint.Pointer pointerButton){
+
+
+    Menu createEditMenu(Canvas canvas, RectSelection rectSelection, ToolBarPaint pointerButton, BackAndForward backAndForward){
         Menu editMenu = new Menu("Edit");
+        back = new MenuItem("Back");
+        back.setOnAction(e->{
+            backAndForward.dec();
+            backAndForward.setCanvas(canvas, pointerButton);
+        });
+        back.setAccelerator(KeyCombination.keyCombination("Ctrl+Z"));
+        forward = new MenuItem("Forward");
+        forward.setOnAction(e->{
+            backAndForward.inc();
+            backAndForward.setCanvas(canvas, pointerButton);
+        });
+        forward.setAccelerator(KeyCombination.keyCombination("Ctrl+Shift+Z"));
         MenuItem copy = new MenuItem("Copy");
         copy.setOnAction(e->rectSelection.copy(canvas));
         copy.setAccelerator(KeyCombination.keyCombination("Ctrl+C"));
         MenuItem paste = new MenuItem("Paste");
-        paste.setOnAction(e->onPaste(pointerButton, rectSelection));
+        paste.setOnAction(e->onPaste(pointerButton.pointer, rectSelection));
         paste.setAccelerator(KeyCombination.keyCombination("Ctrl+V"));
-        editMenu.getItems().addAll(copy, paste);
+        editMenu.getItems().addAll(back, forward, copy, paste);
         return editMenu;
     }
 
-    public MenuPaint(Canvas canvas, RectSelection rectSelection, ToolBarPaint.Pointer pointer){
+    public MenuPaint(Canvas canvas, RectSelection rectSelection, ToolBarPaint pointer, BackAndForward backAndForward){
         menuBar = new MenuBar();
-        menuBar.getMenus().addAll(createFileMenu(canvas), createEditMenu(canvas, rectSelection, pointer));
+        menuBar.getMenus().addAll(createFileMenu(canvas), createEditMenu(canvas, rectSelection, pointer, backAndForward));
     }
 
 }

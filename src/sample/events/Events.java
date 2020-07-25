@@ -8,8 +8,13 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
+import sample.toolbar.BackAndForward;
 import sample.toolbar.ToolBarPaint;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Events {
     boolean click;
@@ -17,6 +22,8 @@ public class Events {
     ColorPicker colorPicker;
     TextField brushSize;
     ToolBarPaint toolBarPaint;
+    BackAndForward backAndForward;
+
     void setCursor(){
         switch (toolBarPaint.pointer.pointerButton){
             case 0:{
@@ -96,14 +103,20 @@ public class Events {
         switch (toolBarPaint.pointer.pointerButton){
             case 0:{
                 toolBarPaint.pencil.designReleased(g, x, y);
+                backAndForward.removingUnnecessary();
+                backAndForward.addSnapshot(canvas);
                 break;
             }
             case 1:{
                 toolBarPaint.brush.designReleased(g, x, y);
+                backAndForward.removingUnnecessary();
+                backAndForward.addSnapshot(canvas);
                 break;
             }
             case 2:{
                 toolBarPaint.eraser.designReleased(g, x, y);
+                backAndForward.removingUnnecessary();
+                backAndForward.addSnapshot(canvas);
                 break;
             }
         }
@@ -129,6 +142,8 @@ public class Events {
             }
             case 6:{
                 toolBarPaint.text.design(x, y);
+                backAndForward.removingUnnecessary();
+                backAndForward.addSnapshot(canvas);
                 click = true;
                 break;
             }
@@ -142,6 +157,10 @@ public class Events {
             }
             case 9:{
                 toolBarPaint.ellipse.design(canvas.getGraphicsContext2D(), colorPicker, toolBarPaint.fill, x, y);
+                if(click){
+                    backAndForward.removingUnnecessary();
+                    backAndForward.addSnapshot(canvas);
+                }
                 click = toolBarPaint.ellipse.click;
                 break;
             }
@@ -198,6 +217,7 @@ public class Events {
         });
         canvas.setOnMousePressed(e->{
             designPressed(e.getX(), e.getY());
+
         });
         canvas.setOnMouseReleased(e->{
             designReleased(e.getX(), e.getY());
@@ -208,9 +228,13 @@ public class Events {
         });
         toolBarPaint.line.side.setOnMouseClicked(e->{
             toolBarPaint.line.endDesign(canvas.getGraphicsContext2D(), e.getX(), e.getY(), colorPicker);
+            backAndForward.removingUnnecessary();
+            backAndForward.addSnapshot(canvas);
         });
         toolBarPaint.rectangle.rectangleFigure.setOnMouseClicked(e->{
             toolBarPaint.rectangle.endDesign(canvas.getGraphicsContext2D(), toolBarPaint.fill, e);
+            backAndForward.removingUnnecessary();
+            backAndForward.addSnapshot(canvas);
             click = false;
         });
         toolBarPaint.rectSelection.rectangleFigure.setOnMouseClicked(e->{
@@ -237,11 +261,12 @@ public class Events {
         });
     }
 
-    public Events(Canvas canvas, ColorPicker colorPicker, TextField brushSize, ToolBarPaint toolBarPaint){
+    public Events(Canvas canvas, ColorPicker colorPicker, TextField brushSize, ToolBarPaint toolBarPaint, BackAndForward backAndForward){
         click = false;
         this.canvas = canvas;
         this.colorPicker = colorPicker;
         this.brushSize = brushSize;
         this.toolBarPaint = toolBarPaint;
+        this.backAndForward = backAndForward;
     }
 }

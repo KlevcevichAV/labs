@@ -11,6 +11,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import sample.events.Events;
 import sample.menuPaint.MenuPaint;
+import sample.toolbar.BackAndForward;
 import sample.toolbar.ToolBarPaint;
 
 public class Main extends Application{
@@ -24,6 +25,7 @@ public class Main extends Application{
     private Canvas canvas;
     private MenuPaint menuPaint;
     private Events events;
+    private BackAndForward backAndForward;
 
     public void createTop(){
         HBox top1 = new HBox(menuPaint.menuBar);
@@ -63,15 +65,17 @@ public class Main extends Application{
         gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
         toolBarPaint = new ToolBarPaint();
         initializeVariable();
-        menuPaint = new MenuPaint(canvas, toolBarPaint.rectSelection, toolBarPaint.pointer);
+        backAndForward = new BackAndForward(canvas);
+        menuPaint = new MenuPaint(canvas, toolBarPaint.rectSelection, toolBarPaint, backAndForward);
         menuPaint.onClear(canvas);
+        backAndForward.addSnapshot(canvas);
         arrangement();
     }
 
     @Override
     public void start(Stage primaryStage) throws Exception{
         initialize();
-        events = new Events(canvas, colorPicker, brushSize, toolBarPaint);
+        events = new Events(canvas, colorPicker, brushSize, toolBarPaint, backAndForward);
         events.event();
         primaryStage.setScene(new Scene(root, 700, 650));
         primaryStage.show();
