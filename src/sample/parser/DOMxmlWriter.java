@@ -9,14 +9,10 @@ import sample.data.Sportsman;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.List;
 
 public class DOMxmlWriter {
@@ -34,6 +30,23 @@ public class DOMxmlWriter {
         Transformer t = TransformerFactory.newInstance().newTransformer();
         t.setOutputProperty(OutputKeys.INDENT, "yes");
         t.transform(new DOMSource(document), new StreamResult(new FileOutputStream(path)));
+    }
+
+    public static String createSportsman(Sportsman sportsman) throws ParserConfigurationException, IOException, TransformerException {
+        String result = "";
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        Document document = builder.newDocument();
+        Element root = document.createElement("root");
+        document.appendChild(root);
+        Element temp = document.createElement(Constant.SPORTSMAN);
+        createSportsman(temp, sportsman);
+        root.appendChild(temp);
+        Transformer t = TransformerFactory.newInstance().newTransformer();
+        t.setOutputProperty(OutputKeys.INDENT, "yes");
+        t.transform(new DOMSource(document), new StreamResult(new FileOutputStream(Constant.ADD_FILE)));
+        result = Translator.fileToString(new File(Constant.ADD_FILE));
+        return result;
     }
 
     private static void createSportsman(Element element, Sportsman sportsman) {

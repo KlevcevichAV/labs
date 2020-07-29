@@ -16,8 +16,8 @@ public class Constant {
     public static final String KIND_OF_SPORT_EN = "kindOfSport";
     public static final String CATEGORY_EN = "category";
 
-    public static final String MAIN = "Основной";
-    public static final String SPARE = "Запасной";
+    public static final String MAIN = "основной";
+    public static final String SPARE = "запасной";
     public static final String NA = "n/a";
 
     public static final String MASTER_OF_SPORT = "мастер спорта";
@@ -25,5 +25,20 @@ public class Constant {
     public static final String DISCHARGE1 = "1-й разряд";
     public static final String DISCHARGE2 = "2-й разряд";
     public static final String DISCHARGE3 = "3-й разряд";
+
+    public static final String LOAD = "/load";
+    public static final String ADD = "/add";
+    public static final String SEARCH = "/search";
+    public static final String SAVE = "/save";
+    public static final String DELETE = "/delete";
+    public static final String NEXT_PAGE = "/nextPage";
+    public static final String PREV_PAGE = "/prevPage";
+    public static final String LAST_PAGE = "/lastPage";
+    public static final String FIRST_PAGE = "/firstPage";
+    public static final String CHANGE_ROW_TABLE = "/changeRowTable";
+
+    public static final String ADD_FILE = "./src/sample/parser/addFile.txt";
+
+
 
 }

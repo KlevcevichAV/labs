@@ -1,6 +1,5 @@
 package sample.controller;
 
-import javafx.collections.ObservableList;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.xml.sax.SAXException;
@@ -8,6 +7,8 @@ import sample.modalWindow.ModalWindowAdd;
 import sample.modalWindow.ModalWindowSearch;
 import sample.data.Sportsman;
 import sample.model.Model;
+import sample.parser.DOMxmlWriter;
+import sample.parser.SAXXmlReader;
 import sample.view.View;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -20,6 +21,18 @@ import java.util.List;
 public class Controller {
     Model model;
     View view;
+
+    private void add() throws IOException, TransformerException, ParserConfigurationException, SAXException {
+        ModalWindowAdd.newWindow();
+        Sportsman newSportsman = ModalWindowAdd.getResult();
+        String sportsmanString = "";
+        if (newSportsman != null) {
+            sportsmanString = DOMxmlWriter.createSportsman(newSportsman);
+            System.out.println(sportsmanString);
+            Sportsman sportsman = SAXXmlReader.receive(sportsmanString);
+            System.out.println("YesZ");
+        }
+    }
 
     private void pageSwitchingControl() {
         if (model.pointerPage == 1) {
@@ -69,14 +82,16 @@ public class Controller {
             }
         });
         view.add.setOnAction(e -> {
-            ModalWindowAdd.newWindow();
-            Sportsman newSportsman = ModalWindowAdd.getResult();
-            if (newSportsman != null) {
-                model.addElement(newSportsman);
-                List<Sportsman> temp = model.getTable();
-                setLabel(temp.size());
-                view.fillingTable(temp);
-                pageSwitchingControl();
+            try {
+                add();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            } catch (TransformerException transformerException) {
+                transformerException.printStackTrace();
+            } catch (ParserConfigurationException parserConfigurationException) {
+                parserConfigurationException.printStackTrace();
+            } catch (SAXException saxException) {
+                saxException.printStackTrace();
             }
         });
         view.getSearch().setOnAction(e -> {
