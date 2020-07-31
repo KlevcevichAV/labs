@@ -1,5 +1,35 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <root>
-    <sportsman category="мастер спорта" fullName="1" kindOfSport="1" position="1" structure="n/a" title="1"/>
-    <sportsman category="мастер спорта" fullName="1" kindOfSport="1" position="1" structure="n/a" title="1"/>
+    <sportsman category="мастер спорта" fullName="Виктория Азаренко" kindOfSport="Тенис" position="-" structure="n/a" title="11"/>
+    <sportsman category="мастер спорта" fullName="Медведь Александр" kindOfSport="Вольная борьба" position="-" structure="n/a" title="17"/>
+    <sportsman category="мастер спорта" fullName="Калачев Артем" kindOfSport="Легкая атлетика" position="-" structure="n/a" title="13"/>
+    <sportsman category="мастер спорта" fullName="Мирзагаянова Виктория " kindOfSport="гимнастика художественная" position="-" structure="n/a" title="3"/>
+    <sportsman category="мастер спорта" fullName=" Тихонов Артем" kindOfSport="Шашки" position="-" structure="n/a" title="5"/>
+    <sportsman category="кмс" fullName="Кузавка Руслан Валерьевич" kindOfSport="Каратэ" position="-" structure="n/a" title="24"/>
+    <sportsman category="кмс" fullName="Шловенец Александр Здиславович" kindOfSport="Легкая атлетика" position="-" structure="n/a" title="14"/>
+    <sportsman category="2-й разряд" fullName="Гацко Елизавета Николаевна" kindOfSport="Тенис настольный" position="-" structure="n/a" title="2"/>
+    <sportsman category="1-й разряд" fullName="Лукомская Арина Юрьевна" kindOfSport="Тенис настольный" position="-" structure="n/a" title="1"/>
+    <sportsman category="1-й разряд" fullName="Волчкевич Андрей Игоревич" kindOfSport="Самбо" position="-" structure="n/a" title="8"/>
+    <sportsman category="кмс" fullName="Казмерович Лидия Игоревна" kindOfSport="Стрельба пулевая" position="-" structure="n/a" title="13"/>
+    <sportsman category="2-й разряд" fullName="Захар Олег Сергеевич" kindOfSport="Ушу" position="-" structure="n/a" title="7"/>
+    <sportsman category="кмс" fullName="Колесникович Тамара Николаевна" kindOfSport="Армрестлинг" position="-" structure="n/a" title="25"/>
+    <sportsman category="1-й разряд" fullName="Кардаш Арина Владимировна" kindOfSport="Биатлон" position="-" structure="n/a" title="8"/>
+    <sportsman category="кмс" fullName="Грецкий Вячеслав Владимирович" kindOfSport="Хоккей" position="Нападающий" structure="n/a" title="13"/>
+    <sportsman category="кмс" fullName="Кравченко Инна Сергеевна" kindOfSport="Гандбол" position="Вратарь" structure="n/a" title="11"/>
+    <sportsman category="1-й разряд" fullName="Межуева Анастасия Анатольевна" kindOfSport="Гандбол" position="Вратарь" structure="n/a" title="5"/>
+    <sportsman category="1-й разряд" fullName="Козлов Юлиан Русланович" kindOfSport="Борьба" position="-" structure="n/a" title="9"/>
+    <sportsman category="кмс" fullName="Орсич Артем Николаевич" kindOfSport="Бокс" position="-" structure="n/a" title="16"/>
+    <sportsman category="1-й разряд" fullName="Коско ПавелВладимирович" kindOfSport="Гребля" position="-" structure="n/a" title="2"/>
+    <sportsman category="мастер спорта" fullName="Басалыга УльянаЮрьевна" kindOfSport="Бакскетбол" position="Защитник" structure="n/a" title="30"/>
+    <sportsman category="1-й разряд" fullName="Алещенко Сергей Юрьевич" kindOfSport="Баскетбол" position="Нападающий" structure="n/a" title="9"/>
+    <sportsman category="2-й разряд" fullName="Пронюк Татьяна Викторовна" kindOfSport="Гребля" position="-" structure="n/a" title="6"/>
+    <sportsman category="2-й разряд" fullName="Радюн Владислав Янович" kindOfSport="Легкая атлетика" position="Легкая атлетика" structure="n/a" title="13"/>
+    <sportsman category="1-й разряд" fullName="Кнышевская Валентина Петровна" kindOfSport="Дзюдо" position="-" structure="n/a" title="4"/>
+    <sportsman category="кмс" fullName=" Хитрушко Александра Александровна" kindOfSport="Велоспорт" position="-" structure="n/a" title="17"/>
+    <sportsman category="мастер спорта" fullName="Лихорад Ксения Геннадьевна" kindOfSport="Плавание" position="-" structure="n/a" title="31"/>
+    <sportsman category="1-й разряд" fullName="Тихун Максим Константинович" kindOfSport="Плавание" position="-" structure="n/a" title="1"/>
+    <sportsman category="мастер спорта" fullName=" Бубешко Ева Юрьевна" kindOfSport="Художественная гимнастика" position="-" structure="n/a" title="25"/>
+    <sportsman category="кмс" fullName="Гречишко Анастасия Михайловна" kindOfSport="Художественная гимнастика" position="-" structure="n/a" title="15"/>
+    <sportsman category="мастер спорта" fullName="Майкл Джордан" kindOfSport="Баскетбол" position="Защитник" structure="n/a" title="39"/>
+    <sportsman category="мастер спорта" fullName="Джейсон Уильямс" kindOfSport="Баскетбол" position="Защитник" structure="n/a" title="35"/>
 </root>

@@ -39,7 +39,7 @@ public class View {
     }
 
     public View(Stage primaryStage) {
-        primaryStage.setTitle("Hello World");
+        primaryStage.setTitle("Server");
         primaryStage.setScene(createScene());
         primaryStage.show();
     }

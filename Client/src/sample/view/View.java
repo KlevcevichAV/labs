@@ -154,7 +154,7 @@ public class View {
         initialize();
         disableLeft();
         disableRight();
-        primaryStage.setTitle("Hello World");
+        primaryStage.setTitle("Table");
         primaryStage.setScene(new Scene(root, 500, 500));
         primaryStage.show();
     }
