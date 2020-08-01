@@ -1,3 +1,0 @@
-/home/sanchir/CLionProjects/PPVIS_lb3/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/sanchir/CLionProjects/PPVIS_lb3/cmake-build-debug/CMakeFiles/PPVIS_lb3.dir
-/home/sanchir/CLionProjects/PPVIS_lb3/cmake-build-debug/CMakeFiles/edit_cache.dir

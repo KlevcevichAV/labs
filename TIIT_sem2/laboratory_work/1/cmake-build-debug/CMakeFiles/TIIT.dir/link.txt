@@ -1,1 +1,0 @@
-/usr/bin/c++  -g   CMakeFiles/TIIT.dir/main.cpp.o  -o TIIT libfenwick_tree.a 

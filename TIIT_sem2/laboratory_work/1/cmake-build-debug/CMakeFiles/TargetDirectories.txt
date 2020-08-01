@@ -1,4 +1,0 @@
-/home/sanchir/CLionProjects/TIIT/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/sanchir/CLionProjects/TIIT/cmake-build-debug/CMakeFiles/TIIT.dir
-/home/sanchir/CLionProjects/TIIT/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/sanchir/CLionProjects/TIIT/cmake-build-debug/CMakeFiles/fenwick_tree.dir

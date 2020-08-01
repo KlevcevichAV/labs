@@ -1,1 +1,0 @@
-/usr/bin/c++  -g   CMakeFiles/TIIT_3.dir/main.cpp.o  -o TIIT_3 

@@ -1,3 +1,0 @@
-/home/sanchir/Git/TIIT/sem_2/laboratory_work/2/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/home/sanchir/Git/TIIT/sem_2/laboratory_work/2/cmake-build-debug/CMakeFiles/TIIT_2.dir
-/home/sanchir/Git/TIIT/sem_2/laboratory_work/2/cmake-build-debug/CMakeFiles/edit_cache.dir
