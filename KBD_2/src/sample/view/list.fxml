@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.ControllerList">
+   <top>
+      <Label fx:id="label" text="Label" BorderPane.alignment="CENTER" />
+   </top>
+   <bottom>
+      <HBox prefHeight="100.0" prefWidth="200.0" spacing="30.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="addButton" mnemonicParsing="false" text="ДОБАВИТЬ" />
+            <Button fx:id="editButton" mnemonicParsing="false" text="РЕДАКТИРОВАТЬ" />
+            <Button fx:id="deleteButton" mnemonicParsing="false" text="УДАЛИТЬ" />
+            <Button fx:id="menuButton" mnemonicParsing="false" text="В МЕНЮ" />
+         </children>
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
+         <padding>
+            <Insets left="20.0" top="20.0" />
+         </padding>
+      </HBox>
+   </bottom>
+   <center>
+      <Group BorderPane.alignment="CENTER">
+         <children>
+            <TableView fx:id="tableTechnics" prefHeight="200.0" prefWidth="590.0">
+              <columns>
+                <TableColumn fx:id="inventoryNumber" prefWidth="138.0" text="Inventory number" />
+                <TableColumn fx:id="name" prefWidth="114.0" text="Name" />
+                  <TableColumn fx:id="date" prefWidth="110.0" text="Date" />
+                  <TableColumn fx:id="price" text="Price" />
+                  <TableColumn fx:id="modelColumn" prefWidth="147.0" text="Model" />
+              </columns>
+            </TableView>
+            <TableView fx:id="tableSubdivisions" prefHeight="200.0" prefWidth="587.0">
+               <columns>
+                  <TableColumn fx:id="number" prefWidth="75.0" text="Number" />
+                  <TableColumn fx:id="fullName" prefWidth="249.0" text="Full name" />
+                  <TableColumn fx:id="shortName" prefWidth="262.0" text="Short name" />
+               </columns>
+            </TableView>
+            <TableView fx:id="tableStaff" prefHeight="200.0" prefWidth="587.0">
+               <columns>
+                  <TableColumn fx:id="fullNameStaff" prefWidth="206.0" text="Full name" />
+                  <TableColumn fx:id="positionStaff" prefWidth="221.0" text="Position" />
+                  <TableColumn fx:id="subdivisionName" prefWidth="159.0" text="Subdivision" />
+               </columns></TableView>
+            <TableView fx:id="tableTransfer" prefHeight="200.0" prefWidth="585.0">
+               <columns>
+                  <TableColumn fx:id="dateTransfer" prefWidth="84.0" text="Date" />
+                  <TableColumn fx:id="fullNameTransfer" prefWidth="124.0" text="Full name" />
+                  <TableColumn fx:id="roomNumberTransfer" prefWidth="143.0" text="Room number" />
+                  <TableColumn fx:id="inventoryNumberTransfer" prefWidth="308.0" text="Inventory number" />
+               </columns></TableView>
+         </children>
+      </Group>
+   </center>
+</BorderPane>
